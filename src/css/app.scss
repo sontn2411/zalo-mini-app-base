@@ -1,10 +1,74 @@
 :root {
   --color-1: #fd9221;
   --color-2: #9a9a9a;
+  --color-3: #ffeb3b;
+  --color-4: #033d78;
+  --color-5: rgba(253 146 33 /20%);
 
   --safe-top: var(--zaui-safe-area-inset-top, env(safe-area-inset-top, 30px));
   --safe-bottom: max(
     8px,
     var(--zaui-safe-area-inset-bottom, env(safe-area-inset-bottom, 30px))
   );
+}
+
+.swiper-home {
+  .zaui-swiper-dots {
+    bottom: 0px;
+  }
+}
+
+@keyframes left_to_right {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 120%;
+  }
+}
+
+.shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200px;
+  height: 100%;
+  background: linear-gradient(
+    109deg,
+    rgba(255, 255, 255, 0) 30%,
+    rgba(255, 255, 255, 0.6) 50%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  animation: left_to_right 2s linear infinite;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.3s ease-out;
 }

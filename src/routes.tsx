@@ -5,6 +5,11 @@ import HomePage from './pages/home'
 import NewspaperPage from './pages/newspaper'
 import PostPage from './pages/post'
 import ProfilePage from './pages/profile'
+import RegisterPerson from './pages/auth/registerPerson'
+import JobPostingPage from './pages/jobs/job-posting'
+import RegisterBusiness from './pages/auth/registerBusiness'
+import Decree70Page from './pages/decree'
+import { ROUTES } from './constants/routes'
 
 const router = createBrowserRouter(
   [
@@ -13,20 +18,39 @@ const router = createBrowserRouter(
       element: <Layout />,
       children: [
         {
-          path: '/',
+          path: ROUTES.HOME,
           element: <HomePage />,
+          handle: { title: 'Trang chủ' },
         },
         {
-          path: '/news',
-          element: <NewspaperPage />,
+          path: ROUTES.ND70,
+          element: <Decree70Page />,
+          handle: { title: 'Nghị định 70' },
         },
         {
           path: '/post',
           element: <PostPage />,
+          handle: { title: 'Đăng bài' },
+        },
+        {
+          path: ROUTES.JOB_POSTING,
+          element: <JobPostingPage />,
+          handle: { title: 'Đăng tin tuyển dụng' },
         },
         {
           path: '/profile',
           element: <ProfilePage />,
+          handle: { title: 'Hồ sơ cá nhân', desc: 'Quản lý thông tin của bạn' },
+        },
+        {
+          path: ROUTES.REGISTER_PERSON,
+          element: <RegisterPerson />,
+          handle: { title: 'Đăng ký', desc: 'Hồ sơ người lao động' },
+        },
+        {
+          path: ROUTES.REGISTER_BUSINESS,
+          element: <RegisterBusiness />,
+          handle: { title: 'Đăng ký', desc: 'Hồ sơ doanh nghiệp' },
         },
       ],
     },

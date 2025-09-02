@@ -20,12 +20,17 @@
     "deploy": "zmp deploy"
   },
   "dependencies": {
+    "@hookform/resolvers": "^5.2.1",
     "jotai": "^2.12.1",
+    "lucide-react": "^0.542.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.62.0",
     "react-router-dom": "^6.30.1",
     "zmp-sdk": "latest",
-    "zmp-ui": "latest"
+    "zmp-ui": "latest",
+    "zod": "^4.1.5",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@types/react": "^18.3.1",

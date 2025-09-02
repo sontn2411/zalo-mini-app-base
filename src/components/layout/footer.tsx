@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom'
 import IconUI from '../ui/iconUi'
+import { ROUTES } from '@/constants/routes'
 
 const NAV_ITEMS = [
   {
@@ -11,17 +12,17 @@ const NAV_ITEMS = [
   },
   {
     id: 2,
-    name: 'Tin tức',
+    name: 'Nghị định 70',
     icon: 'newspaper',
     iconActive: 'newspaperActive',
-    path: '/news',
+    path: ROUTES.ND70,
   },
   {
     id: 3,
     name: 'Đăng tin',
     icon: 'briefcase',
     iconActive: 'briefcaseActive',
-    path: '/post',
+    path: '/jobs/posting',
   },
   {
     id: 4,
@@ -36,7 +37,7 @@ const Footer = () => {
   return (
     <div className='w-full relative'>
       <div
-        className='w-full px-4 pt-2 grid text-3xs relative z-20 justify-center pb-sb bg-white'
+        className='w-full px-4 pt-2 grid text-3xs relative z-20 justify-center pb-sb bg-white shadow-[0_-2px_6px_rgba(0,0,0,0.08)]'
         style={{
           gridTemplateColumns: `repeat(${NAV_ITEMS.length}, 1fr)`,
         }}
@@ -61,7 +62,7 @@ const Footer = () => {
                       />
                     </div>
                     <div
-                      className={`text-xs  truncate ${
+                      className={`text-xs  truncate font-medium ${
                         isActive ? 'text-color-1' : ' text-color-2'
                       }`}
                     >
