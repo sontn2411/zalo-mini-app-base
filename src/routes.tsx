@@ -12,6 +12,7 @@ import Decree70Page from './pages/decree'
 import { ROUTES } from './constants/routes'
 import JobListPage from './pages/jobs'
 import CandidatePage from './pages/Candidate'
+import JobDetail from './pages/jobs/detail/JobDetail'
 
 const router = createBrowserRouter(
   [
@@ -33,6 +34,11 @@ const router = createBrowserRouter(
           path: ROUTES.JOB_LIST,
           element: <JobListPage />,
           handle: { title: 'Danh sách việc làm' },
+        },
+        {
+          path: ROUTES.JOB_DETAIL,
+          element: <JobDetail />,
+          handle: { title: 'Chi tiết việc làm' },
         },
         {
           path: ROUTES.CANDIDATE,

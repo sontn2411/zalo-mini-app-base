@@ -1,3 +1,6 @@
+import { ROUTES } from '@/constants/routes'
+import { useNavigate } from 'react-router-dom'
+
 const latestJobs = [
   {
     id: 1,
@@ -53,10 +56,12 @@ const latestJobs = [
 ]
 
 const JobList = () => {
+  const navigate = useNavigate()
   return (
     <div className='space-y-3'>
       {latestJobs.map((job) => (
         <div
+          onClick={() => navigate(ROUTES.JOB_LIST + '/' + job.id)}
           key={job.id}
           className='bg-white rounded-lg p-3 shadow-sm border-l-4 border-color-1 hover:shadow-md transition-shadow'
         >
