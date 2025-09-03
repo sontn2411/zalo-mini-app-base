@@ -5,7 +5,7 @@ import Header from './header'
 import { ROUTES } from '@/constants/routes'
 
 const Layout = () => {
-  const paths = [ROUTES.REGISTER_PERSON]
+  const paths = [ROUTES.REGISTER_PERSON, ROUTES.REGISTER_BUSINESS]
 
   const location = useLocation()
 

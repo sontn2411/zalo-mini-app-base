@@ -3,11 +3,12 @@ import { useState } from 'react'
 import { Sheet } from 'zmp-ui'
 
 interface SelectInputProps {
-  options: string[] // danh sách lựa chọn
-  maxSelect?: number // số lượng chọn tối đa (mặc định 2)
-  title?: string // tiêu đề hiển thị trong Sheet
-  placeholder?: string // text khi chưa chọn
-  onChange?: (values: string[]) => void // callback trả về giá trị đã chọn
+  options: string[]
+  maxSelect?: number
+  title?: string
+  placeholder?: string
+  onChange?: (values: string[]) => void
+  showSearch?: boolean
 }
 
 const SelectInput = ({
@@ -16,10 +17,12 @@ const SelectInput = ({
   title = 'Chọn mục',
   placeholder = 'Chọn',
   onChange,
+  showSearch = true,
 }: SelectInputProps) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
   const [selectedValues, setSelectedValues] = useState<string[]>([])
   const [tempSelected, setTempSelected] = useState<string[]>([])
+  const [searchTerm, setSearchTerm] = useState<string>('')
 
   const handleToggle = (item: string) => {
     if (maxSelect === 1) {
@@ -42,18 +45,24 @@ const SelectInput = ({
   const handleConfirm = () => {
     setSelectedValues(tempSelected)
     setIsOpen(false)
-    onChange?.(tempSelected) // gọi callback nếu có
+    onChange?.(tempSelected)
   }
 
   const handleOpen = () => {
     setTempSelected(selectedValues)
+    setSearchTerm('')
     setIsOpen(true)
   }
+
+  // Lọc option theo searchTerm
+  const filteredOptions = options.filter((item) =>
+    item.toLowerCase().includes(searchTerm.toLowerCase())
+  )
 
   return (
     <div>
       <div
-        className='border rounded-lg px-4 py-2 cursor-pointer w-full flex justify-between items-center gap-2 min-h-12 '
+        className='border rounded-lg px-4 py-2 cursor-pointer w-full flex justify-between items-center gap-2 min-h-12 z-50 '
         onClick={handleOpen}
       >
         <div>
@@ -85,8 +94,20 @@ const SelectInput = ({
             </button>
           </div>
 
+          {showSearch && (
+            <div className='px-4 pb-2'>
+              <input
+                type='text'
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder='Tìm kiếm...'
+                className='w-full border rounded-lg px-3 py-2'
+              />
+            </div>
+          )}
+
           <div className='flex-1 overflow-y-auto px-4 space-y-3'>
-            {options.map((item, index) => {
+            {filteredOptions.map((item, index) => {
               const checked =
                 maxSelect === 1
                   ? selectedValues.includes(item)
@@ -124,6 +145,12 @@ const SelectInput = ({
                 </div>
               )
             })}
+
+            {filteredOptions.length === 0 && (
+              <p className='text-center text-sm text-gray-500 py-4'>
+                Không tìm thấy kết quả
+              </p>
+            )}
           </div>
 
           {maxSelect > 1 && (

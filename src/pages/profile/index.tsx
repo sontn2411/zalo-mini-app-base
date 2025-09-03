@@ -283,7 +283,7 @@ const ProfilePage = () => {
             {/* <div className='mb-4'>
               <label className='block text-sm font-medium text-gray-700 mb-2'>
                 <Gift className='w-4 h-4 inline mr-2' />
-                Phúc lợi mong muốn
+                Chế độ phúc lợi
               </label>
               <CheckboxGrid
                 options={benefitOptions}
@@ -335,9 +335,7 @@ const ProfilePage = () => {
               </div>
               {originalData.otherBenefits && (
                 <div>
-                  <p className='text-xs text-gray-500 mb-1'>
-                    Phúc lợi mong muốn
-                  </p>
+                  <p className='text-xs text-gray-500 mb-1'>Chế độ phúc lợi</p>
                   <div className='flex flex-wrap gap-1'>
                     {originalData.otherBenefits
                       .split(', ')

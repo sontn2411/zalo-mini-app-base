@@ -8,13 +8,19 @@ import {
   EyeOff,
 } from 'lucide-react'
 import { useState } from 'react'
+import { ButtonCompleted, ButtonNextStep, ButtonPrevStep } from './buttonSteps'
 
 interface AccountInfoProps {
   handleNextStep: () => void
   handlePrevStep: () => void
+  isEndStep?: boolean
 }
 
-const AccountInfo = ({ handleNextStep, handlePrevStep }: AccountInfoProps) => {
+const AccountInfo = ({
+  handleNextStep,
+  handlePrevStep,
+  isEndStep = false,
+}: AccountInfoProps) => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
@@ -80,28 +86,13 @@ const AccountInfo = ({ handleNextStep, handlePrevStep }: AccountInfoProps) => {
         </div>
       </div>
 
-      {/* Buttons */}
-      <div className='flex gap-2 pt-2'>
-        <button
-          onClick={(e) => {
-            e.preventDefault()
-            handlePrevStep()
-          }}
-          className='flex-1 bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-colors flex items-center justify-center'
-        >
-          <ArrowLeft className='w-5 h-5 mr-2' />
-          Quay lại
-        </button>
-        <button
-          onClick={(e) => {
-            e.preventDefault()
-            handleNextStep()
-          }}
-          className='flex-1 bg-color-1 text-white py-3 px-4 rounded-xl font-semibold transition-colors flex items-center justify-center'
-        >
-          <CheckCircle className='w-5 h-5 mr-2' />
-          Hoàn thành
-        </button>
+      <div className='flex gap-4 pt-2'>
+        <ButtonPrevStep handlePrevStep={handlePrevStep} />
+        {isEndStep ? (
+          <ButtonCompleted hanldeComplete={handleNextStep} />
+        ) : (
+          <ButtonNextStep handleNextStep={handleNextStep} />
+        )}
       </div>
     </div>
   )

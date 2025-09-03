@@ -1,11 +1,12 @@
 import {
   PersonInfoFields,
   useFormRegisterStore,
-} from '@/components/store/registerFormStore'
+} from '@/store/registerFormStore'
 import { AlertCircle, ArrowRight, MapPin, Phone, User } from 'lucide-react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema } from '@/schemas/registerSchema'
+import { ButtonNextStep } from '../buttonSteps'
 
 type PersonalInfoProps = {
   handleNextStep: () => void
@@ -102,14 +103,9 @@ const PersonalInfo = ({ handleNextStep }: PersonalInfoProps) => {
           </p>
         )}
       </div>
-
-      <button
-        // onClick={nextStep}
-        className='flex-1 bg-color-1 w-full text-white py-3 px-4 rounded-xl font-semibold transition-colors flex items-center justify-center'
-      >
-        Tiếp theo
-        <ArrowRight className='w-5 h-5 ml-2' />
-      </button>
+      <div>
+        <ButtonNextStep handleNextStep={handleNextStep} />
+      </div>
     </form>
   )
 }

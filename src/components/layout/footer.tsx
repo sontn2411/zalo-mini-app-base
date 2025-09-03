@@ -11,19 +11,33 @@ const NAV_ITEMS = [
     path: '/',
   },
   {
+    id: 5,
+    name: 'Tuyển dụng',
+    icon: 'file',
+    iconActive: 'activeFile',
+    path: ROUTES.JOB_LIST,
+  },
+  {
+    id: 6,
+    name: 'Ứng viên',
+    icon: 'users',
+    iconActive: 'activeUsers',
+    path: ROUTES.CANDIDATE,
+  },
+  {
     id: 2,
     name: 'Nghị định 70',
     icon: 'newspaper',
     iconActive: 'newspaperActive',
     path: ROUTES.ND70,
   },
-  {
-    id: 3,
-    name: 'Đăng tin',
-    icon: 'briefcase',
-    iconActive: 'briefcaseActive',
-    path: '/jobs/posting',
-  },
+  // {
+  //   id: 3,
+  //   name: 'Đăng tin',
+  //   icon: 'briefcase',
+  //   iconActive: 'briefcaseActive',
+  //   path: '/jobs/posting',
+  // },
   {
     id: 4,
     name: 'Cá nhân',
@@ -35,9 +49,9 @@ const NAV_ITEMS = [
 
 const Footer = () => {
   return (
-    <div className='w-full relative'>
+    <div className='w-full relative z-[1]'>
       <div
-        className='w-full px-4 pt-2 grid text-3xs relative z-20 justify-center pb-sb bg-white shadow-[0_-2px_6px_rgba(0,0,0,0.08)]'
+        className='w-full px-2 pt-2 grid text-3xs relative z-20 justify-center pb-sb bg-white shadow-[0_-2px_6px_rgba(0,0,0,0.08)]'
         style={{
           gridTemplateColumns: `repeat(${NAV_ITEMS.length}, 1fr)`,
         }}

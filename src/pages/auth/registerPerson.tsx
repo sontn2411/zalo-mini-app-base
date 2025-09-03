@@ -1,6 +1,6 @@
 import AccountInfo from '@/components/shared/form/accountInfo'
-import PersonalInfo from '@/components/shared/form/personalInfo'
-import ProfessionalInfo from '@/components/shared/form/professionalInfo'
+import PersonalInfo from '@/components/shared/form/person/personalInfo'
+import ProfessionalInfo from '@/components/shared/form/person/professionalInfo'
 import StepIndicator from '@/components/shared/stepIndicator'
 import IconUI from '@/components/ui/iconUi'
 import { CheckCircle, MapPin, Phone, UserRound } from 'lucide-react'
@@ -43,7 +43,7 @@ const RegisterPerson = () => {
   return (
     <div className='px-2 mt-4 '>
       <StepIndicator steps={steps} currentStep={currentStep} />
-      <div className='bg-white rounded-2xl p-6 shadow-sm mb-'>
+      <div className='bg-white rounded-2xl p-6 shadow-sm mb-2'>
         {currentStep === 1 && <PersonalInfo handleNextStep={handleNextStep} />}
         {currentStep === 2 && (
           <ProfessionalInfo
@@ -55,6 +55,7 @@ const RegisterPerson = () => {
           <AccountInfo
             handleNextStep={handleNextStep}
             handlePrevStep={handlePrevStep}
+            isEndStep={true}
           />
         )}
       </div>
