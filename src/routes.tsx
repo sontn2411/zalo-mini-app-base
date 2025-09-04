@@ -4,7 +4,7 @@ import Layout from './components/layout/layout'
 import HomePage from './pages/home'
 import NewspaperPage from './pages/newspaper'
 import PostPage from './pages/post'
-import ProfilePage from './pages/profile'
+
 import RegisterPerson from './pages/auth/registerPerson'
 import JobPostingPage from './pages/jobs/job-posting'
 import RegisterBusiness from './pages/auth/registerBusiness'
@@ -13,6 +13,7 @@ import { ROUTES } from './constants/routes'
 import JobListPage from './pages/jobs'
 import CandidatePage from './pages/Candidate'
 import JobDetail from './pages/jobs/detail/JobDetail'
+import ProfilePage from './pages/profile'
 
 const router = createBrowserRouter(
   [

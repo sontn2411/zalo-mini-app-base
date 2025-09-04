@@ -13,8 +13,8 @@ const NAV_ITEMS = [
   {
     id: 5,
     name: 'Tuyển dụng',
-    icon: 'file',
-    iconActive: 'activeFile',
+    icon: 'dashboard',
+    iconActive: 'activeDashboard',
     path: ROUTES.JOB_LIST,
   },
   {
@@ -24,20 +24,20 @@ const NAV_ITEMS = [
     iconActive: 'activeUsers',
     path: ROUTES.CANDIDATE,
   },
-  {
-    id: 2,
-    name: 'Nghị định 70',
-    icon: 'newspaper',
-    iconActive: 'newspaperActive',
-    path: ROUTES.ND70,
-  },
   // {
-  //   id: 3,
-  //   name: 'Đăng tin',
-  //   icon: 'briefcase',
-  //   iconActive: 'briefcaseActive',
-  //   path: '/jobs/posting',
+  //   id: 2,
+  //   name: 'Nghị định 70',
+  //   icon: 'newspaper',
+  //   iconActive: 'newspaperActive',
+  //   path: ROUTES.ND70,
   // },
+  {
+    id: 3,
+    name: 'Đăng tin',
+    icon: 'briefcase',
+    iconActive: 'briefcaseActive',
+    path: ROUTES.JOB_POSTING,
+  },
   {
     id: 4,
     name: 'Cá nhân',

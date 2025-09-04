@@ -1,0 +1,43 @@
+import { Search, Share2 } from 'lucide-react'
+import { Link } from 'react-router-dom'
+
+const dataBtn = [
+  { id: 1, name: 'Việc tìm người', path: '/' },
+  { id: 2, name: 'Người tìm việc', path: '/' },
+  { id: 3, name: 'Việc làm nước ngoài', path: '/' },
+]
+
+const SearchHome = () => {
+  return (
+    <>
+      <div className='flex w-full gap-2 items-center'>
+        <div
+          onClick={() => console.log('===')}
+          className='relative h-9 border rounded-md flex items-center px-3 cursor-pointer w-full'
+        >
+          <Search className='w-5 h-5 text-gray-400' />
+          <span className='ml-2 text-gray-500 text-sm'>Tìm kiếm công việc</span>
+        </div>
+        <button className='text-color-2'>
+          <Share2 />
+        </button>
+      </div>
+
+      <ul className='flex flex-wrap gap-2 '>
+        {dataBtn.map((item) => (
+          <li key={item.id} className='pt-2'>
+            <Link
+              viewTransition={true}
+              to={item.path}
+              className='text-[0.7rem] px-2 py-2 border rounded-md bg-color-4 text-white font-medium transition-colors'
+            >
+              {item.name}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </>
+  )
+}
+
+export default SearchHome

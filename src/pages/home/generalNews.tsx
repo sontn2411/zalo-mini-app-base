@@ -1,6 +1,3 @@
-import { ChevronRight } from 'lucide-react'
-
-// General news data
 const generalNews = [
   {
     id: 1,
@@ -29,6 +26,24 @@ const generalNews = [
       'https://thongtinvieclamkhanhhoa.vn/FileStorage/Content/images/B1.jpg',
     date: '27/08/2025',
   },
+  {
+    id: 4,
+    title: 'Chương trình đào tạo kỹ năng nghề du lịch',
+    summary:
+      'Mở đăng ký khóa đào tạo hướng dẫn viên du lịch, lễ tân khách sạn miễn phí cho người lao động...',
+    image:
+      'https://thongtinvieclamkhanhhoa.vn/FileStorage/Content/images/B1.jpg',
+    date: '27/08/2025',
+  },
+  {
+    id: 5,
+    title: 'Chương trình đào tạo kỹ năng nghề du lịch',
+    summary:
+      'Mở đăng ký khóa đào tạo hướng dẫn viên du lịch, lễ tân khách sạn miễn phí cho người lao động...',
+    image:
+      'https://thongtinvieclamkhanhhoa.vn/FileStorage/Content/images/B1.jpg',
+    date: '27/08/2025',
+  },
 ]
 
 const GeneralNews = () => {
@@ -36,10 +51,10 @@ const GeneralNews = () => {
     <div className=''>
       <div className='flex items-center justify-between mb-3'>
         <h2 className='text-lg font-semibold text-gray-900'>Tin tức</h2>
-        <button className='text-color-1 text-sm font-medium flex items-center'>
+        {/* <button className='text-color-1 text-sm font-medium flex items-center'>
           Xem tất cả
           <ChevronRight className='w-4 h-4 ml-1' />
-        </button>
+        </button> */}
       </div>
 
       <div className='space-y-3'>
@@ -63,14 +78,17 @@ const GeneralNews = () => {
 
                 <div className='flex items-center justify-between'>
                   <span className='text-gray-400 text-xs'>{news.date}</span>
-                  <button className='text-color-1 text-xs font-medium'>
+                  {/* <button className='text-color-1 text-xs font-medium'>
                     Đọc thêm
-                  </button>
+                  </button> */}
                 </div>
               </div>
             </div>
           </div>
         ))}
+        <div className='text-center text-color-1 underline underline-offset-2 text-sm font-medium  '>
+          <span>Xem thêm</span>
+        </div>
       </div>
     </div>
   )

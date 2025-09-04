@@ -8,7 +8,7 @@ export default function GenderField() {
         Giới tính
       </label>
       <div className='flex gap-4'>
-        <label className='flex items-center gap-2 cursor-pointer'>
+        <label className='flex items-center gap-2 cursor-pointer text-sm '>
           <input
             type='radio'
             name='gender'
@@ -17,7 +17,7 @@ export default function GenderField() {
           />
           Nam
         </label>
-        <label className='flex items-center gap-2 cursor-pointer'>
+        <label className='flex items-center gap-2 cursor-pointer text-sm'>
           <input
             type='radio'
             name='gender'
@@ -26,7 +26,7 @@ export default function GenderField() {
           />
           Nữ
         </label>
-        <label className='flex items-center gap-2 cursor-pointer'>
+        <label className='flex items-center gap-2 cursor-pointer text-sm'>
           <input
             type='radio'
             name='gender'

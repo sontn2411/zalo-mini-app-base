@@ -26,7 +26,7 @@ const Header = () => {
   }
 
   return (
-    <div className='flex-none w-full min-h-12 pr-[90px] px-4 pt-st pb-2 space-x-2 bg-color-3  '>
+    <div className='flex-none w-full min-h-12  px-4 pt-st pb-2 space-x-2 bg-color-3  '>
       <div className='flex items-center min-h-12'>
         {isHome ? (
           <div className='flex items-center gap-2'>
@@ -35,9 +35,11 @@ const Header = () => {
               alt='logo'
               className='h-10'
             />
-            <div className='text-sm font-bold text-color-4 leading-tight flex flex-col justify-between gap-1 uppercase'>
-              <p>Trung tâm dịch vụ</p>
-              <p>việc làm Khánh Hòa</p>
+            <div className='text-sm text-color-4 leading-tight flex flex-col justify-between '>
+              <p className='text-[0.8rem] font-bold '>
+                Trung tâm dịch vụ việc làm Khánh Hòa
+              </p>
+              <p className='text-xs font-medium'>Xin Chào!</p>
             </div>
           </div>
         ) : (

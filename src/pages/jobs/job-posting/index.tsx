@@ -1,35 +1,48 @@
-import InforJobPosting from '@/components/shared/form/job/InforJobPosting'
-import Requirements from '@/components/shared/form/job/requirements'
-import StepIndicator from '@/components/shared/stepIndicator'
-import { useState } from 'react'
-
-const steps = [
-  { title: 'Thông tin cơ bản', description: 'Vị trí và yêu cầu tuyển dụng' },
-  {
-    title: 'Yêu cầu ứng viên',
-    description: 'Chi tiết yêu cầu của nhà tuyển dụng',
-  },
-  { title: 'Mô tả công việc', description: 'Mô tả thông tin công việc' },
-  { title: 'Xem trước & Đăng', description: 'Kiểm tra và hoàn tất' },
-]
+import BenfitOptions from '@/components/shared/form/benfitOptions'
+import ExperienceOptions from '@/components/shared/form/experienceOptions'
+import GenderField from '@/components/shared/form/genderField'
+import SalaryRanges from '@/components/shared/form/salaryRanges'
+import JobSelectOption from '@/components/shared/form/selectOption/jobOptions'
+import LevelOption from '@/components/shared/form/selectOption/levelOption'
+import RankJobOption from '@/components/shared/form/selectOption/rankJobOption'
+import TimeOption from '@/components/shared/form/selectOption/timeOption'
+import InputCustom from '@/components/ui/inputCustom'
+import { Target, UsersRound } from 'lucide-react'
 
 const JobPostingPage = () => {
-  const [currentStep, setCurrentStep] = useState(1)
-
-  const handleNextStep = () =>
-    setCurrentStep((prev) => Math.min(prev + 1, steps.length))
-
-  const handlePrevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 1))
-
   return (
-    <div className='px-2 mt-4 '>
-      <StepIndicator steps={steps} currentStep={currentStep} />
-      <div className='bg-white rounded-2xl p-6 shadow-sm mb-2'>
-        {currentStep === 1 && (
-          <InforJobPosting handleNextStep={handleNextStep} />
-        )}
+    <div className=''>
+      {/* <StepIndicator steps={steps} currentStep={currentStep} /> */}
+      <div className='bg-white rounded-2xl shadow-sm my-4 px-4 space-y-6'>
+        <InputCustom
+          label='Vị trí tuyển dụng'
+          icon={Target}
+          name='target'
+          placeholder='Nhập vị trí cần tuyển'
+        />
 
-        {currentStep === 2 && <Requirements />}
+        <JobSelectOption />
+
+        <RankJobOption />
+
+        <LevelOption />
+
+        <GenderField />
+
+        <InputCustom
+          label='Số lượng'
+          icon={UsersRound}
+          name='countUser'
+          placeholder='Nhập số lượng'
+        />
+
+        <TimeOption />
+
+        <SalaryRanges />
+
+        <ExperienceOptions />
+
+        <BenfitOptions />
       </div>
     </div>
   )

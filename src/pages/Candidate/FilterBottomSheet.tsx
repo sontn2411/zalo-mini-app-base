@@ -1,7 +1,7 @@
 import { Check, X } from 'lucide-react'
 import { Sheet } from 'zmp-ui'
 
-type FilterType = 'industry' | 'location' | 'salary' | 'experience' | 'jobType'
+type FilterType = 'sex' | 'age' | 'location' | 'industry'
 
 interface FilterBottomSheetProps {
   filterType: FilterType | null

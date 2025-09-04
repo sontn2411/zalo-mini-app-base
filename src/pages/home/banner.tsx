@@ -1,21 +1,26 @@
+import { Swiper } from 'zmp-ui'
+
 const data = [
-  'https://thongtinvieclamkhanhhoa.vn/assets/images/banner/dai-bieu-2025-2030.jpg',
-  'https://res.cloudinary.com/dmgnjoeyq/image/upload/v1756439368/download_os1jq0.png',
-  'https://res.cloudinary.com/dmgnjoeyq/image/upload/v1756439368/download_1_j5sebq.jpg',
+  'https://picsum.photos/id/1018/600/300',
+  'https://picsum.photos/id/1024/600/300',
+  'https://picsum.photos/id/1035/600/300',
 ]
 
 const BannerHome = () => {
   return (
-    <ul className='flex flex-col gap-2'>
-      {data.map((item, index) => {
-        return (
-          <li key={index} className='relative overflow-hidden rounded-md'>
-            <img src={item} alt='banner' className='rounded-md w-full' />
-            <span className='absolute inset-0 shimmer'></span>
-          </li>
-        )
-      })}
-    </ul>
+    <div className=''>
+      <Swiper autoplay loop className='rounded-md overflow-hidden'>
+        {data.map((item, index) => (
+          <Swiper.Slide key={index}>
+            <img
+              src={item}
+              alt={`banner-${index}`}
+              className='w-full h-full object-cover rounded-md'
+            />
+          </Swiper.Slide>
+        ))}
+      </Swiper>
+    </div>
   )
 }
 

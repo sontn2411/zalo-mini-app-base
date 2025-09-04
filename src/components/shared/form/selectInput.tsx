@@ -62,7 +62,7 @@ const SelectInput = ({
   return (
     <div>
       <div
-        className='border rounded-lg px-4 py-2 cursor-pointer w-full flex justify-between items-center gap-2 min-h-12 z-50 '
+        className='border rounded-xl px-4 py-2 cursor-pointer w-full flex justify-between items-center gap-2 min-h-12 z-50 '
         onClick={handleOpen}
       >
         <div>

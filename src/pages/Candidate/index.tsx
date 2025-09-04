@@ -1,5 +1,11 @@
+import FilterCandidate from './filter'
+
 const CandidatePage = () => {
-  return <div>Candidate</div>
+  return (
+    <div>
+      <FilterCandidate />
+    </div>
+  )
 }
 
 export default CandidatePage

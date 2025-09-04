@@ -1,5 +1,5 @@
 const Decree70Page = () => {
-  return <div>Decree70Page</div>
+  return <div></div>
 }
 
 export default Decree70Page
