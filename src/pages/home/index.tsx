@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Info, ShieldCheck, Newspaper, FileText } from 'lucide-react'
 import { openShareSheet } from 'zmp-sdk/apis'
 import SearchHome from './searchHome'
+import { getRouteParams } from 'zmp-sdk/apis'
 
 const menuItems = [
   { id: 1, name: 'Giới thiệu', icon: Info },
@@ -16,8 +17,16 @@ const menuItems = [
 
 function HomePage() {
   const navigate = useNavigate()
+
+  const params = new URLSearchParams(location.search)
+  const param1 = params.get('param1')
+  const param2 = params.get('param2')
+
+  console.log('=====', getRouteParams())
+
   return (
     <div className=' p-4 flex flex-col gap-6'>
+      <span>{param1}</span>
       <div className='flex flex-col gap-2'>
         <SearchHome />
       </div>

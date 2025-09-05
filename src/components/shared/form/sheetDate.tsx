@@ -1,0 +1,71 @@
+import { useState } from 'react'
+import DateRangePicker from '../DateRangePicker'
+import { Sheet } from 'zmp-ui'
+import { CalendarDays, CalendarRange, X } from 'lucide-react'
+import useSettingStore from '@/store/useSetting'
+import SheetPortal from './sheetPortal'
+
+const SheetDate = () => {
+  const [range, setRange] = useState<{
+    startDate: Date
+    endDate: Date
+  } | null>(null)
+
+  const [visible, setVisible] = useState(false)
+
+  return (
+    <div>
+      <label className='block text-sm font-semibold text-gray-700 mb-2'>
+        <CalendarDays className='w-4 h-4 inline mr-2 ' />
+        Thời hạn tuyển dụng
+      </label>
+
+      <div
+        className='h-12 border rounded-xl relative flex items-center px-4 cursor-pointer'
+        onClick={() => setVisible(true)}
+      >
+        <p className='text-sm text-gray-600'>
+          {range ? (
+            `Từ ${range.startDate.toLocaleDateString()} - ${range.endDate.toLocaleDateString()}`
+          ) : (
+            <span className='text-color-2'>Chọn ngày</span>
+          )}
+        </p>
+        <CalendarRange className='w-5 h-5 absolute right-2 top-1/2 -translate-y-1/2 text-color-2' />
+      </div>
+
+      <SheetPortal visible={visible} onClose={() => setVisible(false)}>
+        <div>
+          <div className='flex justify-between p-4 pb-2'>
+            <h2 className='text-lg font-bold '>Thời hạn tuyển dụng</h2>
+            <button
+              onClick={(e) => {
+                e.preventDefault()
+                setVisible(false)
+              }}
+            >
+              <X />
+            </button>
+          </div>
+        </div>
+        <div className='w-full'>
+          <DateRangePicker
+            onChange={(val) => {
+              setRange(val)
+            }}
+          />
+          <div className='mt-2 flex justify-start gap-2 w-full px-4'>
+            <button
+              className='px-4 py-2 rounded-lg bg-color-1 text-white text-sm w-full h-10'
+              onClick={() => setVisible(false)}
+            >
+              Xác nhận
+            </button>
+          </div>
+        </div>
+      </SheetPortal>
+    </div>
+  )
+}
+
+export default SheetDate

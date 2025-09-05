@@ -47,8 +47,6 @@ const RegisterBusiness = () => {
     },
   })
 
-  console.log('=========', errors)
-
   const onSubmit = (data: RegisterBusinessForm) => {
     console.log('Form data:', data)
   }
@@ -65,7 +63,7 @@ const RegisterBusiness = () => {
       <div className='bg-white p-4 rounded-xl shadow-sm'>
         <form className=' space-y-6 mb-6'>
           <InputCustom
-            label='Email'
+            label='Email người dùng'
             type='email'
             placeholder='Nhập email'
             icon={Mail}

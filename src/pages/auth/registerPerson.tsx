@@ -139,7 +139,7 @@ const RegisterPerson = () => {
             <div className='my-4'>
               <label className='block text-sm font-semibold text-gray-700 mb-2 '>
                 <Calendar className='w-4 h-4 inline mr-2 text-gray-500' />
-                Nơi cấp
+                Ngày cấp
               </label>
               <DatePicker
                 placeholder='Chọn ngày'

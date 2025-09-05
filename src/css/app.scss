@@ -76,3 +76,25 @@
 .zaui-picker-item-selected {
   color: var(--color-1);
 }
+
+.rdrDateRangeWrapper {
+  width: 100% !important;
+  .rdrMonth {
+    width: 100% !important;
+  }
+
+  .rdrDateDisplayItemActive {
+    border-color: var(--color-1) !important;
+  }
+  .rdrInRange {
+    background: var(--color-1) !important;
+  }
+
+  .rdrStartEdge {
+    background: var(--color-1) !important;
+  }
+
+  .rdrEndEdge {
+    background: var(--color-1) !important;
+  }
+}

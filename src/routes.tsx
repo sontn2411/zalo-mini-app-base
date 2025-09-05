@@ -57,7 +57,7 @@ const router = createBrowserRouter(
           handle: { title: 'Đăng tin tuyển dụng' },
         },
         {
-          path: '/profile',
+          path: ROUTES.PROFILE,
           element: <ProfilePage />,
           handle: { title: 'Hồ sơ cá nhân', desc: 'Quản lý thông tin của bạn' },
         },

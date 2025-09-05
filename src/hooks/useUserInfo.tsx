@@ -2,26 +2,40 @@ import { useEffect, useState } from 'react'
 import { getUserInfo } from 'zmp-sdk/apis'
 
 type AppInfo = {
-  appName: string
-  appId: string
-  version: string
-  [key: string]: any
+  id: string
+  name: string
+  avatar: string
 }
 
 export function useUserInfo() {
-  const [appInfo, setAppInfo] = useState<AppInfo | null>(null)
+  const [userInfo, setAppInfo] = useState<AppInfo | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    const data = async () => {
-      const { userInfo } = await getUserInfo({
-        autoRequestPermission: true,
-      })
-      console.log('======', userInfo)
+    const fetchUserInfo = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+
+        const { userInfo } = await getUserInfo({
+          autoRequestPermission: true,
+        })
+
+        setAppInfo({
+          id: userInfo.id,
+          name: userInfo.name,
+          avatar: userInfo.avatar,
+        })
+      } catch (err: any) {
+        setError(err instanceof Error ? err : new Error('Unknown error'))
+      } finally {
+        setLoading(false)
+      }
     }
-    data()
+
+    fetchUserInfo()
   }, [])
 
-  return { appInfo, loading, error }
+  return { userInfo, loading, error }
 }

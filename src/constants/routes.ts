@@ -7,4 +7,5 @@ export const ROUTES = {
   REGISTER_BUSINESS: '/auth/register-business',
   ND70: '/nghi-dinh-70',
   CANDIDATE: '/Candidate',
+  PROFILE :'/profile'
 }

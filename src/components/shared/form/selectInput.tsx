@@ -1,6 +1,7 @@
 import { ChevronDown, X } from 'lucide-react'
 import { useState } from 'react'
 import { Sheet } from 'zmp-ui'
+import SheetPortal from './sheetPortal'
 
 interface SelectInputProps {
   options: string[]
@@ -74,14 +75,12 @@ const SelectInput = ({
         </div>
         <ChevronDown />
       </div>
-
-      <Sheet
+      <SheetPortal
         visible={isOpen}
-        onClose={() => setIsOpen(false)}
-        autoHeight={false}
         height='85%'
+        onClose={() => setIsOpen(false)}
       >
-        <div className='flex flex-col h-full'>
+        <div className='flex flex-col h-full pb-4'>
           <div className='flex justify-between p-4 pb-2'>
             <h2 className='text-lg font-bold '>{title}</h2>
             <button
@@ -167,7 +166,7 @@ const SelectInput = ({
             </div>
           )}
         </div>
-      </Sheet>
+      </SheetPortal>
     </div>
   )
 }
