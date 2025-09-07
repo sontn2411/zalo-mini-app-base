@@ -1,4 +1,3 @@
-import DateRangePicker from '@/components/shared/DateRangePicker'
 import BenfitOptions from '@/components/shared/form/benfitOptions'
 import ExperienceOptions from '@/components/shared/form/experienceOptions'
 import GenderField from '@/components/shared/form/genderField'
@@ -46,7 +45,7 @@ const JobPostingPage = () => {
 
         <BenfitOptions />
 
-        <SheetDate />
+        <SheetDate title='Thời hạn tuyển dụng' />
         <div>
           <label className='block text-sm font-semibold text-gray-700 mb-2'>
             <FilePenLine className='w-4 h-4 inline mr-2' />

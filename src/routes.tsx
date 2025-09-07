@@ -14,6 +14,9 @@ import JobListPage from './pages/jobs'
 import CandidatePage from './pages/Candidate'
 import JobDetail from './pages/jobs/detail/JobDetail'
 import ProfilePage from './pages/profile'
+import AboutPage from './pages/about'
+import InsurancePage from './pages/insurance'
+import LaborExportPage from './pages/laborExport'
 
 const router = createBrowserRouter(
   [
@@ -27,9 +30,29 @@ const router = createBrowserRouter(
           handle: { title: 'Trang chủ' },
         },
         {
+          path: ROUTES.ABOUT,
+          element: <AboutPage />,
+          handle: { title: 'Giới thiệu' },
+        },
+        {
+          path: ROUTES.NEWS,
+          element: <NewspaperPage />,
+          handle: { title: 'Tin tức' },
+        },
+        {
+          path: ROUTES.INSURANCE,
+          element: <InsurancePage />,
+          handle: { title: 'Bảo hiểm thấp nghiệp' },
+        },
+        {
           path: ROUTES.ND70,
           element: <Decree70Page />,
           handle: { title: 'Nghị định 70' },
+        },
+        {
+          path: ROUTES.LABOREXPORT,
+          element: <LaborExportPage />,
+          handle: { title: 'Xuất khẩu lao động' },
         },
         {
           path: ROUTES.JOB_LIST,

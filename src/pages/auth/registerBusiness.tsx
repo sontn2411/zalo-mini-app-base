@@ -145,7 +145,7 @@ const RegisterBusiness = () => {
           </div>
 
           <p className='text-center text-sm  my-3 underline underline-offset-2 font-normal '>
-            Liên kết tài khoản Người lao động với Zalo
+            Liên kết tài khoản doanh nghiệp với Zalo
           </p>
         </div>
       </div>

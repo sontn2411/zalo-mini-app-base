@@ -1,18 +1,25 @@
+import { ROUTES } from '@/constants/routes'
 import { Search, Share2 } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const dataBtn = [
-  { id: 1, name: 'Việc tìm người', path: '/' },
-  { id: 2, name: 'Người tìm việc', path: '/' },
-  { id: 3, name: 'Việc làm nước ngoài', path: '/' },
+  { id: 1, name: 'Việc tìm người', path: ROUTES.JOB_LIST },
+  { id: 2, name: 'Người tìm việc', path: ROUTES.CANDIDATE },
+  { id: 3, name: 'Việc làm nước ngoài', path: ROUTES.LABOREXPORT },
 ]
 
 const SearchHome = () => {
+  const navigate = useNavigate()
   return (
     <>
       <div className='flex w-full gap-2 items-center'>
         <div
-          onClick={() => console.log('===')}
+          onClick={() =>
+            navigate(ROUTES.JOB_LIST, {
+              viewTransition: true,
+              state: { home: true },
+            })
+          }
           className='relative h-9 border rounded-md flex items-center px-3 cursor-pointer w-full'
         >
           <Search className='w-5 h-5 text-gray-400' />

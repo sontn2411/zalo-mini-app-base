@@ -77,6 +77,20 @@
   color: var(--color-1);
 }
 
+.rdrCalendarWrapper {
+  width: 100% !important;
+  .rdrMonthAndYearWrapper {
+    width: 100% !important;
+  }
+  .rdrMonth {
+    width: 100% !important;
+  }
+
+  .rdrSelected {
+    background: var(--color-1) !important;
+  }
+}
+
 .rdrDateRangeWrapper {
   width: 100% !important;
   .rdrMonth {

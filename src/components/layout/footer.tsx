@@ -24,13 +24,7 @@ const NAV_ITEMS = [
     iconActive: 'activeUsers',
     path: ROUTES.CANDIDATE,
   },
-  // {
-  //   id: 2,
-  //   name: 'Nghị định 70',
-  //   icon: 'newspaper',
-  //   iconActive: 'newspaperActive',
-  //   path: ROUTES.ND70,
-  // },
+
   {
     id: 3,
     name: 'Đăng tin',
@@ -61,12 +55,18 @@ const Footer = () => {
             <NavLink
               to={item.path}
               key={item.path}
-              className='flex flex-col items-center space-y-0.5 p-1 active:scale-105'
+              className='flex flex-col items-center space-y-0.5 p-1 active:scale-105 relative'
               viewTransition
             >
               {({ isActive }) =>
                 item.name ? (
                   <>
+                    <div
+                      className={`absolute -top-2 w-[80%] h-0.5 rounded-full ${
+                        isActive ? 'bg-color-1' : ''
+                      } `}
+                    ></div>
+
                     <div className='w-6 h-6 flex justify-center items-center'>
                       <IconUI
                         icon={isActive ? item.iconActive : item.icon}
@@ -76,8 +76,10 @@ const Footer = () => {
                       />
                     </div>
                     <div
-                      className={`text-xs  truncate font-medium ${
-                        isActive ? 'text-color-1' : ' text-color-2'
+                      className={`text-xs truncate  ${
+                        isActive
+                          ? 'text-color-1 font-bold '
+                          : ' text-color-2  font-medium'
                       }`}
                     >
                       {item.name}

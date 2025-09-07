@@ -6,6 +6,11 @@ export const ROUTES = {
   JOB_DETAIL: '/jobs/:id',
   REGISTER_BUSINESS: '/auth/register-business',
   ND70: '/nghi-dinh-70',
-  CANDIDATE: '/Candidate',
-  PROFILE :'/profile'
+  CANDIDATE: '/candidate',
+  DETAIL_CANDIDATE: '/candidate/:id',
+  PROFILE: '/profile',
+  ABOUT: '/about',
+  INSURANCE: '/inscurance',
+  NEWS: '/news',
+  LABOREXPORT: '/labor-export',
 }

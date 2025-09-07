@@ -16,7 +16,7 @@ const Layout = () => {
 
   return (
     <div className='w-screen h-screen flex flex-col bg-gray-50 text-foreground overflow-hidden'>
-      <Header />
+      {isHeaderProfile ? <HeaderProfile /> : <Header />}
 
       <div className=' flex-1 flex flex-col z-10 overflow-y-scroll'>
         <Outlet />

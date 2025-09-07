@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { getUserInfo } from 'zmp-sdk/apis'
-
+import { getPhoneNumber } from 'zmp-sdk/apis'
 type AppInfo = {
   id: string
   name: string

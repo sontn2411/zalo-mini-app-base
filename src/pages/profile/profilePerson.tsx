@@ -16,15 +16,19 @@ import {
   IdCard,
   FileText,
   Flag,
+  VenusAndMars,
+  GraduationCap,
+  Building2,
 } from 'lucide-react'
+import ProfileField from './profileField'
 
-type ProfileData = {
+export type ProfileData = {
   name: string
   phone: string
   email: string
   location: string
   dateOfBirth: string
-  gender: 'male' | 'female' | 'other'
+  gender: string
   experience: string
   skills: string
   hourlyRate: string
@@ -32,6 +36,10 @@ type ProfileData = {
   issueDate: string
   issuePlace: string
   ethnicity: string
+  educationLevel: string
+  school: string
+  major: string
+  graduation: string
 }
 
 const ProfilePerson = () => {
@@ -42,7 +50,7 @@ const ProfilePerson = () => {
     email: 'nguyenvanan@email.com',
     location: 'Nha Trang, Khánh Hòa',
     dateOfBirth: '1995-05-15',
-    gender: 'male',
+    gender: 'Nam',
     experience: '3 năm kinh nghiệm',
     skills: 'Thợ điện, Sửa chữa máy móc',
     hourlyRate: '150,000 VNĐ/giờ',
@@ -50,6 +58,10 @@ const ProfilePerson = () => {
     issueDate: '2015-08-20',
     issuePlace: 'Công an Khánh Hòa',
     ethnicity: 'Kinh',
+    educationLevel: 'Đại học',
+    school: 'Đai học Nha Trang',
+    major: 'CNTT',
+    graduation: '',
   })
 
   const handleInputChange = (field: keyof ProfileData, value: string) => {
@@ -68,85 +80,9 @@ const ProfilePerson = () => {
     setIsEditing(false)
   }
 
-  type ProfileFieldProps = {
-    icon: React.ElementType
-    label: string
-    value: string
-    field: keyof ProfileData
-    type?: string
-    options?: { value: string; label: string }[]
-    className?: string
-  }
-
-  const ProfileField: React.FC<ProfileFieldProps> = ({
-    icon: Icon,
-    label,
-    value,
-    field,
-    type = 'text',
-    options,
-    className = '',
-  }) => {
-    if (!isEditing) {
-      return (
-        <div
-          className={`flex items-center p-4 bg-white rounded-xl shadow-sm border border-gray-100 ${className}`}
-        >
-          <div className='flex-shrink-0'>
-            <Icon size={20} className='text-gray-500' />
-          </div>
-          <div className='ml-3 flex-1'>
-            <p className='text-sm font-medium text-gray-500'>{label}</p>
-            <p className='text-gray-900 font-medium'>
-              {value || 'Chưa cập nhật'}
-            </p>
-          </div>
-        </div>
-      )
-    }
-
-    if (type === 'select' && options) {
-      return (
-        <div className={`${className}`}>
-          <label className='flex items-center text-sm font-medium text-gray-700 mb-2'>
-            <Icon size={16} className='text-gray-500 mr-2' />
-            {label}
-          </label>
-          <select
-            value={value}
-            onChange={(e) => handleInputChange(field, e.target.value)}
-            className='w-full p-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all'
-          >
-            {options.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-        </div>
-      )
-    }
-
-    return (
-      <div className={`${className}`}>
-        <label className='flex items-center text-sm font-medium text-gray-700 mb-2'>
-          <Icon size={16} className='text-gray-500 mr-2' />
-          {label}
-        </label>
-        <input
-          type={type}
-          value={value}
-          onChange={(e) => handleInputChange(field, e.target.value)}
-          className='w-full p-4 bg-white border border-gray-200 rounded-xl transition-all focus:outline-color-1 focus:outline focus:outline-2 '
-          placeholder={`Nhập ${label.toLowerCase()}`}
-        />
-      </div>
-    )
-  }
-
   return (
     <div className=' relative'>
-      <div className=' fixed right-4'>
+      {/* <div className=' fixed right-4'>
         {!isEditing ? (
           <button
             onClick={() => setIsEditing(true)}
@@ -170,7 +106,7 @@ const ProfilePerson = () => {
             </button>
           </div>
         )}
-      </div>
+      </div> */}
 
       <div className='max-w-md mx-auto px-6 mt-6 '>
         {/* Personal Info */}
@@ -185,6 +121,8 @@ const ProfilePerson = () => {
               value={profileData.name}
               field='name'
               type='text'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
             />
             <ProfileField
               icon={Calendar}
@@ -192,18 +130,17 @@ const ProfilePerson = () => {
               value={profileData.dateOfBirth}
               field='dateOfBirth'
               type='date'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
             />
             <ProfileField
-              icon={User}
+              icon={VenusAndMars}
               label='Giới tính'
               value={profileData.gender}
               field='gender'
               type='select'
-              options={[
-                { value: 'male', label: 'Nam' },
-                { value: 'female', label: 'Nữ' },
-                { value: 'other', label: 'Khác' },
-              ]}
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
             />
           </div>
         </div>
@@ -220,6 +157,8 @@ const ProfilePerson = () => {
               value={profileData.phone}
               field='phone'
               type='tel'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
             />
             <ProfileField
               icon={Mail}
@@ -227,12 +166,16 @@ const ProfilePerson = () => {
               value={profileData.email}
               field='email'
               type='email'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
             />
             <ProfileField
               icon={MapPin}
               label='Địa chỉ'
               value={profileData.location}
               field='location'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
             />
           </div>
         </div>
@@ -248,6 +191,8 @@ const ProfilePerson = () => {
               label='Căn Cước Công Dân'
               value={profileData.citizenId}
               field='citizenId'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
             />
             <ProfileField
               icon={Calendar}
@@ -255,45 +200,67 @@ const ProfilePerson = () => {
               value={profileData.issueDate}
               field='issueDate'
               type='date'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
             />
             <ProfileField
               icon={FileText}
               label='Nơi cấp'
               value={profileData.issuePlace}
               field='issuePlace'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
             />
             <ProfileField
               icon={Flag}
               label='Dân tộc'
               value={profileData.ethnicity}
               field='ethnicity'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
             />
           </div>
         </div>
 
-        {/* Job Info */}
         <div className='mb-6'>
           <h3 className='text-lg font-bold text-gray-900 mb-4 px-2 flex items-center'>
             Thông tin nghề nghiệp
           </h3>
-          <div className='space-y-3'>
+          <div className=' space-y-3'>
             <ProfileField
-              icon={Award}
-              label='Kinh nghiệm'
-              value={profileData.experience}
-              field='experience'
+              icon={GraduationCap}
+              label='Trình độ học vấn'
+              value={profileData.educationLevel}
+              field='educationLevel'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
+            />
+
+            <ProfileField
+              icon={Building2}
+              label='Tên trường tốt nghiệp'
+              value={profileData.school}
+              field='school'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
+            />
+
+            <ProfileField
+              icon={Building2}
+              label='Chuyên ngành đào tạo'
+              value={profileData.major}
+              field='major'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
             />
             <ProfileField
-              icon={Star}
-              label='Kỹ năng'
-              value={profileData.skills}
-              field='skills'
-            />
-            <ProfileField
-              icon={Clock}
-              label='Mức lương theo giờ'
-              value={profileData.hourlyRate}
-              field='hourlyRate'
+              icon={GraduationCap}
+              label='Trình độ CMKT cao nhất'
+              value={profileData.graduation}
+              field='graduation'
+              isEditing={isEditing}
+              handleInputChange={handleInputChange}
+              type='select'
             />
           </div>
         </div>

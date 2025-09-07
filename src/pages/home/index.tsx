@@ -7,26 +7,25 @@ import { Info, ShieldCheck, Newspaper, FileText } from 'lucide-react'
 import { openShareSheet } from 'zmp-sdk/apis'
 import SearchHome from './searchHome'
 import { getRouteParams } from 'zmp-sdk/apis'
+import { ROUTES } from '@/constants/routes'
 
 const menuItems = [
-  { id: 1, name: 'Giới thiệu', icon: Info },
-  { id: 2, name: 'Bảo hiểm thất nghiệp', icon: ShieldCheck },
-  { id: 3, name: 'Tin tức', icon: Newspaper },
-  { id: 4, name: 'Nghị định 70', icon: FileText },
+  { id: 1, name: 'Giới thiệu', icon: Info, path: ROUTES.ABOUT },
+  {
+    id: 2,
+    name: 'Bảo hiểm thất nghiệp',
+    icon: ShieldCheck,
+    path: ROUTES.INSURANCE,
+  },
+  { id: 3, name: 'Tin tức', icon: Newspaper, path: ROUTES.NEWS },
+  { id: 4, name: 'Nghị định 70', icon: FileText, path: ROUTES.ND70 },
 ]
 
 function HomePage() {
   const navigate = useNavigate()
 
-  const params = new URLSearchParams(location.search)
-  const param1 = params.get('param1')
-  const param2 = params.get('param2')
-
-  console.log('=====', getRouteParams())
-
   return (
     <div className=' p-4 flex flex-col gap-6'>
-      <span>{param1}</span>
       <div className='flex flex-col gap-2'>
         <SearchHome />
       </div>
@@ -37,7 +36,9 @@ function HomePage() {
         {menuItems.map((item) => {
           const Icon = item.icon
           return (
-            <div
+            <Link
+              viewTransition={true}
+              to={item.path}
               key={item.id}
               className='flex flex-col items-center cursor-pointer'
             >
@@ -45,7 +46,7 @@ function HomePage() {
                 <Icon className='w-5 h-5 text-color-4' />
               </div>
               <span className='mt-1 text-[10px]'>{item.name}</span>
-            </div>
+            </Link>
           )
         })}
       </div>
