@@ -1,6 +1,6 @@
-import { logo } from '@/static'
 import { To, useLocation, useMatches, useNavigate } from 'react-router-dom'
 import IconUI from '../ui/iconUi'
+import { logo } from '@/static'
 
 type RouteHandle = {
   title?: string
@@ -30,11 +30,7 @@ const Header = () => {
       <div className='flex items-center min-h-12'>
         {isHome ? (
           <div className='flex items-center gap-2'>
-            <img
-              src='https://thongtinvieclamkhanhhoa.vn/assets/images/brand/trung-tam-dich-viec-lam-logo-footer.svg'
-              alt='logo'
-              className='h-10'
-            />
+            <img src={logo} alt='logo' className='h-10' />
             <div className='text-sm text-color-4 leading-tight flex flex-col justify-between '>
               <p className='text-[0.8rem] font-bold '>
                 Trung tâm dịch vụ việc làm Khánh Hòa

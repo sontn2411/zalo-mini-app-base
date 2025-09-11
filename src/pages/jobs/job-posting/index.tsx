@@ -9,12 +9,13 @@ import TimeOption from '@/components/shared/form/selectOption/timeOption'
 import SheetDate from '@/components/shared/form/sheetDate'
 import InputCustom from '@/components/ui/inputCustom'
 import { FilePenLine, ListCheck, Target, UsersRound } from 'lucide-react'
+import { Button } from 'zmp-ui'
 
 const JobPostingPage = () => {
   return (
     <div className=''>
       {/* <StepIndicator steps={steps} currentStep={currentStep} /> */}
-      <div className='bg-white rounded-2xl shadow-sm my-4 px-4 space-y-6'>
+      <div className='bg-white rounded-2xl shadow-sm  p-4 space-y-6'>
         <InputCustom
           label='Vị trí tuyển dụng'
           icon={Target}
@@ -68,6 +69,15 @@ const JobPostingPage = () => {
             placeholder='Nhập yêu cầu'
             className={`w-full px-4 py-3 border rounded-xl  transition-all resize-none focus:outline-color-1  focus:outline focus:outline-2`}
           />
+        </div>
+
+        <div className='pb-6'>
+          <Button
+            htmlType='submit'
+            className='w-full bg-color-1 text-white py-3 rounded-xl text-sm font-medium hover:bg-color-1'
+          >
+            Tiếp tục
+          </Button>
         </div>
       </div>
     </div>

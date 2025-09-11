@@ -6,11 +6,8 @@ import {
   Clock,
   DollarSign,
   Eye,
-  Globe,
   GraduationCap,
-  Mail,
   MapPin,
-  Phone,
   Target,
   Timer,
   UserCheck,
@@ -18,108 +15,121 @@ import {
 } from 'lucide-react'
 import InfoCard from './infoCard'
 import CustomTabs from '@/components/shared/customTabs'
+import { useParams } from 'react-router-dom'
+import { useDataJobDetail } from '@/api/query/jobs'
+import SkeletonDetail from './skeletonDetail'
 
-const jobData = {
-  position: 'Nhân viên Kế toán Tổng hợp',
-  company: 'Công ty TNHH Kỹ thuật Khánh Hòa',
-  education: 'Đại học',
-  salary: '10-15 triệu VNĐ',
-  location: 'Nam Nha Trang, Khánh Hòa',
-  deadline: '30/09/2025',
-  totalViews: 47,
-  postingDate: '15/08/2025',
-  jobLevel: 'Nhân viên',
-  genderRequirement: 'Không yêu cầu',
-  numberOfHires: 2,
-  workingHours: '8:00 - 17:00 (Thứ 2 - Thứ 6)',
-  degreeRequirement: 'Cử nhân Kế toán hoặc tương đương',
-  experienceRequirement: '1-3 năm kinh nghiệm',
-  industry: 'Kế toán - Kiểm toán',
-  urgentHiring: true,
-  employerInfo: {
-    name: 'Công ty TNHH Kỹ thuật Khánh Hòa',
-    type: 'Công ty TNHH',
-    size: '50-100 nhân viên',
-    website: 'www.ktkhanhoa.com.vn',
-    phone: '0258.123.456',
-    email: 'hr@ktkhanhoa.com.vn',
-    address: '123 Trần Phú, Vĩnh Hải, TP. Nha Trang',
-    established: '2018',
-    description:
-      'Chuyên cung cấp dịch vụ kỹ thuật và tư vấn trong lĩnh vực xây dựng',
-  },
-  jobDescription: [
-    'Thực hiện công tác kế toán tổng hợp cho công ty',
-    'Lập báo cáo tài chính hàng tháng, quý, năm',
-    'Theo dõi và kiểm soát các khoản thu chi',
-    'Lập hồ sơ thanh quyết toán thuế',
-    'Phối hợp với các bộ phận khác trong công ty',
-  ],
-  requirements: [
-    'Tốt nghiệp Đại học chuyên ngành Kế toán',
-    'Có 1-3 năm kinh nghiệm làm việc',
-    'Thành thạo Excel, Word và phần mềm kế toán',
-    'Có chứng chỉ hành nghề kế toán là lợi thế',
-    'Tỉ mỉ, cẩn thận trong công việc',
-  ],
-  benefits: [
-    'Lương cơ bản + phụ cấp + thưởng',
-    'Bảo hiểm xã hội, y tế đầy đủ',
-    'Thưởng tháng 13, thưởng hiệu suất',
-    '12 ngày phép/năm',
-    'Đào tạo nâng cao kỹ năng',
-    'Môi trường làm việc thân thiện',
-  ],
-}
+const PageNotFound = () => (
+  <div className='flex flex-col items-center justify-center min-h-[60vh] text-center'>
+    <h2 className='text-2xl font-bold text-gray-800 mb-2'>
+      Không tìm thấy công việc
+    </h2>
+    <p className='text-gray-500 mb-4'>
+      Công việc bạn đang tìm không tồn tại hoặc đã bị xoá.
+    </p>
+    <a
+      href='/'
+      className='px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition'
+    >
+      Quay lại trang chủ
+    </a>
+  </div>
+)
 
 const JobDetail = () => {
+  const { id } = useParams()
+  if (!id) return null
+
+  const { data, isLoading } = useDataJobDetail(id)
+  const job = data?.Data?.Data
+
+  if (isLoading) {
+    return <SkeletonDetail />
+  }
+
+  if (!job) {
+    return <PageNotFound />
+  }
+
+  const {
+    thumbnail,
+    title,
+    companyname,
+    salary,
+    position,
+    degreerequired,
+    experience,
+    gender,
+    job: industry,
+    publishdate,
+    viewcount,
+    deadline,
+    location,
+    numofrecruitment,
+    workingtime,
+    summary,
+    jobrequirements,
+    benefits,
+    companyaddress,
+    companyscale,
+  } = job
+
+  const infoCards = [
+    location && { icon: MapPin, title: 'Địa điểm', value: location },
+    salary && { icon: DollarSign, title: 'Mức lương', value: salary },
+    deadline && { icon: Clock, title: 'Hạn nộp', value: deadline },
+    numofrecruitment && {
+      icon: Users,
+      title: 'Số lượng tuyển',
+      value: `${numofrecruitment} người`,
+    },
+    position && { icon: Building2, title: 'Cấp bậc', value: position },
+  ].filter(Boolean)
+
   return (
     <div>
-      <div className='bg-white p-4 mb-4'>
-        <div className='flex items-start space-x-4'>
-          <div className='w-16 h-16 bg-color-1 rounded-2xl flex items-center justify-center'>
+      <div className='bg-white p-4 mb-4 flex items-start space-x-4'>
+        <div className='w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center bg-gray-100'>
+          {thumbnail ? (
+            <img
+              src={thumbnail}
+              alt={title || 'Logo công ty'}
+              className='w-full h-full object-cover'
+            />
+          ) : (
             <Building2 className='w-8 h-8 text-white' />
-          </div>
-          <div className='flex-1'>
-            <div className='flex items-center space-x-2 mb-1'>
-              <h2 className='text-lg font-bold text-gray-900'>
-                {jobData.position}
-              </h2>
-            </div>
-            <p className='text-gray-600 text-sm mb-2'>{jobData.company}</p>
-            <div className='flex items-center space-x-4 text-xs text-gray-500'>
+          )}
+        </div>
+        <div className='flex-1'>
+          <h2 className='text-lg font-bold text-gray-900'>{title}</h2>
+          <p className='text-gray-600 text-sm mb-2'>{companyname}</p>
+          <div className='flex items-center space-x-4 text-xs text-gray-500'>
+            {viewcount && (
               <span className='flex items-center'>
-                <Eye className='w-3 h-3 mr-1' />
-                {jobData.totalViews} lượt xem
+                <Eye className='w-3 h-3 mr-1' /> {viewcount} lượt xem
               </span>
+            )}
+            {publishdate && (
               <span className='flex items-center'>
-                <Calendar className='w-3 h-3 mr-1' />
-                Đăng {jobData.postingDate}
+                <Calendar className='w-3 h-3 mr-1' /> Đăng {publishdate}
               </span>
-            </div>
+            )}
           </div>
         </div>
       </div>
-      <div className='px-4 mb-4'>
-        <div className='grid grid-cols-2 gap-3'>
-          <div className='col-span-2'>
-            <InfoCard icon={MapPin} title='Địa điểm' value={jobData.location} />
+
+      <div className='px-4 mb-4 grid grid-cols-2 gap-3'>
+        {infoCards.map((card, idx) => (
+          <div
+            key={idx}
+            className={card.title === 'Địa điểm' ? 'col-span-2' : ''}
+          >
+            <InfoCard icon={card.icon} title={card.title} value={card.value} />
           </div>
-          <InfoCard
-            icon={DollarSign}
-            title='Mức lương'
-            value={jobData.salary}
-          />
-          <InfoCard icon={Clock} title='Hạn nộp' value={jobData.deadline} />
-          <InfoCard
-            icon={Users}
-            title='Số lượng tuyển'
-            value={`${jobData.numberOfHires} người`}
-          />
-          <InfoCard icon={Building2} title='Cấp bậc' value={jobData.jobLevel} />
-        </div>
+        ))}
       </div>
-      <div className='px-4 mb-4'>
+
+      <div className=' mb-4'>
         <CustomTabs
           tabs={[
             {
@@ -127,30 +137,33 @@ const JobDetail = () => {
               label: 'Nội dung công việc',
               content: (
                 <>
-                  <div className='bg-white p-4 mb-4'>
-                    <div className='space-y-4'>
-                      <div className='grid grid-cols-2 gap-4'>
+                  <div className='bg-white p-4 mb-4 space-y-4'>
+                    <div className='grid grid-cols-2 gap-4'>
+                      {position && (
                         <div>
                           <p className='text-xs text-gray-500 mb-1'>Cấp bậc</p>
                           <div className='flex items-center'>
                             <Briefcase className='w-4 h-4 text-gray-400 mr-2' />
                             <p className='text-sm font-medium text-gray-900'>
-                              {jobData.jobLevel}
+                              {position}
                             </p>
                           </div>
                         </div>
+                      )}
+                      {degreerequired && (
                         <div>
                           <p className='text-xs text-gray-500 mb-1'>Trình độ</p>
                           <div className='flex items-center'>
                             <GraduationCap className='w-4 h-4 text-gray-400 mr-2' />
                             <p className='text-sm font-medium text-gray-900'>
-                              {jobData.education}
+                              {degreerequired}
                             </p>
                           </div>
                         </div>
-                      </div>
-
-                      <div className='grid grid-cols-2 gap-4'>
+                      )}
+                    </div>
+                    <div className='grid grid-cols-2 gap-4'>
+                      {experience && (
                         <div>
                           <p className='text-xs text-gray-500 mb-1'>
                             Kinh nghiệm
@@ -158,10 +171,12 @@ const JobDetail = () => {
                           <div className='flex items-center'>
                             <Award className='w-4 h-4 text-gray-400 mr-2' />
                             <p className='text-sm font-medium text-gray-900'>
-                              {jobData.experienceRequirement}
+                              {experience}
                             </p>
                           </div>
                         </div>
+                      )}
+                      {gender && (
                         <div>
                           <p className='text-xs text-gray-500 mb-1'>
                             Giới tính
@@ -169,12 +184,13 @@ const JobDetail = () => {
                           <div className='flex items-center'>
                             <UserCheck className='w-4 h-4 text-gray-400 mr-2' />
                             <p className='text-sm font-medium text-gray-900'>
-                              {jobData.genderRequirement}
+                              {gender}
                             </p>
                           </div>
                         </div>
-                      </div>
-
+                      )}
+                    </div>
+                    {workingtime && (
                       <div>
                         <p className='text-xs text-gray-500 mb-1'>
                           Thời gian làm việc
@@ -182,70 +198,56 @@ const JobDetail = () => {
                         <div className='flex items-center'>
                           <Timer className='w-4 h-4 text-gray-400 mr-2' />
                           <p className='text-sm font-medium text-gray-900'>
-                            {jobData.workingHours}
+                            {workingtime}
                           </p>
                         </div>
                       </div>
-
+                    )}
+                    {industry && (
                       <div>
                         <p className='text-xs text-gray-500 mb-1'>Ngành nghề</p>
                         <div className='flex items-center'>
                           <Target className='w-4 h-4 text-gray-400 mr-2' />
                           <p className='text-sm font-medium text-gray-900'>
-                            {jobData.industry}
+                            {industry}
                           </p>
                         </div>
                       </div>
+                    )}
+                  </div>
+                  {summary && (
+                    <div className='bg-white p-4 mb-4'>
+                      <h3 className='text-lg font-bold text-gray-900 mb-4'>
+                        Mô tả công việc
+                      </h3>
+                      <div
+                        className='text-sm text-gray-700 leading-relaxed'
+                        dangerouslySetInnerHTML={{ __html: summary }}
+                      />
                     </div>
-                  </div>
-
-                  <div className='bg-white p-4 mb-4'>
-                    <h3 className='text-lg font-bold text-gray-900 mb-4'>
-                      Mô tả công việc
-                    </h3>
-                    <ul className='space-y-2'>
-                      {jobData.jobDescription.map((desc, index) => (
-                        <li key={index} className='flex items-start'>
-                          <span className='w-2 h-2 bg-color-1 rounded-full mt-2 mr-3 flex-shrink-0'></span>
-                          <p className='text-sm text-gray-700 leading-relaxed'>
-                            {desc}
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className='bg-white p-4 mb-4'>
-                    <h3 className='text-lg font-bold text-gray-900 mb-4'>
-                      Yêu cầu công việc
-                    </h3>
-                    <ul className='space-y-2'>
-                      {jobData.requirements.map((req, index) => (
-                        <li key={index} className='flex items-start'>
-                          <span className='w-2 h-2 bg-color-4 rounded-full mt-2 mr-3 flex-shrink-0'></span>
-                          <p className='text-sm text-gray-700 leading-relaxed'>
-                            {req}
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div className='bg-white p-4 mb-4'>
-                    <h3 className='text-lg font-bold text-gray-900 mb-4'>
-                      Quyền lợi được hưởng
-                    </h3>
-                    <ul className='space-y-2'>
-                      {jobData.benefits.map((benefit, index) => (
-                        <li key={index} className='flex items-start'>
-                          <span className='w-2 h-2 bg-color-3 rounded-full mt-2 mr-3 flex-shrink-0'></span>
-                          <p className='text-sm text-gray-700 leading-relaxed'>
-                            {benefit}
-                          </p>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+                  )}
+                  {jobrequirements && (
+                    <div className='bg-white p-4 mb-4'>
+                      <h3 className='text-lg font-bold text-gray-900 mb-4'>
+                        Yêu cầu công việc
+                      </h3>
+                      <div
+                        className='text-sm text-gray-700 leading-relaxed'
+                        dangerouslySetInnerHTML={{ __html: jobrequirements }}
+                      />
+                    </div>
+                  )}
+                  {benefits && (
+                    <div className='bg-white p-4 mb-4'>
+                      <h3 className='text-lg font-bold text-gray-900 mb-4'>
+                        Quyền lợi được hưởng
+                      </h3>
+                      <div
+                        className='text-sm text-gray-700 leading-relaxed'
+                        dangerouslySetInnerHTML={{ __html: benefits }}
+                      />
+                    </div>
+                  )}
                 </>
               ),
             },
@@ -253,80 +255,45 @@ const JobDetail = () => {
               key: 'company',
               label: 'Thông tin công ty',
               content: (
-                <div className='bg-white p-4 mb-20'>
-                  <div className='space-y-4'>
-                    <div className='flex items-center space-x-3'>
-                      <div className='w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center'>
+                <div className='bg-white p-4 mb-20 space-y-4'>
+                  <div className='flex items-center space-x-3'>
+                    <div className='w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden'>
+                      {thumbnail ? (
+                        <img
+                          src={thumbnail}
+                          alt={companyname || 'Logo công ty'}
+                          className='w-full h-full object-cover'
+                        />
+                      ) : (
                         <Building2 className='w-6 h-6 text-gray-600' />
-                      </div>
-                      <div>
-                        <h4 className='font-semibold text-gray-900'>
-                          {jobData.employerInfo.name}
-                        </h4>
-                        <p className='text-sm text-gray-600'>
-                          {jobData.employerInfo.type}
-                        </p>
-                      </div>
+                      )}
                     </div>
-
-                    <div className='grid grid-cols-2 gap-4'>
-                      <div>
-                        <p className='text-xs text-gray-500 mb-1'>Quy mô</p>
-                        <p className='text-sm font-medium text-gray-900'>
-                          {jobData.employerInfo.size}
-                        </p>
-                      </div>
-                      <div>
-                        <p className='text-xs text-gray-500 mb-1'>Thành lập</p>
-                        <p className='text-sm font-medium text-gray-900'>
-                          {jobData.employerInfo.established}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div>
-                      <p className='text-xs text-gray-500 mb-1'>
-                        Mô tả công ty
-                      </p>
-                      <p className='text-sm text-gray-700 leading-relaxed'>
-                        {jobData.employerInfo.description}
-                      </p>
-                    </div>
-
-                    <div className='space-y-2'>
-                      <div className='flex items-center space-x-2'>
-                        <Phone className='w-4 h-4 text-gray-400' />
-                        <p className='text-sm text-gray-700'>
-                          {jobData.employerInfo.phone}
-                        </p>
-                      </div>
-                      <div className='flex items-center space-x-2'>
-                        <Mail className='w-4 h-4 text-gray-400' />
-                        <p className='text-sm text-gray-700'>
-                          {jobData.employerInfo.email}
-                        </p>
-                      </div>
-                      <div className='flex items-center space-x-2'>
-                        <Globe className='w-4 h-4 text-gray-400' />
-                        <p className='text-sm text-blue-600'>
-                          {jobData.employerInfo.website}
-                        </p>
-                      </div>
-                      <div className='flex items-start space-x-2'>
-                        <MapPin className='w-4 h-4 text-gray-400 mt-0.5' />
-                        <p className='text-sm text-gray-700'>
-                          {jobData.employerInfo.address}
-                        </p>
-                      </div>
-                    </div>
+                    <h4 className='font-semibold text-gray-900'>
+                      {companyname}
+                    </h4>
                   </div>
+
+                  {companyscale && (
+                    <div>
+                      <p className='text-xs text-gray-500 mb-1'>Quy mô</p>
+                      <p className='text-sm font-medium text-gray-900'>
+                        {companyscale}
+                      </p>
+                    </div>
+                  )}
+
+                  {companyaddress && (
+                    <div className='flex items-start space-x-2'>
+                      <MapPin className='w-4 h-4 text-gray-400 mt-0.5' />
+                      <p className='text-sm text-gray-700'>{companyaddress}</p>
+                    </div>
+                  )}
                 </div>
               ),
             },
           ]}
         />
       </div>
-      ;
     </div>
   )
 }

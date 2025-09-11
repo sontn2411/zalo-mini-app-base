@@ -1,3 +1,4 @@
+import useSettingStore from '@/store/useSetting'
 import { VenusAndMars } from 'lucide-react'
 
 interface GenderFieldProps {
@@ -7,6 +8,8 @@ interface GenderFieldProps {
 export default function GenderField({
   disbaleLabel = false,
 }: GenderFieldProps) {
+  const { ListGenderUser } = useSettingStore()
+
   return (
     <div className='flex gap-4 items-center '>
       {!disbaleLabel && (
@@ -16,33 +19,19 @@ export default function GenderField({
         </label>
       )}
       <div className='flex gap-4'>
-        <label className='flex items-center gap-2 cursor-pointer text-sm '>
-          <input
-            type='radio'
-            name='gender'
-            value='male'
-            className='accent-color-1'
-          />
-          Nam
-        </label>
-        <label className='flex items-center gap-2 cursor-pointer text-sm'>
-          <input
-            type='radio'
-            name='gender'
-            value='female'
-            className='accent-color-1'
-          />
-          Nữ
-        </label>
-        <label className='flex items-center gap-2 cursor-pointer text-sm'>
-          <input
-            type='radio'
-            name='gender'
-            value='other'
-            className='accent-color-1'
-          />
-          Khác
-        </label>
+        {ListGenderUser.map((item) => {
+          return (
+            <label className='flex items-center gap-2 cursor-pointer text-sm'>
+              <input
+                type='radio'
+                name='gender'
+                value={item.value}
+                className='ccent-color-1'
+              />
+              {item.label}
+            </label>
+          )
+        })}
       </div>
     </div>
   )

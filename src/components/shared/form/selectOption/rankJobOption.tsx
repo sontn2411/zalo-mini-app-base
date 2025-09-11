@@ -16,7 +16,10 @@ const RankJobOption = () => {
         Cấp bậc
       </label>
       <SelectInput
-        options={ranks}
+        options={ranks.map((item, index) => ({
+          label: item,
+          value: `ranks_${index}`,
+        }))}
         maxSelect={1}
         title='Chọn cấp bậc'
         placeholder='Chọn cấp bậc'

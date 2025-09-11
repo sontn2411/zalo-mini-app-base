@@ -23,7 +23,10 @@ const BenfitOptions = () => {
         Chế độ phúc lợi
       </label>
       <SelectInput
-        options={benefitOptions}
+        options={benefitOptions.map((item, index) => ({
+          label: item,
+          value: `benefit_${index}`,
+        }))}
         maxSelect={5}
         title='Chọn Phúc lợi'
         placeholder='Chọn tối đa 5 phúc lợi'

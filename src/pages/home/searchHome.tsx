@@ -1,6 +1,7 @@
 import { ROUTES } from '@/constants/routes'
 import { Search, Share2 } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
+import { openShareSheet } from 'zmp-sdk/apis'
 
 const dataBtn = [
   { id: 1, name: 'Việc tìm người', path: ROUTES.JOB_LIST },
@@ -10,6 +11,19 @@ const dataBtn = [
 
 const SearchHome = () => {
   const navigate = useNavigate()
+
+  const handleShareApp = async () => {
+    const data = await openShareSheet({
+      type: 'zmp_deep_link',
+      data: {
+        title: 'Trung tâm dịch vụ việc làm Khánh Hòa - Trang chủ',
+        description: 'Trang chủ',
+        thumbnail:
+          'https://thongtinvieclamkhanhhoa.vn/assets/images/share-img.jpg',
+      },
+    })
+  }
+
   return (
     <>
       <div className='flex w-full gap-2 items-center'>
@@ -25,7 +39,7 @@ const SearchHome = () => {
           <Search className='w-5 h-5 text-gray-400' />
           <span className='ml-2 text-gray-500 text-sm'>Tìm kiếm công việc</span>
         </div>
-        <button className='text-color-2'>
+        <button onClick={handleShareApp} className='text-color-2'>
           <Share2 />
         </button>
       </div>

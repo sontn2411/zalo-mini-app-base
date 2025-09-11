@@ -1,17 +1,10 @@
 import { DollarSign } from 'lucide-react'
 import SelectInput from './selectInput'
-
-const salaryRanges = [
-  'Dưới 5 triệu',
-  '5-10 triệu',
-  '10-20 triệu',
-  '20-50 triệu',
-  'Thỏa thuận',
-  'Lương ngày',
-  'Lương Giờ',
-]
+import useSettingStore from '@/store/useSetting'
 
 const SalaryRanges = () => {
+  const { ListSalary } = useSettingStore()
+
   return (
     <div>
       <label className='block text-sm font-semibold text-gray-700 mb-2'>
@@ -20,7 +13,7 @@ const SalaryRanges = () => {
       </label>
 
       <SelectInput
-        options={salaryRanges}
+        options={ListSalary}
         maxSelect={1}
         title='Chọn Mức lương'
         placeholder='Chọn Mức lương'

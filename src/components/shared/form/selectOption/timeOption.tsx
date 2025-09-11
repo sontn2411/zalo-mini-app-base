@@ -18,7 +18,10 @@ const TimeOption = () => {
       </label>
 
       <SelectInput
-        options={times}
+        options={times.map((item, index) => ({
+          label: item,
+          value: `times_${index}`,
+        }))}
         maxSelect={1}
         title='Chọn thời gian'
         placeholder='Chọn thời gian'

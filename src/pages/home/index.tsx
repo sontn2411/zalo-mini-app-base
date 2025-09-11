@@ -1,13 +1,11 @@
 import BannerHome from './banner'
 import LatestJob from './latestJob'
 import GeneralNews from './generalNews'
-import { Search, Share2 } from 'lucide-react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Info, ShieldCheck, Newspaper, FileText } from 'lucide-react'
-import { openShareSheet } from 'zmp-sdk/apis'
 import SearchHome from './searchHome'
-import { getRouteParams } from 'zmp-sdk/apis'
 import { ROUTES } from '@/constants/routes'
+import { useHomeData } from '@/api/query/home'
 
 const menuItems = [
   { id: 1, name: 'Giới thiệu', icon: Info, path: ROUTES.ABOUT },
@@ -22,7 +20,7 @@ const menuItems = [
 ]
 
 function HomePage() {
-  const navigate = useNavigate()
+  const { data, isLoading } = useHomeData()
 
   return (
     <div className=' p-4 flex flex-col gap-6'>
@@ -52,8 +50,8 @@ function HomePage() {
       </div>
 
       <LatestJob />
-      {/* <RegisterCTA /> */}
-      <GeneralNews />
+
+      <GeneralNews data={data?.Data?.Data ?? []} isLoading={isLoading} />
     </div>
   )
 }

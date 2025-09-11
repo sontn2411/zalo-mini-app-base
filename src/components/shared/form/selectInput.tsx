@@ -1,15 +1,20 @@
 import { ChevronDown, X } from 'lucide-react'
 import { useState } from 'react'
-import { Sheet } from 'zmp-ui'
 import SheetPortal from './sheetPortal'
 
+interface Option {
+  value: string
+  label: string
+}
+
 interface SelectInputProps {
-  options: string[]
+  options: Option[]
   maxSelect?: number
   title?: string
   placeholder?: string
   onChange?: (values: string[]) => void
   showSearch?: boolean
+  className?: string
 }
 
 const SelectInput = ({
@@ -19,23 +24,24 @@ const SelectInput = ({
   placeholder = 'Chọn',
   onChange,
   showSearch = true,
+  className,
 }: SelectInputProps) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [isOpen, setIsOpen] = useState(false)
   const [selectedValues, setSelectedValues] = useState<string[]>([])
   const [tempSelected, setTempSelected] = useState<string[]>([])
-  const [searchTerm, setSearchTerm] = useState<string>('')
+  const [searchTerm, setSearchTerm] = useState('')
 
-  const handleToggle = (item: string) => {
+  const handleToggle = (value: string) => {
     if (maxSelect === 1) {
-      setSelectedValues([item])
-      onChange?.([item])
+      setSelectedValues([value])
+      onChange?.([value])
       setIsOpen(false)
     } else {
-      if (tempSelected.includes(item)) {
-        setTempSelected(tempSelected.filter((j) => j !== item))
+      if (tempSelected.includes(value)) {
+        setTempSelected(tempSelected.filter((v) => v !== value))
       } else {
         if (tempSelected.length < maxSelect) {
-          setTempSelected([...tempSelected, item])
+          setTempSelected([...tempSelected, value])
         } else {
           alert(`Bạn chỉ được chọn tối đa ${maxSelect} mục!`)
         }
@@ -55,26 +61,29 @@ const SelectInput = ({
     setIsOpen(true)
   }
 
-  // Lọc option theo searchTerm
-  const filteredOptions = options.filter((item) =>
-    item.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredOptions = options.filter((opt) =>
+    opt.label.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
   return (
     <div>
       <div
-        className='border rounded-xl px-4 py-2 cursor-pointer w-full flex justify-between items-center gap-2 min-h-12 z-50 '
+        className={`border rounded-xl px-4 py-2 cursor-pointer w-full flex justify-between bg-white items-center gap-2 min-h-12 z-50 ${className}`}
         onClick={handleOpen}
       >
         <div>
           {selectedValues.length > 0 ? (
-            selectedValues.join(', ')
+            options
+              .filter((opt) => selectedValues.includes(opt.value))
+              .map((opt) => opt.label)
+              .join(', ')
           ) : (
             <span className='text-color-2'>{placeholder}</span>
           )}
         </div>
         <ChevronDown />
       </div>
+
       <SheetPortal
         visible={isOpen}
         height='85%'
@@ -82,13 +91,8 @@ const SelectInput = ({
       >
         <div className='flex flex-col h-full pb-4'>
           <div className='flex justify-between p-4 pb-2'>
-            <h2 className='text-lg font-bold '>{title}</h2>
-            <button
-              onClick={(e) => {
-                e.preventDefault()
-                setIsOpen(false)
-              }}
-            >
+            <h2 className='text-lg font-bold'>{title}</h2>
+            <button onClick={() => setIsOpen(false)}>
               <X />
             </button>
           </div>
@@ -100,22 +104,22 @@ const SelectInput = ({
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder='Tìm kiếm...'
-                className='w-full border rounded-lg px-3 py-2'
+                className='w-full border rounded-lg px-3 py-2 focus:outline-color-1 focus:outline focus:outline-2'
               />
             </div>
           )}
 
           <div className='flex-1 overflow-y-auto px-4 space-y-3'>
-            {filteredOptions.map((item, index) => {
+            {filteredOptions.map((opt, index) => {
               const checked =
                 maxSelect === 1
-                  ? selectedValues.includes(item)
-                  : tempSelected.includes(item)
+                  ? selectedValues.includes(opt.value)
+                  : tempSelected.includes(opt.value)
 
               return (
                 <div
                   key={index}
-                  onClick={() => handleToggle(item)}
+                  onClick={() => handleToggle(opt.value)}
                   className='flex items-center justify-between p-2 rounded-lg cursor-pointer hover:bg-gray-50 transition'
                 >
                   <span
@@ -123,7 +127,7 @@ const SelectInput = ({
                       checked ? 'text-color-1 font-medium' : 'text-black'
                     }`}
                   >
-                    {item}
+                    {opt.label}
                   </span>
                   {checked && (
                     <svg
@@ -155,10 +159,7 @@ const SelectInput = ({
           {maxSelect > 1 && (
             <div className='px-4 pb-8 py-4 border-t bg-white'>
               <button
-                onClick={(e) => {
-                  e.preventDefault()
-                  handleConfirm()
-                }}
+                onClick={handleConfirm}
                 className='w-full py-3 bg-color-1 text-white font-semibold rounded-lg'
               >
                 Xác nhận

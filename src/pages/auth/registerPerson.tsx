@@ -21,16 +21,7 @@ import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import GraduationOption from '@/components/shared/form/selectOption/graduationOption'
-
-const jobOptions = [
-  'Kế toán',
-  'Lập trình viên',
-  'Nhân viên bán hàng',
-  'Thiết kế đồ họa',
-  'Quản lý dự án',
-  'Marketing',
-  'Bảo vệ',
-]
+import useSettingStore from '@/store/useSetting'
 
 const registerPersonSchema = z
   .object({
@@ -56,6 +47,8 @@ const registerPersonSchema = z
 type RegisterPersonForm = z.infer<typeof registerPersonSchema>
 
 const RegisterPerson = () => {
+  const { ListJob } = useSettingStore()
+
   const {
     register,
     handleSubmit,
@@ -219,7 +212,7 @@ const RegisterPerson = () => {
                 Ngành nghề mong muốn
               </label>
               <SelectInput
-                options={jobOptions}
+                options={ListJob}
                 maxSelect={2}
                 title='Chọn ngành nghề'
                 placeholder='Chọn tối đa 2 ngành'
@@ -239,7 +232,7 @@ const RegisterPerson = () => {
             </div>
             <Button
               htmlType='submit'
-              className='w-full bg-color-1 text-white py-3 rounded-xl text-sm font-medium'
+              className='w-full bg-color-1 text-white py-3 rounded-xl text-sm font-medium hover:bg-color-1'
             >
               Đăng ký
             </Button>

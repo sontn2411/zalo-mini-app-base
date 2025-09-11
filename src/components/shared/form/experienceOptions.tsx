@@ -20,7 +20,10 @@ const ExperienceOptions = () => {
         </label>
 
         <SelectInput
-          options={experienceOptions}
+          options={experienceOptions.map((item, index) => ({
+            label: item,
+            value: `graduation_${index}`,
+          }))}
           maxSelect={1}
           title='Chọn kinh nghiệm'
           placeholder='Chọn Khinh nghiệm'

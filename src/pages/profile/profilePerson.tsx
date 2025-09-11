@@ -108,7 +108,7 @@ const ProfilePerson = () => {
         )}
       </div> */}
 
-      <div className='max-w-md mx-auto px-6 mt-6 '>
+      <div className='max-w-md mx-auto px-4 mt-6 '>
         {/* Personal Info */}
         <div className='mb-6'>
           <h3 className='text-lg font-bold text-gray-900 mb-4 px-2'>

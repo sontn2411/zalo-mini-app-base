@@ -3,8 +3,6 @@ import { createBrowserRouter } from 'react-router-dom'
 import Layout from './components/layout/layout'
 import HomePage from './pages/home'
 import NewspaperPage from './pages/newspaper'
-import PostPage from './pages/post'
-
 import RegisterPerson from './pages/auth/registerPerson'
 import JobPostingPage from './pages/jobs/job-posting'
 import RegisterBusiness from './pages/auth/registerBusiness'
@@ -17,6 +15,8 @@ import ProfilePage from './pages/profile'
 import AboutPage from './pages/about'
 import InsurancePage from './pages/insurance'
 import LaborExportPage from './pages/laborExport'
+import DetailCandidate from './pages/Candidate/detailCandidate'
+import NewsDetailPage from './pages/newspaper/newsDetail'
 
 const router = createBrowserRouter(
   [
@@ -38,6 +38,11 @@ const router = createBrowserRouter(
           path: ROUTES.NEWS,
           element: <NewspaperPage />,
           handle: { title: 'Tin tức' },
+        },
+        {
+          path: ROUTES.NEWSITEM,
+          element: <NewsDetailPage />,
+          handle: { title: 'Chi tiết tin tức' },
         },
         {
           path: ROUTES.INSURANCE,
@@ -70,9 +75,9 @@ const router = createBrowserRouter(
           handle: { title: 'Danh sách ứng viên' },
         },
         {
-          path: '/post',
-          element: <PostPage />,
-          handle: { title: 'Đăng bài' },
+          path: ROUTES.DETAIL_CANDIDATE,
+          element: <DetailCandidate />,
+          handle: { title: 'Chi tiết ứng viên' },
         },
         {
           path: ROUTES.JOB_POSTING,

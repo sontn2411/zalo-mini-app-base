@@ -19,17 +19,6 @@ const ProfilePage = () => {
 
   return (
     <>
-      {/* <div className=' pb-4 bg-white'>
-        <div className='flex items-center gap-3 px-4 '>
-          <img
-            src={data.avatar}
-            alt={data.name}
-            className='w-16 h-16 rounded-full object-cover '
-          />
-          <span className='text-base font-semibold '>{data.name}</span>
-        </div>
-      </div> */}
-
       <ProfilePerson />
 
       <div className='mt-4 pb-6 px-4'>
@@ -44,7 +33,7 @@ const ProfilePage = () => {
               <User className='w-5 h-5' />
             </div>
             <div className='text-left'>
-              <p className='text-sm font-semibold'>Đăng ký tìm việc</p>
+              <p className='text-sm font-semibold'>Đăng ký người tìm việc</p>
               <p className='text-xs text-white/80'>Cho người lao động</p>
             </div>
           </button>
@@ -59,7 +48,7 @@ const ProfilePage = () => {
               <Building2 className='w-5 h-5' />
             </div>
             <div className='text-left'>
-              <p className='text-sm font-semibold'>Đăng ký tuyển dụng</p>
+              <p className='text-sm font-semibold'>Đăng ký nhà tuyển dụng</p>
               <p className='text-xs text-white/80'>Cho doanh nghiệp</p>
             </div>
           </button>

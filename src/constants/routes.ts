@@ -12,5 +12,6 @@ export const ROUTES = {
   ABOUT: '/about',
   INSURANCE: '/inscurance',
   NEWS: '/news',
+  NEWSITEM: '/news/:id',
   LABOREXPORT: '/labor-export',
 }

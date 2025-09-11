@@ -1,10 +1,7 @@
+import { banner1, banner2, banner3 } from '@/static'
 import { Swiper } from 'zmp-ui'
 
-const data = [
-  'https://picsum.photos/id/1018/600/300',
-  'https://picsum.photos/id/1024/600/300',
-  'https://picsum.photos/id/1035/600/300',
-]
+const data = [banner1, banner2, banner3]
 
 const BannerHome = () => {
   return (

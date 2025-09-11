@@ -1,28 +1,14 @@
 import { GraduationCap } from 'lucide-react'
 import SelectInput from '../selectInput'
-
-const dataGraduation = [
-  'Không có trình độ CMKT',
-  'CNKT không bằng',
-  'Đào tạo thường xuyên',
-  'Sơ cấp nghề',
-  'Trung cấp',
-  'Cao đẳng',
-  'Đại học',
-  'Chưa qua đào tạo',
-  'Chứng chỉ nghề dưới 3 tháng',
-  'Tiến sĩ',
-  'CNKT không bằng',
-  'Thạc sĩ',
-  'Lao động phổ thông',
-  'Khác',
-]
+import useSettingStore from '@/store/useSetting'
 
 interface GraduationOptionProps {
   hiddenLabel?: boolean
 }
 
 const GraduationOption = ({ hiddenLabel = false }: GraduationOptionProps) => {
+  const { ListStudy } = useSettingStore()
+
   return (
     <div>
       {!hiddenLabel && (
@@ -33,7 +19,7 @@ const GraduationOption = ({ hiddenLabel = false }: GraduationOptionProps) => {
       )}
 
       <SelectInput
-        options={dataGraduation}
+        options={ListStudy}
         maxSelect={1}
         title='Chọn Trình độ'
         placeholder='Chọn Trình độ'

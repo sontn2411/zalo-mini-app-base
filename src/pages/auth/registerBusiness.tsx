@@ -134,7 +134,7 @@ const RegisterBusiness = () => {
           <Button
             onClick={handleSubmit(onSubmit)}
             htmlType='submit'
-            className='w-full bg-color-1 text-white py-3 rounded-xl text-sm font-medium'
+            className='w-full bg-color-1 text-white py-3 rounded-xl text-sm font-medium  hover:bg-color-1'
           >
             Đăng ký
           </Button>

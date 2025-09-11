@@ -27,7 +27,10 @@ const LevelOption = () => {
       </label>
 
       <SelectInput
-        options={dataGraduation}
+        options={dataGraduation.map((item, index) => ({
+          label: item,
+          value: `graduation_${index}`,
+        }))}
         maxSelect={1}
         title='Chọn Trình độ'
         placeholder='Chọn Trình độ'
