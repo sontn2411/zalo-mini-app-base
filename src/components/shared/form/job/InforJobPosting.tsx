@@ -4,16 +4,7 @@ import SelectInput from '../selectInput'
 import TargetJob from '../input/targetJob'
 import { ButtonNextStep } from '../buttonSteps'
 import GenderField from '../genderField'
-
-const jobOptions = [
-  'Kế toán',
-  'Lập trình viên',
-  'Nhân viên bán hàng',
-  'Thiết kế đồ họa',
-  'Quản lý dự án',
-  'Marketing',
-  'Bảo vệ',
-]
+import useSettingStore from '@/store/useSetting'
 
 const ranks = [
   'Lao động kỹ thuật',
@@ -27,6 +18,8 @@ interface InforJobPostingProps {
 }
 
 const InforJobPosting = ({ handleNextStep }: InforJobPostingProps) => {
+  const { ListJob } = useSettingStore()
+
   return (
     <form className='space-y-6 animate-fadeIn'>
       <TargetJob />
@@ -38,7 +31,7 @@ const InforJobPosting = ({ handleNextStep }: InforJobPostingProps) => {
         </label>
 
         <SelectInput
-          options={jobOptions}
+          options={ListJob}
           maxSelect={2}
           title='Chọn ngành nghề'
           placeholder='Chọn ngành nghề'

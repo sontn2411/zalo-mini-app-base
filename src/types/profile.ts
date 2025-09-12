@@ -13,3 +13,10 @@ export interface WorkerProfileForm {
   password: string
   confirmPassword: string
 }
+
+export interface UserProfile {
+  id: string
+  avatar: string
+  name: string
+  accessToken: string
+}

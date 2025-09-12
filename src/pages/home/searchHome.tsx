@@ -44,13 +44,13 @@ const SearchHome = () => {
         </button>
       </div>
 
-      <ul className='flex flex-wrap gap-2 '>
+      <ul className='flex flex-wrap gap-2 mt-1 '>
         {dataBtn.map((item) => (
           <li key={item.id} className='pt-2'>
             <Link
               viewTransition={true}
               to={item.path}
-              className='text-[0.7rem] px-2 py-2 border rounded-md bg-color-4 text-white font-medium transition-colors'
+              className='text-[0.7rem] px-2 py-2.5 border rounded-md bg-color-4 text-white font-medium transition-colors'
             >
               {item.name}
             </Link>

@@ -37,9 +37,20 @@ const fetchDataJobList = async ({
   jobtype = '',
 }: JobListParams & { pageParam?: number }) => {
   const pageSize = 10
-  const { data } = await instance.get(
-    `JobList?rowIndex=${pageParam}&pageSize=${pageSize}&keyword=${keyword}&job=${job}&ward=${ward}&salary=${salary}&gender=${gender}&jobtype=${jobtype}`
-  )
+
+  const { data } = await instance.get('JobList', {
+    params: {
+      rowIndex: pageParam,
+      pageSize,
+      keyword,
+      job,
+      ward,
+      salary,
+      gender,
+      jobtype,
+    },
+  })
+
   return data
 }
 

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useDataOverseasJobs } from '@/api/query/news'
 import NewsList from '@/components/shared/newsList'
+import NewsSkeleton from '@/components/shared/newsSkeleton'
 
 const LaborExportPage = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
@@ -27,13 +28,26 @@ const LaborExportPage = () => {
   }, [hasNextPage, fetchNextPage, isLoading])
 
   return (
-    <div className='p-4'>
-      {data?.pages.map((page, i) => (
-        <NewsList key={i} data={page.Data.Data} isLoading={isLoading} />
-      ))}
+    <div className='p-4 space-y-4'>
+      {isLoading ? (
+        <>
+          <NewsSkeleton />
+          <NewsSkeleton />
+          <NewsSkeleton />
+        </>
+      ) : (
+        data?.pages.map((page, i) => (
+          <NewsList key={i} data={page.Data.Data} isLoading={isLoading} />
+        ))
+      )}
 
       <div ref={loadMoreRef} className='h-10 flex items-center justify-center'>
-        {isFetchingNextPage ? <span>Đang tải...</span> : null}
+        {isFetchingNextPage ? (
+          <div className='w-full space-y-2'>
+            <NewsSkeleton />
+            <NewsSkeleton />
+          </div>
+        ) : null}
       </div>
     </div>
   )

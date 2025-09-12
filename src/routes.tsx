@@ -97,7 +97,10 @@ const router = createBrowserRouter(
         {
           path: ROUTES.REGISTER_BUSINESS,
           element: <RegisterBusiness />,
-          handle: { title: 'Đăng ký', desc: 'Hồ sơ doanh nghiệp' },
+          handle: {
+            title: 'Đăng ký',
+            desc: 'Hãy đồng hành cùng các doanh nghiệp tại việc làm Khánh Hòa',
+          },
         },
       ],
     },

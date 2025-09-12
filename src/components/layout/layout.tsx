@@ -16,6 +16,7 @@ import Settings from './settings'
 import ScrollToTop from '../shared/scrollToTop'
 import { useRef } from 'react'
 import HeaderDetail from './headerDetail'
+import LayoutAuth from './layoutAuth'
 
 const queryClient = new QueryClient()
 
@@ -23,7 +24,9 @@ const Layout = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Settings>
-        <ContentLayout />
+        <LayoutAuth>
+          <ContentLayout />
+        </LayoutAuth>
       </Settings>
     </QueryClientProvider>
   )
@@ -40,28 +43,29 @@ const ContentLayout = () => {
     ROUTES.ABOUT,
   ]
   const pathProfile = [ROUTES.PROFILE]
-  const pathDetail = ['/news/:id']
+  const pathDetail = []
+  const pathNoHeader = [ROUTES.REGISTER_PERSON, ROUTES.REGISTER_BUSINESS]
 
   const scrollRef = useRef<HTMLDivElement>(null)
-
   const location = useLocation()
 
   const isShowFooter = paths.includes(location.pathname)
   const isHeaderProfile = pathProfile.includes(location.pathname)
-
   const isHeaderDetail = pathDetail.some((pattern) =>
     matchPath(pattern, location.pathname)
   )
+  const isNoHeader = pathNoHeader.includes(location.pathname)
 
   return (
     <div className='w-screen h-screen flex flex-col bg-gray-50 text-foreground overflow-hidden'>
-      {isHeaderProfile ? (
-        <HeaderProfile />
-      ) : isHeaderDetail ? (
-        <HeaderDetail />
-      ) : (
-        <Header />
-      )}
+      {!isNoHeader &&
+        (isHeaderProfile ? (
+          <HeaderProfile />
+        ) : isHeaderDetail ? (
+          <HeaderDetail />
+        ) : (
+          <Header />
+        ))}
 
       <div
         ref={scrollRef}
@@ -75,5 +79,4 @@ const ContentLayout = () => {
     </div>
   )
 }
-
 export default Layout

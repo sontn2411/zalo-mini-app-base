@@ -67,7 +67,7 @@ const LatestJob = () => {
                           {item.title}
                         </p>
                         {item.location && (
-                          <p className='text-xs text-gray-500 flex items-center mt-1'>
+                          <p className='text-xs text-gray-500 flex items-center mt-1 line-clamp-1'>
                             <MapPin className='w-3 h-3 mr-1' />
                             {item.location}
                           </p>

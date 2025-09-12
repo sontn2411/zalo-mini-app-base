@@ -13,55 +13,90 @@ import {
   FileText,
   UserRound,
   Briefcase,
+  User2,
+  AlertCircle,
 } from 'lucide-react'
-import { Button, DatePicker } from 'zmp-ui'
+import { Button } from 'zmp-ui'
 import SelectInput from '@/components/shared/form/selectInput'
 import GenderField from '@/components/shared/form/genderField'
 import { z } from 'zod'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import GraduationOption from '@/components/shared/form/selectOption/graduationOption'
 import useSettingStore from '@/store/useSetting'
-
-const registerPersonSchema = z
-  .object({
-    username: z.string().min(3, 'Tên đăng nhập tối thiểu 3 ký tự'),
-    password: z.string().min(6, 'Mật khẩu tối thiểu 6 ký tự'),
-    confirmPassword: z.string(),
-    fullName: z.string().min(1, 'Vui lòng nhập họ tên'),
-    idCard: z.string().min(9, 'Số CCCD không hợp lệ'),
-    issuePlace: z.string().min(1, 'Vui lòng nhập nơi cấp'),
-    phone: z.string().regex(/^[0-9]{9,11}$/, 'Số điện thoại không hợp lệ'),
-    address: z.string().min(1, 'Vui lòng nhập địa chỉ'),
-    email: z.string().email('Email không hợp lệ'),
-    ethnicity: z.string().min(1, 'Vui lòng nhập dân tộc'),
-    educationLevel: z.string().min(1, 'Vui lòng nhập trình độ học vấn'),
-    graduationSchool: z.string().min(1, 'Vui lòng nhập trường tốt nghiệp'),
-    major: z.string().min(1, 'Vui lòng nhập chuyên ngành'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: 'Mật khẩu xác nhận không khớp',
-  })
-
-type RegisterPersonForm = z.infer<typeof registerPersonSchema>
+import SheetDate from '@/components/shared/form/sheetDate'
+import IconUI from '@/components/ui/iconUi'
+import { To, useNavigate } from 'react-router-dom'
+import {
+  RegisterPersonForm,
+  registerPersonSchema,
+} from '@/schemas/registerSchema'
 
 const RegisterPerson = () => {
   const { ListJob } = useSettingStore()
+  const [birthDay, setBirthDay] = useState<string>('')
+
+  const { ListGenderUser } = useSettingStore()
+
+  const genderDefault = ListGenderUser.find(
+    (item) => item.label !== 'Nam' && item.label !== 'Nữ'
+  )
+
+  const navigate = useNavigate()
 
   const {
     register,
     handleSubmit,
+    control,
+    getValues,
     formState: { errors },
   } = useForm<RegisterPersonForm>({
     resolver: zodResolver(registerPersonSchema),
+    defaultValues: {
+      job: [],
+      gender: genderDefault?.value,
+    },
   })
 
   const onSubmit = (data: RegisterPersonForm) => {
-    console.log('Form data:', data)
+    // let erros = []
+
+    // if (birthDay.length === 0) {
+    //   erros.push({ field: 'birthday', messgage: 'errror' })
+    // }
+
+    const payload = {
+      ...data,
+      birthDay,
+    }
   }
+
+  const handlePrev = () => {
+    navigate(-1 as To, {
+      viewTransition: true,
+    })
+  }
+
+  const hanldeChangeBirthDay = (value: string) => setBirthDay(value)
+
+  // console.log('=[]====', getValues())
+  // console.log('=[]=errors===', errors)
+
   return (
-    <div className='pb-2'>
+    <div className='pb-sb'>
+      <div className='pt-st relative bg-color-4 text-white rounded-b-3xl p-6 mb-6 shadow-md'>
+        <button
+          onClick={handlePrev}
+          className='absolute left-4 top-14 bg-white/20 p-2 rounded-full'
+        >
+          <IconUI icon='previous' className='w-5 h-5' />
+        </button>
+        <div className='text-center'>
+          <User2 className='w-12 h-12 mx-auto mb-2' />
+          <h2 className='text-2xl font-bold'>Đăng ký</h2>
+          <p className='text-sm opacity-90'>Hồ sơ người lao động</p>
+        </div>
+      </div>
       <div className='rounded-2xl shadow-sm'>
         <form onSubmit={handleSubmit(onSubmit)} className=''>
           <div className='bg-white p-4 rounded-xl shadow-sm'>
@@ -93,7 +128,6 @@ const RegisterPerson = () => {
             />
           </div>
 
-          {/* Thông tin cá nhân */}
           <div className='bg-white p-4 rounded-xl shadow-sm mt-6'>
             <h3 className='text-base font-semibold text-gray-800 mb-3'>
               Thông tin cá nhân
@@ -118,9 +152,10 @@ const RegisterPerson = () => {
                 <Calendar className='w-4 h-4 inline mr-2 text-gray-500' />
                 Ngày cấp
               </label>
-              <DatePicker
-                placeholder='Chọn ngày'
-                inputClass='hover:border hover:border-color-1 !focus:border-color-1 rounded-xl'
+              <SheetDate
+                title='Chọn ngày'
+                singleDate={true}
+                disableLabel={true}
               />
             </div>
             <InputCustom
@@ -157,9 +192,11 @@ const RegisterPerson = () => {
                 <Calendar className='w-4 h-4 inline mr-2 text-gray-500' />
                 Ngày sinh
               </label>
-              <DatePicker
-                placeholder='Chọn ngày'
-                inputClass='hover:border hover:border-color-1 !focus:border-color-1 !rounded-xl'
+              <SheetDate
+                title='Chọn ngày'
+                singleDate={true}
+                disableLabel={true}
+                onChange={(value) => hanldeChangeBirthDay(value)}
               />
             </div>
             <InputCustom
@@ -170,11 +207,14 @@ const RegisterPerson = () => {
               {...register('ethnicity')}
             />
             <div className='my-4'>
-              <GenderField />
+              <Controller
+                name='gender'
+                control={control}
+                render={({ field }) => <GenderField value={field.value} />}
+              />
             </div>
           </div>
 
-          {/* Học vấn */}
           <div className='bg-white p-4 rounded-xl shadow-sm mt-6'>
             <h3 className='text-base font-semibold text-gray-800 mb-3'>
               Học vấn
@@ -203,7 +243,19 @@ const RegisterPerson = () => {
             />
 
             <div className='mb-6'>
-              <GraduationOption />
+              <Controller
+                name='study'
+                control={control}
+                defaultValue=''
+                render={({ field }) => (
+                  <GraduationOption
+                    error={errors.study?.message}
+                    onChange={(value) => {
+                      field.onChange(value ?? '')
+                    }}
+                  />
+                )}
+              />
             </div>
 
             <div>
@@ -211,13 +263,26 @@ const RegisterPerson = () => {
                 <Briefcase className='w-4 h-4 inline mr-2' />
                 Ngành nghề mong muốn
               </label>
-              <SelectInput
-                options={ListJob}
-                maxSelect={2}
-                title='Chọn ngành nghề'
-                placeholder='Chọn tối đa 2 ngành'
-                onChange={(values) => console.log('Ngành đã chọn:', values)}
+              <Controller
+                name='job'
+                control={control}
+                render={({ field }) => (
+                  <SelectInput
+                    options={ListJob}
+                    maxSelect={2}
+                    title='Chọn ngành nghề'
+                    placeholder='Chọn tối đa 2 ngành'
+                    onChange={(values: string[]) => field.onChange(values)}
+                    className={`${errors.job ? 'border-red-600' : ''}`}
+                  />
+                )}
               />
+              {errors.job && (
+                <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>
+                  <AlertCircle className='w-4 h-4 mr-1' />
+                  {errors.job.message}
+                </p>
+              )}
             </div>
           </div>
 

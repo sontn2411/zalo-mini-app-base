@@ -1,28 +1,30 @@
 import { z } from 'zod'
 
-export const registerSchema = z
+export const registerPersonSchema = z
   .object({
-    fullName: z
-      .string()
-      .min(2, 'Tên phải có ít nhất 2 ký tự')
-      .nonempty('Vui lòng nhập họ tên'),
-    address: z.string().nonempty('Vui lòng nhập địa chỉ'),
-    phone: z.string().regex(/^[0-9]{10,11}$/, 'Số điện thoại không hợp lệ'),
-
-    jobPosition: z.string().nonempty('Vui lòng nhập vị trí ứng tuyển'),
-    educationLevel: z.string().nonempty('Vui lòng nhập trình độ'),
-    workExperience: z.string().nonempty('Vui lòng nhập kinh nghiệm'),
-    expectedSalary: z.string().nonempty('Vui lòng nhập mức lương mong muốn'),
-    otherBenefits: z.string().optional(),
-    notes: z.string().optional(),
-
-    username: z.string().min(4, 'Username phải có ít nhất 4 ký tự'),
-    password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
-    confirmPassword: z.string().min(6, 'Vui lòng nhập lại mật khẩu'),
+    username: z.string().min(3, 'Tên đăng nhập tối thiểu 3 ký tự'),
+    password: z.string().min(6, 'Mật khẩu tối thiểu 6 ký tự'),
+    confirmPassword: z.string(),
+    fullName: z.string().min(1, 'Vui lòng nhập họ tên'),
+    idCard: z.string().min(9, 'Số CCCD không hợp lệ'),
+    issuePlace: z.string().min(1, 'Vui lòng nhập nơi cấp'),
+    phone: z.string().regex(/^[0-9]{9,11}$/, 'Số điện thoại không hợp lệ'),
+    address: z.string().min(1, 'Vui lòng nhập địa chỉ'),
+    email: z.string().email('Email không hợp lệ'),
+    ethnicity: z.string().min(1, 'Vui lòng nhập dân tộc'),
+    educationLevel: z.string().min(1, 'Vui lòng nhập trình độ học vấn'),
+    graduationSchool: z.string().min(1, 'Vui lòng nhập trường tốt nghiệp'),
+    major: z.string().min(1, 'Vui lòng nhập chuyên ngành'),
+    study: z.string().min(1, 'Vui lòng chọn trình độ cao nhất'),
+    job: z
+      .array(z.string())
+      .min(1, 'Vui lòng chọn ít nhất 1 ngành')
+      .max(2, 'Chỉ được chọn tối đa 2 ngành'),
+    gender: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],
-    message: 'Mật khẩu nhập lại không khớp',
+    message: 'Mật khẩu xác nhận không khớp',
   })
 
-export type RegisterFormData = z.infer<typeof registerSchema>
+export type RegisterPersonForm = z.infer<typeof registerPersonSchema>

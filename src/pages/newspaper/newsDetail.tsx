@@ -67,7 +67,7 @@ export default function NewsDetailPage() {
                 url: href,
               })
             }}
-            className='text-blue-600 underline'
+            className=''
           >
             {domToReact(
               domNode.children as unknown as import('html-react-parser').DOMNode[]

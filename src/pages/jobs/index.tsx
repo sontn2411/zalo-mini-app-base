@@ -85,7 +85,7 @@ const JobListPage = () => {
         }}
       />
 
-      <div className='px-4 py-4 h-full overflow-y-scroll space-y-3'>
+      <div className=' py-4 h-full overflow-y-scroll space-y-3'>
         {isLoading ? (
           <JobListSkeleton />
         ) : jobs.length === 0 ? (

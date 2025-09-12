@@ -6,6 +6,8 @@ import { Button } from 'zmp-ui'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import IconUI from '@/components/ui/iconUi'
+import { To, useNavigate } from 'react-router-dom'
 
 const registerBusinessSchema = z
   .object({
@@ -28,6 +30,8 @@ const registerBusinessSchema = z
 type RegisterBusinessForm = z.infer<typeof registerBusinessSchema>
 
 const RegisterBusiness = () => {
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
@@ -51,13 +55,28 @@ const RegisterBusiness = () => {
     console.log('Form data:', data)
   }
 
+  const handlePrev = () => {
+    navigate(-1 as To, {
+      viewTransition: true,
+    })
+  }
+
   return (
-    <div className=' '>
-      <div className='text-center mb-4 mt-4'>
-        <h2 className='text-xl font-bold text-gray-900 mb-2'>Đăng ký</h2>
-        <p className='text-gray-600 text-sm text-center px-4'>
-          Hãy đồng hành cùng các doanh nghiệp tại việc làm Khánh Hòa
-        </p>
+    <div className='  '>
+      <div className='pt-st relative bg-color-1 text-white rounded-b-3xl p-6 mb-6 shadow-md'>
+        <button
+          onClick={handlePrev}
+          className='absolute left-4 top-14 bg-white/20 p-2 rounded-full'
+        >
+          <IconUI icon='previous' className='w-5 h-5' />
+        </button>
+        <div className='text-center'>
+          <Building2 className='w-12 h-12 mx-auto mb-2' />
+          <h2 className='text-2xl font-bold'>Đăng ký </h2>
+          <p className='text-sm opacity-90'>
+            Hãy đồng hành cùng việc làm Khánh Hòa để tìm kiếm nhân tài
+          </p>
+        </div>
       </div>
 
       <div className='bg-white p-4 rounded-xl shadow-sm'>

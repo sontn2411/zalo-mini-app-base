@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { DateRange, Calendar } from 'react-date-range'
-import { addDays } from 'date-fns'
+import { addYears, endOfYear } from 'date-fns'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
 import { vi } from 'date-fns/locale'
@@ -8,11 +8,13 @@ import { vi } from 'date-fns/locale'
 interface Props {
   onChange?: (range: { startDate: Date; endDate: Date }) => void
   singleDate?: boolean
+  onSelectDone?: () => void
 }
 
 export default function DateRangePicker({
   onChange,
   singleDate = false,
+  onSelectDone,
 }: Props) {
   const [range, setRange] = useState([
     {
@@ -21,6 +23,9 @@ export default function DateRangePicker({
       key: 'selection',
     },
   ])
+
+  const maxYear = addYears(new Date(), 1)
+  const maxDate = endOfYear(maxYear)
 
   const handleRangeChange = (item: any) => {
     const selection = item.selection
@@ -34,6 +39,7 @@ export default function DateRangePicker({
   const handleSingleChange = (date: Date) => {
     setRange([{ startDate: date, endDate: date, key: 'selection' }])
     onChange?.({ startDate: date, endDate: date })
+    if (onSelectDone) onSelectDone()
   }
 
   return singleDate ? (
@@ -42,6 +48,7 @@ export default function DateRangePicker({
       onChange={handleSingleChange}
       locale={vi}
       dateDisplayFormat='dd/MM/yyyy'
+      maxDate={maxDate}
     />
   ) : (
     <DateRange
@@ -53,6 +60,7 @@ export default function DateRangePicker({
       direction='vertical'
       locale={vi}
       dateDisplayFormat='dd/MM/yyyy'
+      maxDate={maxDate}
     />
   )
 }

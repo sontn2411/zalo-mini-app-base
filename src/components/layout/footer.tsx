@@ -25,13 +25,13 @@ const NAV_ITEMS = [
     path: ROUTES.CANDIDATE,
   },
 
-  {
-    id: 3,
-    name: 'Đăng tin',
-    icon: 'briefcase',
-    iconActive: 'briefcaseActive',
-    path: ROUTES.JOB_POSTING,
-  },
+  // {
+  //   id: 3,
+  //   name: 'Đăng tin',
+  //   icon: 'briefcase',
+  //   iconActive: 'briefcaseActive',
+  //   path: ROUTES.JOB_POSTING,
+  // },
   {
     id: 4,
     name: 'Cá nhân',

@@ -8,19 +8,33 @@ interface SheetDateProps {
   title: string
   singleDate?: boolean
   disableLabel?: boolean
+  onChange?: (val: string) => void
+  value?: { startDate: Date; endDate: Date } | null
 }
 
 const SheetDate = ({
   title,
   singleDate,
   disableLabel = false,
+  value,
+  onChange,
 }: SheetDateProps) => {
-  const [range, setRange] = useState<{
-    startDate: Date
-    endDate: Date
-  } | null>(null)
+  // const [range, setRange] = useState<{
+  //   startDate: Date
+  //   endDate: Date
+  // } | null>(null)
 
   const [visible, setVisible] = useState(false)
+
+  const handleOnChange = (val: { startDate: Date; endDate: Date }) => {
+    const startDate = val.startDate.toLocaleDateString()
+    const endDate = val.startDate.toLocaleDateString()
+    if (singleDate) {
+      onChange?.(startDate)
+    } else {
+      onChange?.(startDate + '-' + endDate)
+    }
+  }
 
   return (
     <div>
@@ -36,11 +50,11 @@ const SheetDate = ({
         onClick={() => setVisible(true)}
       >
         <p className='text-sm text-gray-600'>
-          {range ? (
+          {value ? (
             singleDate ? (
-              `${range.startDate.toLocaleDateString()}`
+              `${value.startDate.toLocaleDateString()}`
             ) : (
-              `Từ ${range.startDate.toLocaleDateString()} - ${range.endDate.toLocaleDateString()}`
+              `Từ ${value.startDate.toLocaleDateString()} - ${value.endDate.toLocaleDateString()}`
             )
           ) : (
             <span className='text-color-2'>Chọn ngày</span>
@@ -65,9 +79,8 @@ const SheetDate = ({
         </div>
         <div className='w-full'>
           <DateRangePicker
-            onChange={(val) => {
-              setRange(val)
-            }}
+            onSelectDone={() => setVisible(false)}
+            onChange={(val) => handleOnChange(val)}
             singleDate={singleDate}
           />
           {!singleDate && (

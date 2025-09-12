@@ -1,12 +1,18 @@
-import { GraduationCap } from 'lucide-react'
+import { AlertCircle, GraduationCap } from 'lucide-react'
 import SelectInput from '../selectInput'
 import useSettingStore from '@/store/useSetting'
 
 interface GraduationOptionProps {
   hiddenLabel?: boolean
+  onChange?: (value: string) => void
+  error?: string
 }
 
-const GraduationOption = ({ hiddenLabel = false }: GraduationOptionProps) => {
+const GraduationOption = ({
+  hiddenLabel = false,
+  error,
+  onChange,
+}: GraduationOptionProps) => {
   const { ListStudy } = useSettingStore()
 
   return (
@@ -23,8 +29,16 @@ const GraduationOption = ({ hiddenLabel = false }: GraduationOptionProps) => {
         maxSelect={1}
         title='Chọn Trình độ'
         placeholder='Chọn Trình độ'
-        onChange={(values) => console.log('Ngành đã chọn:', values)}
+        onChange={(values) => onChange?.(values[0])}
+        className={`${error ? 'border-red-600' : ''}`}
       />
+
+      {error && (
+        <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>
+          <AlertCircle className='w-4 h-4 mr-1' />
+          {error}
+        </p>
+      )}
     </div>
   )
 }

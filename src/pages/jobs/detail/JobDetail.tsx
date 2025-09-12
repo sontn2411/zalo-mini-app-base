@@ -18,6 +18,7 @@ import CustomTabs from '@/components/shared/customTabs'
 import { useParams } from 'react-router-dom'
 import { useDataJobDetail } from '@/api/query/jobs'
 import SkeletonDetail from './skeletonDetail'
+import he from 'he'
 
 const PageNotFound = () => (
   <div className='flex flex-col items-center justify-center min-h-[60vh] text-center'>
@@ -222,7 +223,7 @@ const JobDetail = () => {
                       </h3>
                       <div
                         className='text-sm text-gray-700 leading-relaxed'
-                        dangerouslySetInnerHTML={{ __html: summary }}
+                        dangerouslySetInnerHTML={{ __html: he.decode(summary) }}
                       />
                     </div>
                   )}
@@ -233,7 +234,9 @@ const JobDetail = () => {
                       </h3>
                       <div
                         className='text-sm text-gray-700 leading-relaxed'
-                        dangerouslySetInnerHTML={{ __html: jobrequirements }}
+                        dangerouslySetInnerHTML={{
+                          __html: he.decode(jobrequirements),
+                        }}
                       />
                     </div>
                   )}
@@ -244,7 +247,9 @@ const JobDetail = () => {
                       </h3>
                       <div
                         className='text-sm text-gray-700 leading-relaxed'
-                        dangerouslySetInnerHTML={{ __html: benefits }}
+                        dangerouslySetInnerHTML={{
+                          __html: he.decode(benefits),
+                        }}
                       />
                     </div>
                   )}
