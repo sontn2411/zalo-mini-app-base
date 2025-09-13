@@ -61,17 +61,12 @@ const LayoutAuth = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const data = await authorize({
-          scopes: ['scope.userPhonenumber'],
-        })
-
-        console.log('========', data)
-        // const { userInfo } = await getUserInfo()
-        // const accessTokenRes = await getAccessToken()
+        const { userInfo } = await getUserInfo()
+        const accessTokenRes = await getAccessToken()
         // const { token } = await getPhoneNumber()
 
-        // setUserInfo({ ...userInfo, accessToken: accessTokenRes })
-        // setAccessToken(accessTokenRes)
+        setUserInfo({ ...userInfo, accessToken: accessTokenRes })
+        setAccessToken(accessTokenRes)
         // setPhoneToken(token || '')
 
         // console.log('=====accessToken====', accessTokenRes)

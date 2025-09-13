@@ -21,6 +21,8 @@ export const registerPersonSchema = z
       .min(1, 'Vui lòng chọn ít nhất 1 ngành')
       .max(2, 'Chỉ được chọn tối đa 2 ngành'),
     gender: z.string(),
+    birthday: z.string().min(1, 'Vui lòng chọn ngày tháng năm sinh'),
+    dateIdCard: z.string().min(1, 'Vui lòng chọn ngày cấp CCCD'),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ['confirmPassword'],

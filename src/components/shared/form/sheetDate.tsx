@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { CalendarDays, CalendarRange, X } from 'lucide-react'
+import { AlertCircle, CalendarDays, CalendarRange, X } from 'lucide-react'
 import SheetPortal from './sheetPortal'
 import DateRangePicker from '../dateRangePicker'
 
@@ -9,7 +9,8 @@ interface SheetDateProps {
   singleDate?: boolean
   disableLabel?: boolean
   onChange?: (val: string) => void
-  value?: { startDate: Date; endDate: Date } | null
+  value?: string
+  error?: string
 }
 
 const SheetDate = ({
@@ -18,6 +19,7 @@ const SheetDate = ({
   disableLabel = false,
   value,
   onChange,
+  error,
 }: SheetDateProps) => {
   // const [range, setRange] = useState<{
   //   startDate: Date
@@ -46,22 +48,31 @@ const SheetDate = ({
       )}
 
       <div
-        className='h-12 border rounded-xl relative flex items-center px-4 cursor-pointer'
+        className={`h-12 border rounded-xl relative flex items-center px-4 cursor-pointer ${
+          error ? 'border-red-600' : ''
+        }`}
         onClick={() => setVisible(true)}
       >
         <p className='text-sm text-gray-600'>
           {value ? (
-            singleDate ? (
-              `${value.startDate.toLocaleDateString()}`
-            ) : (
-              `Từ ${value.startDate.toLocaleDateString()} - ${value.endDate.toLocaleDateString()}`
-            )
+            <span>{value}</span>
           ) : (
+            // singleDate ? (
+            //   `${value.startDate.toLocaleDateString()}`
+            // ) : (
+            //   `Từ ${value.startDate.toLocaleDateString()} - ${value.endDate.toLocaleDateString()}`
+            // )
             <span className='text-color-2'>Chọn ngày</span>
           )}
         </p>
         <CalendarRange className='w-5 h-5 absolute right-2 top-1/2 -translate-y-1/2 text-color-2' />
       </div>
+      {error && (
+        <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>
+          <AlertCircle className='w-4 h-4 mr-1' />
+          {error}
+        </p>
+      )}
 
       <SheetPortal visible={visible} onClose={() => setVisible(false)}>
         <div>

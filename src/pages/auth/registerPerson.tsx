@@ -55,6 +55,7 @@ const RegisterPerson = () => {
     defaultValues: {
       job: [],
       gender: genderDefault?.value,
+      birthday: '',
     },
   })
 
@@ -79,7 +80,7 @@ const RegisterPerson = () => {
 
   const hanldeChangeBirthDay = (value: string) => setBirthDay(value)
 
-  // console.log('=[]====', getValues())
+  console.log('=[]====', getValues())
   // console.log('=[]=errors===', errors)
 
   return (
@@ -145,6 +146,7 @@ const RegisterPerson = () => {
               icon={FileText}
               error={errors.idCard?.message}
               {...register('idCard')}
+              type='tel'
             />
 
             <div className='my-4'>
@@ -152,11 +154,26 @@ const RegisterPerson = () => {
                 <Calendar className='w-4 h-4 inline mr-2 text-gray-500' />
                 Ngày cấp
               </label>
-              <SheetDate
+              <Controller
+                name='dateIdCard'
+                control={control}
+                defaultValue=''
+                render={({ field }) => (
+                  <SheetDate
+                    title='Chọn ngày cấp CCCD'
+                    singleDate={true}
+                    disableLabel={true}
+                    error={errors.dateIdCard?.message}
+                    onChange={(value) => field.onChange(value ?? '')}
+                    value={field.value}
+                  />
+                )}
+              />
+              {/* <SheetDate
                 title='Chọn ngày'
                 singleDate={true}
                 disableLabel={true}
-              />
+              /> */}
             </div>
             <InputCustom
               label='Nơi cấp'
@@ -171,6 +188,7 @@ const RegisterPerson = () => {
               icon={Phone}
               error={errors.phone?.message}
               {...register('phone')}
+              type='tel'
             />
             <InputCustom
               label='Địa chỉ liên lạc'
@@ -192,12 +210,29 @@ const RegisterPerson = () => {
                 <Calendar className='w-4 h-4 inline mr-2 text-gray-500' />
                 Ngày sinh
               </label>
-              <SheetDate
+              <Controller
+                name='birthday'
+                control={control}
+                defaultValue=''
+                render={({ field }) => {
+                  return (
+                    <SheetDate
+                      title='Chọn ngày'
+                      singleDate={true}
+                      value={field.value}
+                      disableLabel={true}
+                      onChange={(value) => field.onChange(value ?? '')}
+                      error={errors.birthday?.message}
+                    />
+                  )
+                }}
+              />
+              {/* <SheetDate
                 title='Chọn ngày'
                 singleDate={true}
                 disableLabel={true}
                 onChange={(value) => hanldeChangeBirthDay(value)}
-              />
+              /> */}
             </div>
             <InputCustom
               label='Dân tộc'
