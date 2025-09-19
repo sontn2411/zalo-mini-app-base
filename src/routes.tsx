@@ -17,6 +17,16 @@ import InsurancePage from './pages/insurance'
 import LaborExportPage from './pages/laborExport'
 import DetailCandidate from './pages/Candidate/detailCandidate'
 import NewsDetailPage from './pages/newspaper/newsDetail'
+import EditPerson from './pages/profile/edit/editPerson'
+import EditEnterprise from './pages/profile/edit/editEnterprise'
+import DetailDecree from './pages/decree/detailDecree'
+import Information from './pages/profile/labore/information'
+import Education from './pages/profile/labore/education'
+import Experience from './pages/profile/labore/experience'
+import LanguageIt from './pages/profile/labore/languageIt'
+import Benefits from './pages/profile/labore/benefits'
+import ProfileEnterprise from './pages/profile/profileEnterprise'
+import Recruitments from './pages/profile/enterprise/recruitments'
 
 const router = createBrowserRouter(
   [
@@ -47,12 +57,17 @@ const router = createBrowserRouter(
         {
           path: ROUTES.INSURANCE,
           element: <InsurancePage />,
-          handle: { title: 'Bảo hiểm thấp nghiệp' },
+          handle: { title: 'Bảo hiểm thất nghiệp' },
         },
         {
           path: ROUTES.ND70,
           element: <Decree70Page />,
-          handle: { title: 'Nghị định 70' },
+          handle: { title: 'Nghị định 219/2025/NĐ-CP' },
+        },
+        {
+          path: ROUTES.DETAILDND70,
+          element: <DetailDecree />,
+          handle: { title: 'Thông tin chi tiết' },
         },
         {
           path: ROUTES.LABOREXPORT,
@@ -88,6 +103,52 @@ const router = createBrowserRouter(
           path: ROUTES.PROFILE,
           element: <ProfilePage />,
           handle: { title: 'Hồ sơ cá nhân', desc: 'Quản lý thông tin của bạn' },
+        },
+        {
+          path: ROUTES.ENTERPRISEINFO,
+          element: <ProfileEnterprise />,
+          handle: { title: 'Thông tin doanh nghiệp', edit: true },
+        },
+        {
+          path: ROUTES.ENTERPRISERECRUITMENTS,
+          element: <Recruitments />,
+          handle: { title: 'Danh sách tuyển dụng' },
+        },
+        {
+          path: ROUTES.EDITINFOMATION,
+          element: <Information />,
+
+          handle: { title: 'Thông tin chung', edit: true },
+        },
+        {
+          path: ROUTES.EDITIEDUCATION,
+          element: <Education />,
+          handle: { title: 'Học vấn' },
+        },
+        {
+          path: ROUTES.EDITPERSON,
+          element: <EditPerson />,
+          handle: { title: 'Chỉnh sửa hồ sơ' },
+        },
+        {
+          path: ROUTES.EDITIEXPERIENCE,
+          element: <Experience />,
+          handle: { title: 'Kinh nghiệm' },
+        },
+        {
+          path: ROUTES.EDITILANGUAGEIT,
+          element: <LanguageIt />,
+          handle: { title: 'Ngoại ngữ & tin học' },
+        },
+        {
+          path: ROUTES.EDITIBENFITS,
+          element: <Benefits />,
+          handle: { title: 'Phúc lợi & Mong muốn' },
+        },
+        {
+          path: ROUTES.EDITBUSINESS,
+          element: <EditEnterprise />,
+          handle: { title: 'Chỉnh sửa hồ sơ' },
         },
         {
           path: ROUTES.REGISTER_PERSON,

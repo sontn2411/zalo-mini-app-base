@@ -112,3 +112,35 @@
     background: var(--color-1) !important;
   }
 }
+
+.custom-toast-container {
+  width: 240px;
+  left: 50% !important;
+  top: 12% !important;
+  transform: translateX(-50%) !important;
+  padding: 0 !important;
+}
+
+/* Toast item */
+.Toastify__toast {
+  border-radius: 8px !important;
+  font-size: 13px !important;
+  padding: 8px 12px !important;
+  min-height: auto !important;
+
+  .Toastify__close-button {
+    display: none;
+  }
+}
+
+/* Success toast */
+.Toastify__toast--success {
+  background: #e6f7e6 !important;
+  color: #2e7d32 !important;
+}
+
+/* Error toast */
+.Toastify__toast--error {
+  background: #fdecea !important;
+  color: #d32f2f !important;
+}

@@ -1,8 +1,13 @@
-import { Briefcase } from 'lucide-react'
+import { AlertCircle, Briefcase } from 'lucide-react'
 import SelectInput from '../selectInput'
 import useSettingStore from '@/store/useSetting'
 
-const JobSelectOption = () => {
+interface JobSelectOptionProps {
+  onChange: (value: string) => void
+  error?: string
+}
+
+const JobSelectOption = ({ onChange, error }: JobSelectOptionProps) => {
   const { ListJob } = useSettingStore()
 
   return (
@@ -17,8 +22,15 @@ const JobSelectOption = () => {
         maxSelect={1}
         title='Chọn ngành nghề'
         placeholder='Chọn ngành nghề'
-        onChange={(values) => console.log('Ngành đã chọn:', values)}
+        onChange={(values) => onChange(values[0])}
+        className={`${error ? 'border-red-600' : ''}`}
       />
+      {error && (
+        <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>
+          <AlertCircle className='w-4 h-4 mr-1' />
+          {error}
+        </p>
+      )}
     </div>
   )
 }

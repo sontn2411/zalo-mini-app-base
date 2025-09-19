@@ -3,6 +3,7 @@ import { DollarSign, MapPin } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import useEmblaCarousel from 'embla-carousel-react'
 import { useDataJobListHome } from '@/api/query/jobs'
+import { noCompany } from '@/static'
 
 const LatestJob = () => {
   const { data, isLoading } = useDataJobListHome()
@@ -18,7 +19,7 @@ const LatestJob = () => {
   return (
     <div>
       <div className='flex items-center justify-between mb-3'>
-        <h2 className='text-lg font-semibold text-gray-900'>
+        <h2 className='text-lg font-semibold text-color-4'>
           Việc làm tuyển gấp
         </h2>
         <button
@@ -56,9 +57,12 @@ const LatestJob = () => {
                   <div className='rounded-lg overflow-hidden shadow bg-white h-full flex flex-col'>
                     <div className='w-full aspect-video'>
                       <img
-                        src={item.thumbnail || item.image}
+                        src={item.thumbnail || item.image || noCompany}
                         alt={`banner-${i}`}
                         className='w-full h-full object-cover'
+                        onError={(e) => {
+                          e.currentTarget.src = noCompany
+                        }}
                       />
                     </div>
                     <div className='p-2 flex flex-col justify-between flex-1'>

@@ -5,6 +5,9 @@ import SearchFilter from '@/components/shared/searchFilter'
 import { useDataCandidateInfinite } from '@/api/query/candidate'
 import { noAvatar } from '@/static'
 import { useEffect, useRef, useState } from 'react'
+import CandidateItem from './candidateItem'
+import { nativeStorage } from 'zmp-sdk'
+import { KEYSTORAGE } from '@/constants/message'
 
 const CandidateSkeleton = () => (
   <div className='bg-white rounded-sm p-4 shadow-sm animate-pulse'>
@@ -88,6 +91,8 @@ const CandidatePage = () => {
     )
   }
 
+  console.log('===sssss=====', nativeStorage.getItem(KEYSTORAGE.ACCESSTOKEN))
+
   const candidates =
     data?.pages.reduce(
       (acc: any[], page) => [...acc, ...(page?.Data?.Data || [])],
@@ -105,54 +110,9 @@ const CandidatePage = () => {
         }}
       />
 
-      <div className='space-y-3 overflow-y-scroll h-full pb-20'>
+      <div className='space-y-3 overflow-y-scroll h-full pb-20 mt-6'>
         {candidates.map((candidate) => (
-          <div
-            key={candidate.id}
-            className='bg-white rounded-sm p-4 shadow-sm hover:shadow-md transition-all duration-200'
-            onClick={() => navigate(`${ROUTES.CANDIDATE}/${candidate.id}`)}
-          >
-            <div className='flex items-center space-x-4'>
-              <div className='relative flex-shrink-0 border rounded-sm p-1'>
-                <img
-                  src={candidate.thumbnail || noAvatar}
-                  alt={candidate.fullname}
-                  className='w-20 h-20 object-cover rounded-sm'
-                  onError={(e) => {
-                    e.currentTarget.src = noAvatar
-                  }}
-                />
-              </div>
-
-              <div className='flex-1 min-w-0'>
-                <h3 className='font-bold text-gray-900 text-base mb-1'>
-                  {candidate.fullname}
-                </h3>
-                {Array.isArray(candidate.job) && candidate.job.length > 0 && (
-                  <div className='mb-2'>
-                    {[...new Set(candidate.job as string[])].map(
-                      (item, idx) => (
-                        <p
-                          key={idx}
-                          className='text-color-1 font-medium text-sm truncate'
-                        >
-                          {item}
-                        </p>
-                      )
-                    )}
-                  </div>
-                )}
-                {candidate.location && (
-                  <div className='flex items-center text-gray-500'>
-                    <MapPin size={16} className='mr-2' />
-                    <span className='text-sm truncate'>
-                      {candidate.location}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          <CandidateItem key={candidate.id} {...candidate} />
         ))}
 
         {isFetchingNextPage && (

@@ -31,7 +31,7 @@ const NewsList = ({ data = [], isLoading = false }: NewListProps) => {
   }
 
   return (
-    <div className='space-y-3'>
+    <div className='space-y-3 '>
       {data.map((news) => (
         <div
           onClick={() => navigate(`${ROUTES.NEWS}/${news.id}`)}

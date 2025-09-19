@@ -2,35 +2,42 @@ import InputCustom from '@/components/ui/inputCustom'
 import { Building2, Lock, Mail, MapPin, Phone, User } from 'lucide-react'
 import { useState } from 'react'
 import TermsConditionBusiness from './termsConditionBusiness'
-import { Button } from 'zmp-ui'
+import { Button, useSnackbar } from 'zmp-ui'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import IconUI from '@/components/ui/iconUi'
 import { To, useNavigate } from 'react-router-dom'
+import { insertRegisterEnterprise } from '@/api/query/auth'
+import { useLoadingGlobal } from '@/store/useLoadingGlobal'
+import {
+  getAccessToken,
+  getPhoneNumber,
+  getUserID,
+  nativeStorage,
+} from 'zmp-sdk'
+import { useUserStore } from '@/store/useUserStore'
+import { KEYSTORAGE } from '@/constants/message'
+import { ROUTES } from '@/constants/routes'
 
-const registerBusinessSchema = z
-  .object({
-    email: z.string().email('Email không hợp lệ'),
-    username: z.string().min(3, 'Tài khoản tối thiểu 3 ký tự'),
-    password: z.string().min(6, 'Mật khẩu tối thiểu 6 ký tự'),
-    confirmPassword: z.string().min(6, 'Vui lòng nhập lại mật khẩu'),
-    nameCompany: z.string().min(2, 'Tên doanh nghiệp không được để trống'),
-    emailCompany: z.string().email('Email doanh nghiệp không hợp lệ'),
-    addressCompany: z.string().min(5, 'Địa chỉ quá ngắn'),
-    phoneNumber: z
-      .string()
-      .regex(/^\d{9,11}$/, 'Số điện thoại phải có 9-11 số'),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: 'Mật khẩu xác nhận không khớp',
-    path: ['confirmPassword'],
-  })
+export const registerBusinessSchema = z.object({
+  email: z.string().email('Email không hợp lệ'),
+  nameCompany: z.string().min(2, 'Tên doanh nghiệp không được để trống'),
+  emailCompany: z.string().email('Email doanh nghiệp không hợp lệ'),
+  addressCompany: z.string().min(5, 'Địa chỉ không hợp lệ'),
+  phoneNumber: z.string().regex(/^\d{9,11}$/, 'Số điện thoại phải có 9-11 số'),
+})
 
-type RegisterBusinessForm = z.infer<typeof registerBusinessSchema>
+export type RegisterBusinessForm = z.infer<typeof registerBusinessSchema>
 
 const RegisterBusiness = () => {
   const navigate = useNavigate()
+
+  const { setIsLoadingGlobal } = useLoadingGlobal()
+
+  const { userInfo } = useUserStore()
+
+  const { openSnackbar } = useSnackbar()
 
   const {
     register,
@@ -41,9 +48,6 @@ const RegisterBusiness = () => {
     mode: 'onChange',
     defaultValues: {
       email: '',
-      username: '',
-      password: '',
-      confirmPassword: '',
       nameCompany: '',
       emailCompany: '',
       addressCompany: '',
@@ -51,8 +55,59 @@ const RegisterBusiness = () => {
     },
   })
 
-  const onSubmit = (data: RegisterBusinessForm) => {
-    console.log('Form data:', data)
+  const registerEnterprise = insertRegisterEnterprise()
+
+  const onSubmit = async (data: RegisterBusinessForm) => {
+    setIsLoadingGlobal(true)
+    const accessToken = await getAccessToken()
+    const { token } = await getPhoneNumber()
+    const userID = await getUserID({})
+    if (!accessToken || !token) {
+      console.error('Thiếu accessToken hoặc token, không thể đăng ký')
+      setIsLoadingGlobal(false)
+      return
+    }
+
+    const payload = {
+      Accesstoken: accessToken,
+      Code: token || '',
+      ZaloId: userID,
+      Email: data.email,
+      CompanyName: data.nameCompany,
+      CompanyEmail: data.emailCompany,
+      CompanyAddress: data.addressCompany,
+      CompanyPhone: data.phoneNumber,
+    }
+
+    registerEnterprise.mutate(payload, {
+      onSuccess: (data) => {
+        const { Data, StatusResult } = data
+
+        if (StatusResult.Code === 0) {
+          const { AccessToken, RefreshToken } = Data
+          nativeStorage.setItem(KEYSTORAGE.ZALO_ID, userInfo.id)
+          nativeStorage.setItem(KEYSTORAGE.ACCESSTOKEN, AccessToken)
+          nativeStorage.setItem(KEYSTORAGE.REFRESHTOKEN, RefreshToken)
+
+          navigate(ROUTES.PROFILE, { viewTransition: true })
+          openSnackbar({
+            text: 'Đăng ký người doanh nghiệp thành công!',
+            type: 'success',
+          })
+        } else {
+          openSnackbar({
+            text: 'Đã xảy ra lỗi khi lưu dữ liệu. Vui lòng thử lại.',
+            type: 'error',
+          })
+        }
+
+        setIsLoadingGlobal(false)
+      },
+      onError: (error) => {
+        console.error('Đăng ký thất bại:', error)
+        setIsLoadingGlobal(false)
+      },
+    })
   }
 
   const handlePrev = () => {
@@ -89,29 +144,7 @@ const RegisterBusiness = () => {
             {...register('email')}
             error={errors.email?.message}
           />
-          <InputCustom
-            label='Tài khoản đăng nhập'
-            placeholder='Nhập tài khoản đăng nhập'
-            icon={User}
-            {...register('username')}
-            error={errors.username?.message}
-          />
-          <InputCustom
-            label='Mật khẩu'
-            type='password'
-            placeholder='Nhập mật khẩu'
-            icon={Lock}
-            {...register('password')}
-            error={errors.password?.message}
-          />
-          <InputCustom
-            label='Nhập lại mật khẩu'
-            type='password'
-            placeholder='Xác nhận mật khẩu'
-            icon={Lock}
-            {...register('confirmPassword')}
-            error={errors.confirmPassword?.message}
-          />
+
           <InputCustom
             label='Tên Doanh nghiệp'
             type='text'
@@ -141,14 +174,14 @@ const RegisterBusiness = () => {
 
           <InputCustom
             label='Số điện thoại doanh nghiệp'
-            type='text'
+            type='tel'
             placeholder='Nhập số điện thoại'
             icon={Phone}
             {...register('phoneNumber')}
             error={errors.phoneNumber?.message}
           />
         </form>
-        <TermsConditionBusiness />
+        {/* <TermsConditionBusiness /> */}
         <div>
           <Button
             onClick={handleSubmit(onSubmit)}

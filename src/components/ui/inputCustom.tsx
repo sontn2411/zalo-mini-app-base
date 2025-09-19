@@ -6,9 +6,10 @@ interface InputCustomProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string
   icon?: LucideIcon
   error?: string
+  view?: boolean
+  value?: string
 }
 
-// dùng forwardRef để RHF gắn ref
 const InputCustom = forwardRef<HTMLInputElement, InputCustomProps>(
   (
     {
@@ -17,7 +18,9 @@ const InputCustom = forwardRef<HTMLInputElement, InputCustomProps>(
       type = 'text',
       placeholder = '',
       icon: Icon,
+      view = false,
       error,
+      value,
       ...rest
     },
     ref
@@ -31,18 +34,27 @@ const InputCustom = forwardRef<HTMLInputElement, InputCustomProps>(
           {Icon && <Icon className='w-4 h-4 inline mr-2 text-gray-500' />}
           {label}
         </label>
-        <input
-          id={name}
-          name={name}
-          ref={ref} // rất quan trọng cho RHF
-          type={type}
-          placeholder={placeholder}
-          className={`w-full px-4 py-3 border rounded-xl transition-all 
-            focus:outline-color-1 focus:outline focus:outline-2 
-            ${error ? 'border-red-500' : 'border-gray-300'}
-          `}
-          {...rest} // nhận onChange, value từ register
-        />
+
+        {view ? (
+          <span className='block mt-2 pl-2 text-base text-gray-800'>
+            {value}
+          </span>
+        ) : (
+          <input
+            id={name}
+            name={name}
+            ref={ref}
+            type={type}
+            value={value}
+            placeholder={placeholder}
+            className={`w-full px-4 py-3 border rounded-xl transition-all
+              focus:outline-color-1 focus:outline focus:outline-2
+              ${error ? 'border-red-500' : 'border-gray-300'}
+            `}
+            {...rest}
+          />
+        )}
+
         {error && (
           <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>
             <AlertCircle className='w-4 h-4 mr-1' />

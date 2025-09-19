@@ -15,7 +15,7 @@ const GeneralNews = ({ data, isLoading }: GeneralNewsProps) => {
   return (
     <div>
       <div className='flex items-center justify-between mb-3'>
-        <h2 className='text-lg font-semibold text-gray-900'>Tin tức</h2>
+        <h2 className='text-lg font-semibold text-color-4'>Tin tức</h2>
       </div>
 
       <div className='space-y-3'>

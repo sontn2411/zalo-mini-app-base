@@ -1,4 +1,4 @@
-import { ChevronDown, Search } from 'lucide-react'
+import { ChevronDown, Search, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import FilterBottomSheet from './filterBottomSheet'
 import useSettingStore from '@/store/useSetting'
@@ -154,6 +154,10 @@ const SearchFilter = ({
       (!visibleFilters || visibleFilters.includes(key as FilterType))
   )
 
+  const handleClearSearch = () => {
+    setSearchQuery('')
+  }
+
   return (
     <div className='bg-white'>
       {isSearch && (
@@ -170,6 +174,14 @@ const SearchFilter = ({
               }}
               className='w-full pl-10 pr-4 py-2 rounded-lg border text-gray-900 placeholder-gray-500 focus:outline-color-1 focus:outline focus:outline-2'
             />
+            {searchQuery.length > 0 && (
+              <button
+                onClick={handleClearSearch}
+                className='absolute right-3 top-1/2 -translate-y-1/2 '
+              >
+                <X className='w-5 h-5 text-gray-400' />
+              </button>
+            )}
           </div>
         </div>
       )}

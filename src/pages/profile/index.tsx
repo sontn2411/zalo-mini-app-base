@@ -1,51 +1,46 @@
-import { Building2, User } from 'lucide-react'
-
-import { useNavigate } from 'react-router-dom'
-import { ROUTES } from '@/constants/routes'
 import ProfilePerson from './profilePerson'
-import { useUserInfo } from '@/hooks/useUserInfo'
 import ButtonCTA from './buttonCTA'
-import { useEffect, useState } from 'react'
 import { useUserStore } from '@/store/useUserStore'
-import { getPhoneNumber } from 'zmp-sdk'
-import { getAccessToken } from 'zmp-sdk/apis'
-import { TokenDisplay } from '@/components/layout/layoutAuth'
-import { Button } from 'zmp-ui'
+import ProfileEnterprise from './profileEnterprise'
+import { useAuthLogin } from '@/hooks/useAuthLogin'
+import useSettingUser from '@/hooks/useSettingUser'
+import ProfileLabore from './labore/profileLabore'
+import EnterpriseProfile from './enterprise/profileEnterprise'
 
-const data = {
-  avatar: 'https://h5.zdn.vn/static/images/avatar.png',
-  id: '3368637342326461234',
-  name: 'User Name',
+const SkeletonProfile = () => {
+  return (
+    <div className='p-4 space-y-4 animate-pulse'>
+      {/* Info rows */}
+      <div className='space-y-2'>
+        <div className='h-3 w-3/4 bg-gray-300 rounded'></div>
+        <div className='h-3 w-2/3 bg-gray-300 rounded'></div>
+        <div className='h-3 w-1/2 bg-gray-300 rounded'></div>
+      </div>
+
+      {/* CTA button */}
+      <div className='h-10 w-full bg-gray-300 rounded-lg'></div>
+    </div>
+  )
 }
 
 const ProfilePage = () => {
-  const navigate = useNavigate()
-  const { userInfo } = useUserInfo()
-  const { setUserInfo } = useUserStore()
+  const { laboreProfile, enterpriseProfile } = useUserStore()
+  const isBtnRegister = laboreProfile || enterpriseProfile
 
-  const [accessToken, setAccessToken] = useState<string>('')
-  const [phoneToken, setPhoneToken] = useState<string>('')
+  const scope = useSettingUser()
 
-  useEffect(() => {
-    if (userInfo) {
-      setUserInfo(userInfo)
-    }
-  }, [userInfo])
-
-  const handleNavigate = async () => {
-    const { token } = await getPhoneNumber()
-    const accessToken = await getAccessToken()
-    setAccessToken(accessToken)
-    setPhoneToken(token || '')
-  }
+  const { isLoadingProfile } = useAuthLogin(scope)
 
   return (
     <>
-      {/* <ProfilePerson /> */}
+      {/* <ProfileLabore /> */}
+      {isLoadingProfile && <SkeletonProfile />}
+      <EnterpriseProfile />
+      {laboreProfile && <ProfileLabore />}
+      {/* {enterpriseProfile && <ProfileEnterprise />} */}
+      {!isBtnRegister && <ButtonCTA />}
 
-      <Button onClick={handleNavigate}>Show phone</Button>
-      <TokenDisplay accessToken={accessToken} phoneToken={phoneToken} />
-      <ButtonCTA />
+      {/* <button onClick={() => nativeStorage.clear()}>Clear Storage</button> */}
     </>
   )
 }

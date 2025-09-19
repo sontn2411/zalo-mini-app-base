@@ -28,3 +28,16 @@ export const useDataAbout = () => {
     staleTime: 5 * 60 * 1000,
   })
 }
+
+const fetchDataEnterprise = async () => {
+  const { data } = await instance.get('/Enterprise')
+  return data
+}
+
+export const useDataEnterprise = () => {
+  return useQuery({
+    queryKey: ['enterprise'],
+    queryFn: fetchDataEnterprise,
+    staleTime: 5 * 60 * 1000,
+  })
+}

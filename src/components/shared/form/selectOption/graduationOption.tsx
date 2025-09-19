@@ -6,14 +6,16 @@ interface GraduationOptionProps {
   hiddenLabel?: boolean
   onChange?: (value: string) => void
   error?: string
+  value?: string
 }
 
 const GraduationOption = ({
   hiddenLabel = false,
   error,
   onChange,
+  value,
 }: GraduationOptionProps) => {
-  const { ListStudy } = useSettingStore()
+  const { TechnicalLevel } = useSettingStore()
 
   return (
     <div>
@@ -25,10 +27,11 @@ const GraduationOption = ({
       )}
 
       <SelectInput
-        options={ListStudy}
+        options={TechnicalLevel}
         maxSelect={1}
         title='Chọn Trình độ'
         placeholder='Chọn Trình độ'
+        value={value}
         onChange={(values) => onChange?.(values[0])}
         className={`${error ? 'border-red-600' : ''}`}
       />

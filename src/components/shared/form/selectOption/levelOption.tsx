@@ -1,24 +1,15 @@
-import { GraduationCap } from 'lucide-react'
+import { AlertCircle, GraduationCap } from 'lucide-react'
 import SelectInput from '../selectInput'
+import useSettingStore from '@/store/useSetting'
 
-const dataGraduation = [
-  'Không có trình độ CMKT',
-  'CNKT không bằng',
-  'Đào tạo thường xuyên',
-  'Sơ cấp nghề',
-  'Trung cấp',
-  'Cao đẳng',
-  'Đại học',
-  'Chưa qua đào tạo',
-  'Chứng chỉ nghề dưới 3 tháng',
-  'Tiến sĩ',
-  'CNKT không bằng',
-  'Thạc sĩ',
-  'Lao động phổ thông',
-  'Khác',
-]
+interface LevelOptionProps {
+  onChange: (value: string) => void
+  error: string
+}
 
-const LevelOption = () => {
+const LevelOption = ({ onChange, error }) => {
+  const { TechnicalLevel } = useSettingStore()
+
   return (
     <div className=''>
       <label className='block text-sm font-semibold text-gray-700 mb-2'>
@@ -27,15 +18,19 @@ const LevelOption = () => {
       </label>
 
       <SelectInput
-        options={dataGraduation.map((item, index) => ({
-          label: item,
-          value: `graduation_${index}`,
-        }))}
+        options={TechnicalLevel}
         maxSelect={1}
         title='Chọn Trình độ'
         placeholder='Chọn Trình độ'
-        onChange={(values) => console.log('Ngành đã chọn:', values)}
+        onChange={(values) => onChange(values[0])}
+        className={`${error ? 'border-red-600' : ''}`}
       />
+      {error && (
+        <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>
+          <AlertCircle className='w-4 h-4 mr-1' />
+          {error}
+        </p>
+      )}
     </div>
   )
 }

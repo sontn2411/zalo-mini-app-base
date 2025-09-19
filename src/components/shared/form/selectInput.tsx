@@ -1,6 +1,7 @@
 import { ChevronDown, X } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import SheetPortal from './sheetPortal'
+import { useSnackbar } from 'zmp-ui'
 
 interface Option {
   value: string
@@ -15,6 +16,7 @@ interface SelectInputProps {
   onChange?: (values: string[]) => void
   showSearch?: boolean
   className?: string
+  value?: string | string[]
 }
 
 const SelectInput = ({
@@ -25,25 +27,39 @@ const SelectInput = ({
   onChange,
   showSearch = true,
   className,
+  value,
 }: SelectInputProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedValues, setSelectedValues] = useState<string[]>([])
   const [tempSelected, setTempSelected] = useState<string[]>([])
   const [searchTerm, setSearchTerm] = useState('')
+  const { openSnackbar } = useSnackbar()
 
-  const handleToggle = (value: string) => {
+  useEffect(() => {
+    if (value) {
+      if (Array.isArray(value)) {
+        setSelectedValues(value)
+      } else {
+        setSelectedValues([value])
+      }
+    }
+  }, [value])
+
+  const handleToggle = (val: string) => {
     if (maxSelect === 1) {
-      setSelectedValues([value])
-      onChange?.([value])
+      setSelectedValues([val])
+      onChange?.([val])
       setIsOpen(false)
     } else {
-      if (tempSelected.includes(value)) {
-        setTempSelected(tempSelected.filter((v) => v !== value))
+      if (tempSelected.includes(val)) {
+        setTempSelected(tempSelected.filter((v) => v !== val))
       } else {
         if (tempSelected.length < maxSelect) {
-          setTempSelected([...tempSelected, value])
+          setTempSelected([...tempSelected, val])
         } else {
-          alert(`Bạn chỉ được chọn tối đa ${maxSelect} mục!`)
+          openSnackbar({
+            text: `Bạn chỉ được chọn tối đa ${maxSelect} mục!`,
+          })
         }
       }
     }
@@ -68,15 +84,27 @@ const SelectInput = ({
   return (
     <div>
       <div
-        className={`border rounded-xl px-4 py-2  cursor-pointer w-full flex justify-between bg-white items-center gap-2 min-h-12 z-50 ${className}`}
+        className={`border rounded-xl px-4 py-2 cursor-pointer w-full flex justify-between bg-white items-center gap-2 min-h-12 z-50 ${className}`}
         onClick={handleOpen}
       >
-        <div>
+        <div className='flex flex-wrap gap-2'>
           {selectedValues.length > 0 ? (
-            options
-              .filter((opt) => selectedValues.includes(opt.value))
-              .map((opt) => opt.label)
-              .join(', ')
+            maxSelect === 1 ? (
+              <span className=' line-clamp-1'>
+                {options.find((opt) => opt.value === selectedValues[0])?.label}
+              </span>
+            ) : (
+              options
+                .filter((opt) => selectedValues.includes(opt.value))
+                .map((opt) => (
+                  <span
+                    key={opt.value}
+                    className='px-3 py-1 text-sm bg-gray-200 rounded-lg'
+                  >
+                    {opt.label}
+                  </span>
+                ))
+            )
           ) : (
             <span className='text-color-2'>{placeholder}</span>
           )}

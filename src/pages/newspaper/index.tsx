@@ -27,7 +27,7 @@ const NewspaperPage = () => {
   }, [hasNextPage, fetchNextPage, isLoading])
 
   return (
-    <div className='p-4 space-y-4'>
+    <div className='p-4 space-y-4 '>
       {isLoading ? (
         <>
           <NewsSkeleton />
@@ -42,9 +42,11 @@ const NewspaperPage = () => {
         ))
       )}
 
-      <div ref={loadMoreRef} className='h-10 flex items-center justify-center'>
+      <div ref={loadMoreRef} className=' flex items-center justify-center'>
         {isFetchingNextPage ? (
           <div className='w-full space-y-2'>
+            <NewsSkeleton />
+            <NewsSkeleton />
             <NewsSkeleton />
             <NewsSkeleton />
           </div>

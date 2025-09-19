@@ -38,7 +38,6 @@ export default function FilterBottomSheet({
   useLayoutEffect(() => {
     if (!listContainerRef.current || !selectedValue) return
 
-    // tìm chính xác item đã chọn trong list
     const selectedEl = listContainerRef.current.querySelector<HTMLDivElement>(
       `[data-value="${selectedValue}"]`
     )
@@ -53,7 +52,6 @@ export default function FilterBottomSheet({
   return (
     <SheetPortal visible height='85%' onClose={onClose}>
       <div>
-        {/* Header */}
         <div className='flex flex-col p-4 pb-2'>
           <div className='flex justify-between items-center mb-2'>
             <h2 className='text-lg font-bold'>{filterLabels[filterType]}</h2>
@@ -78,10 +76,9 @@ export default function FilterBottomSheet({
           )}
         </div>
 
-        {/* List */}
         <div
           ref={listContainerRef}
-          className='px-4 space-y-3 mt-2 overflow-y-auto'
+          className='px-4 space-y-3 mt-2 pb-10 overflow-y-auto'
           style={{ maxHeight: windowHeight * 0.7 }}
         >
           {filteredOptions.map((option) => {

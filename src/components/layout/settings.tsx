@@ -17,6 +17,7 @@ const Settings = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (data) {
       const dataSettings = data.Data
+      // console.log('======', dataSettings)
       setAllData({
         ListJob: dataSettings.ListJob || [],
         ListAge: dataSettings.ListAge || [],
@@ -25,6 +26,14 @@ const Settings = ({ children }: { children: ReactNode }) => {
         ListSalary: dataSettings.ListSalary || [],
         ListStudy: dataSettings.ListStudy || [],
         ListWorkingTime: dataSettings.ListWorkingTime || [],
+        ListEthnicity: dataSettings.ListEthnicity || [],
+        TechnicalLevel: dataSettings.TechnicalLevel || [],
+        ListAgeRecruitment: dataSettings.ListAgeRecruitment || [],
+        ListPosition: dataSettings.ListPosition || [],
+        ListExp: dataSettings.ListExp || [],
+        ListBenefits: dataSettings.ListBenefits || [],
+        ListStatusJob: dataSettings.ListStatusJob || [],
+        BusinessSize: dataSettings.BusinessSize || [],
       })
     }
   }, [data])

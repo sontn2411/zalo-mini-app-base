@@ -1,94 +1,92 @@
+import { insertLogin, useDataUserProfile } from '@/api/query/auth'
+import { KEYSTORAGE } from '@/constants/message'
+import { useAuthLogin } from '@/hooks/useAuthLogin'
 import useSettingUser from '@/hooks/useSettingUser'
 import { useUserStore } from '@/store/useUserStore'
+import { accessTokenStorage } from '@/utils/localStorage'
 import { ReactNode, useEffect, useState } from 'react'
-import { getUserInfo } from 'zmp-sdk'
+import { getUserInfo, nativeStorage } from 'zmp-sdk'
 import { getAccessToken, getPhoneNumber } from 'zmp-sdk/apis'
-import { authorize } from 'zmp-sdk/apis'
 
-export const TokenDisplay = ({
-  accessToken,
-  phoneToken,
-}: {
-  accessToken: string
-  phoneToken: string
-}) => {
-  const [copied, setCopied] = useState('')
+// const LayoutAuth = ({ children }: { children: ReactNode }) => {
+//   const { setUserInfo, userInfo, setLaboreProfile, setProfile } = useUserStore()
+//   const scope = useSettingUser()
+//   const { data } = useDataUserProfile()
+//   // console.log('=====', scope)
+//   const login = insertLogin()
 
-  const handleCopy = (text: string, type: string) => {
-    navigator.clipboard.writeText(text)
-    setCopied(type)
-    setTimeout(() => setCopied(''), 2000)
-  }
+//   useEffect(() => {
+//     const fetchUserProfile = async () => {
+//       try {
+//         const { userInfo } = await getUserInfo()
+//         const accessTokenRes = await getAccessToken()
+//         setUserInfo({ ...userInfo, accessToken: accessTokenRes })
+//         if (userInfo.id) {
+//           nativeStorage.setItem(KEYSTORAGE.ZALO_ID, userInfo.id)
+//         }
+//       } catch (error) {
+//         console.error('Failed to fetch user info:', error)
+//       }
+//     }
+//     if (scope.info) {
+//       fetchUserProfile()
+//     }
+//   }, [scope, setUserInfo])
 
-  return (
-    <div className='pt-20 px-4 flex flex-col gap-4'>
-      <div className='flex items-center gap-2'>
-        <p className='truncate'>AccessToken: {accessToken}</p>
-        <button
-          onClick={() => handleCopy(accessToken, 'access')}
-          className='px-2 py-1 text-sm bg-gray-200 rounded'
-        >
-          Copy
-        </button>
-        {copied === 'access' && (
-          <span className='text-green-500 text-sm'>Copied!</span>
-        )}
-      </div>
+//   useEffect(() => {
+//     const loginAccount = async () => {
+//       const accessToken = await getAccessToken()
+//       const { token } = await getPhoneNumber()
 
-      <div className='flex items-center gap-2'>
-        <p className='truncate'>Phone Token: {phoneToken}</p>
-        <button
-          onClick={() => handleCopy(phoneToken, 'phone')}
-          className='px-2 py-1 text-sm bg-gray-200 rounded'
-        >
-          Copy
-        </button>
-        {copied === 'phone' && (
-          <span className='text-green-500 text-sm'>Copied!</span>
-        )}
-      </div>
-    </div>
-  )
-}
+//       if (userInfo && userInfo.id && token) {
+//         login.mutate(
+//           { Accesstoken: accessToken, Code: token, ZaloId: userInfo?.id },
+//           {
+//             onSuccess: (res) => {
+//               const { Data, StatusResult } = res
+//               if (StatusResult.Code == 0 && Data) {
+//                 setProfile({ ...Data })
+//                 nativeStorage.setItem(KEYSTORAGE.ACCESSTOKEN, Data.AccessToken)
+//                 nativeStorage.setItem(
+//                   KEYSTORAGE.REFRESHTOKEN,
+//                   Data.RefreshToken
+//                 )
+//               }
+//             },
+//           }
+//         )
+//       }
+//     }
+
+//     if (!accessTokenStorage && scope.phoneNumber && scope.info) {
+//       loginAccount()
+//     }
+//   }, [userInfo])
+
+//   useEffect(() => {
+//     if (accessTokenStorage && data) {
+//       const { Data } = data
+//       setProfile({ ...Data })
+//     }
+//   }, [data])
+
+//   return (
+//     <>
+//       {/* <div className='pt-20 px-4 flex flex-col gap-4'>
+//         <TokenDisplay accessToken={accessToken} phoneToken={phoneToken} />
+//       </div> */}
+//       {children}
+//     </>
+//   )
+// }
 
 const LayoutAuth = ({ children }: { children: ReactNode }) => {
-  const { setUserInfo } = useUserStore()
+  const { userInfo } = useUserStore()
   const scope = useSettingUser()
 
-  const [accessToken, setAccessToken] = useState<string>('')
-  const [phoneToken, setPhoneToken] = useState<string>('')
+  useAuthLogin(scope)
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const { userInfo } = await getUserInfo()
-        const accessTokenRes = await getAccessToken()
-        // const { token } = await getPhoneNumber()
-
-        setUserInfo({ ...userInfo, accessToken: accessTokenRes })
-        setAccessToken(accessTokenRes)
-        // setPhoneToken(token || '')
-
-        // console.log('=====accessToken====', accessTokenRes)
-        // console.log('=====token====', token)
-      } catch (error) {
-        console.error('Failed to fetch user info:', error)
-      }
-    }
-
-    if (scope.info) {
-      fetchUserProfile()
-    }
-  }, [scope, setUserInfo])
-
-  return (
-    <>
-      {/* <div className='pt-20 px-4 flex flex-col gap-4'>
-        <TokenDisplay accessToken={accessToken} phoneToken={phoneToken} />
-      </div> */}
-      {children}
-    </>
-  )
+  return <>{children}</>
 }
 
 export default LayoutAuth

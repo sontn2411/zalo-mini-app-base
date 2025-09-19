@@ -13,7 +13,7 @@ const SearchHome = () => {
   const navigate = useNavigate()
 
   const handleShareApp = async () => {
-    const data = await openShareSheet({
+    await openShareSheet({
       type: 'zmp_deep_link',
       data: {
         title: 'Trung tâm dịch vụ việc làm Khánh Hòa - Trang chủ',
@@ -27,20 +27,26 @@ const SearchHome = () => {
   return (
     <>
       <div className='flex w-full gap-2 items-center'>
-        <div
-          onClick={() =>
-            navigate(ROUTES.JOB_LIST, {
-              viewTransition: true,
-              state: { home: true },
-            })
-          }
-          className='relative h-9 border rounded-md flex items-center px-3 cursor-pointer w-full'
-        >
-          <Search className='w-5 h-5 text-gray-400' />
-          <span className='ml-2 text-gray-500 text-sm'>Tìm kiếm công việc</span>
+        <div className='relative flex-1'>
+          <Search className='w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none' />
+          <input
+            type='text'
+            placeholder='Tìm kiếm công việc'
+            className='w-full h-9 pl-10 pr-3 text-sm border rounded-md focus:ring-1 focus:ring-color-1 focus:outline-none text-gray-700 placeholder:text-gray-500'
+            onFocus={() =>
+              navigate(ROUTES.JOB_LIST, {
+                viewTransition: true,
+                state: { home: true },
+              })
+            }
+          />
         </div>
-        <button onClick={handleShareApp} className='text-color-2'>
-          <Share2 />
+
+        <button
+          onClick={handleShareApp}
+          className='text-color-2 p-2 rounded-md hover:bg-gray-100'
+        >
+          <Share2 className='w-5 h-5' />
         </button>
       </div>
 

@@ -1,5 +1,10 @@
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query'
 import instance from '../http'
+import { PAGESIZE } from '@/constants/message'
+import { PostingJobPayload } from '@/types/job'
+import { AxiosError } from 'axios'
+
+const pageSize = PAGESIZE
 
 const fetchDataJobListHome = async () => {
   const rowIndex = 0
@@ -36,8 +41,6 @@ const fetchDataJobList = async ({
   gender = '',
   jobtype = '',
 }: JobListParams & { pageParam?: number }) => {
-  const pageSize = 10
-
   const { data } = await instance.get('JobList', {
     params: {
       rowIndex: pageParam,
@@ -61,7 +64,7 @@ export const useDataJobListInfinite = (params: JobListParams) => {
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage?.Data?.Data?.length === 0) return undefined
-      return allPages.length * 10
+      return allPages.length * pageSize
     },
     staleTime: 5 * 60 * 1000,
   })
@@ -81,6 +84,110 @@ export const useDataJobDetail = (id: string) => {
   return useQuery({
     queryKey: ['jobDetail', id],
     queryFn: () => fetchDataJobDetail(id),
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
+interface JobForeigners {
+  rowIndex?: number
+  keyword?: string
+  enterprise?: string
+}
+
+const fetchDataJobForeigners = async ({
+  rowIndex,
+  keyword,
+  enterprise,
+}: JobForeigners) => {
+  const { data } = await instance.get('/RecruitmentForeigners', {
+    params: {
+      rowIndex,
+      keyword,
+      enterprise,
+      pageSize,
+    },
+  })
+  return data
+}
+
+export const useDataJobForeigners = (params: JobForeigners) => {
+  return useInfiniteQuery({
+    queryKey: ['jobForeigners', params],
+    queryFn: ({ pageParam = 0 }) =>
+      fetchDataJobForeigners({ ...params, rowIndex: pageParam }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage?.Data?.Data?.length === 0) return undefined
+      return allPages.length * pageSize
+    },
+    staleTime: 5 * 60 * 1000,
+  })
+}
+
+const fetchDetailJobForeigner = async (id: string) => {
+  const { data } = await instance.get('/GetRecruitmentForeigner', {
+    params: {
+      jodId: id,
+    },
+  })
+
+  return data
+}
+
+export const useDetailJobForeigner = (id: string) => {
+  return useQuery({
+    queryKey: ['detailJobForeigner', id],
+    queryFn: () => fetchDetailJobForeigner(id),
+  })
+}
+
+const fetchRegisterRecruitment = async (payload: PostingJobPayload) => {
+  try {
+    const { data } = await instance.post('/RegisterRecruitment', { ...payload })
+    return data
+  } catch (err) {
+    const error = err as AxiosError
+    console.error('❌ Lỗi fetchUpdateProfileEnterprise:', error)
+
+    if (error.response?.data) {
+      return error.response.data
+    }
+    throw error
+  }
+}
+
+export const insertRegisterRecruitment = () => {
+  return useMutation({
+    mutationFn: (data: PostingJobPayload) => fetchRegisterRecruitment(data),
+  })
+}
+
+interface JobByEnterprisePayload {
+  keyword: string
+  rowIndex: number
+}
+
+const fetchDataJobByEnterprise = async (payload: JobByEnterprisePayload) => {
+  const { data } = await instance.get('/EnterpriseJobList', {
+    params: {
+      rowIndex: payload.rowIndex,
+      keyword: payload.keyword,
+    },
+  })
+
+  return data
+}
+
+export const useJobByEnterprise = (params: JobByEnterprisePayload) => {
+  return useInfiniteQuery({
+    queryKey: ['jobByEnterprise', params],
+    queryFn: ({ pageParam = 0 }) =>
+      fetchDataJobByEnterprise({ ...params, rowIndex: pageParam }),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage?.Data?.Data?.length === 0) return undefined
+      return allPages.length * pageSize
+    },
     staleTime: 5 * 60 * 1000,
   })
 }

@@ -9,6 +9,14 @@ interface SettingStore {
   ListSalary: Item[]
   ListStudy: Item[]
   ListWorkingTime: Item[]
+  ListEthnicity: Item[]
+  TechnicalLevel: Item[]
+  ListBenefits: Item[]
+  ListExp: Item[]
+  ListPosition: Item[]
+  ListAgeRecruitment: Item[]
+  ListStatusJob: Item[]
+  BusinessSize: Item[]
   setData: <K extends keyof Omit<SettingStore, 'setData' | 'setAllData'>>(
     key: K,
     value: SettingStore[K]
@@ -26,6 +34,14 @@ const useSettingStore = create<SettingStore>((set) => ({
   ListSalary: [],
   ListStudy: [],
   ListWorkingTime: [],
+  ListEthnicity: [],
+  TechnicalLevel: [],
+  ListBenefits: [],
+  ListExp: [],
+  ListPosition: [],
+  ListAgeRecruitment: [],
+  ListStatusJob: [],
+  BusinessSize: [],
   setData: (key, value) =>
     set((state) => ({
       ...state,

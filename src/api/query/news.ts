@@ -1,8 +1,10 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import instance from '../http'
+import { PAGESIZE } from '@/constants/message'
+
+const pageSize = PAGESIZE
 
 const fetchDataOverseasJobs = async ({ pageParam = 0 }) => {
-  const pageSize = 10
   const { data } = await instance.get(
     `OverseasJobs?rowIndex=${pageParam}&pageSize=${pageSize}`
   )
@@ -17,13 +19,13 @@ export const useDataOverseasJobs = () => {
     staleTime: 5 * 60 * 1000,
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage?.Data?.Data?.length === 0) return undefined
-      return allPages.length * 10
+      return allPages.length * pageSize
     },
   })
 }
 
 const fetchDataUnemploymentInsurance = async ({ pageParam = 0 }) => {
-  const pageSize = 10
+  const pageSize = 100
   const { data } = await instance.get(
     `UnemploymentInsurance?rowIndex=${pageParam}&pageSize=${pageSize}`
   )
@@ -39,7 +41,7 @@ export const useDataUnemploymentInsurance = () => {
     staleTime: 5 * 60 * 1000,
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage?.Data?.Data?.length === 0) return undefined
-      return allPages.length * 10
+      return allPages.length * pageSize
     },
   })
 }
@@ -59,7 +61,6 @@ export const useDetailNews = ({ id }: { id: string }) => {
 }
 
 const fetchDataNewList = async ({ pageParam = 0 }) => {
-  const pageSize = 10
   const { data } = await instance.get(
     `HotNewsHomePage?rowIndex=${pageParam}&pageSize=${pageSize}`
   )
@@ -75,7 +76,7 @@ export const useDataNewList = () => {
     staleTime: 5 * 60 * 1000,
     getNextPageParam: (lastPage, allPages) => {
       if (lastPage?.Data?.Data?.length === 0) return undefined
-      return allPages.length * 10
+      return allPages.length * pageSize
     },
   })
 }

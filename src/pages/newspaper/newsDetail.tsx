@@ -79,22 +79,22 @@ export default function NewsDetailPage() {
   })
 
   return (
-    <div className='bg-gray-50'>
+    <div className='bg-gray-50 mt-4'>
       <div className='max-w-md mx-auto px-4 pb-6'>
-        <h1 className='text-xl font-bold text-gray-900 leading-tight mb-3'>
+        <h1 className='text-xl font-bold text-gray-900 leading-tight'>
           {news.title}
         </h1>
 
-        <div className='flex items-center justify-between mb-6 pb-4 border-b border-gray-200 mt-8'>
+        <div className='flex items-center justify-between  pb-4 border-b border-gray-200 mt-4'>
           <p className='text-xs text-gray-500'>{news.publishdate}</p>
         </div>
 
         <div
-          className='text-gray-900 leading-relaxed space-y-4 prose max-w-none'
-          style={{
-            fontSize: '16px',
-            lineHeight: '1.7',
-          }}
+          className='text-gray-900 leading-relaxed space-y-4 prose max-w-none mt-4'
+          // style={{
+          //   fontSize: '16px',
+          //   lineHeight: '1.7',
+          // }}
         >
           {content}
         </div>

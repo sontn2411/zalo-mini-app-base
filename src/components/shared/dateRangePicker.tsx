@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { DateRange, Calendar } from 'react-date-range'
-import { addYears, endOfYear } from 'date-fns'
+import { addYears, endOfYear, parse } from 'date-fns'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
 import { vi } from 'date-fns/locale'
@@ -9,17 +9,23 @@ interface Props {
   onChange?: (range: { startDate: Date; endDate: Date }) => void
   singleDate?: boolean
   onSelectDone?: () => void
+  value?: string
 }
 
 export default function DateRangePicker({
   onChange,
   singleDate = false,
   onSelectDone,
+  value,
 }: Props) {
+  const defaultDate = value
+    ? parse(value, 'dd/MM/yyyy', new Date())
+    : new Date()
+
   const [range, setRange] = useState([
     {
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: defaultDate,
+      endDate: defaultDate,
       key: 'selection',
     },
   ])

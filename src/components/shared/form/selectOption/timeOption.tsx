@@ -1,15 +1,15 @@
-import { Clock } from 'lucide-react'
+import { AlertCircle, Clock } from 'lucide-react'
 import SelectInput from '../selectInput'
+import useSettingStore from '@/store/useSetting'
 
-const times = [
-  'Giờ hành chính',
-  'Theo ca',
-  'Thỏa thuận',
-  'Bán thời gian',
-  'Toàn thời gian',
-]
+interface TimeOptionProps {
+  onChange: (value: string) => void
+  error?: string
+}
 
-const TimeOption = () => {
+const TimeOption = ({ onChange, error }: TimeOptionProps) => {
+  const { ListWorkingTime } = useSettingStore()
+
   return (
     <div>
       <label className='block text-sm font-semibold text-gray-700 mb-2'>
@@ -18,15 +18,19 @@ const TimeOption = () => {
       </label>
 
       <SelectInput
-        options={times.map((item, index) => ({
-          label: item,
-          value: `times_${index}`,
-        }))}
+        options={ListWorkingTime}
         maxSelect={1}
         title='Chọn thời gian'
         placeholder='Chọn thời gian'
-        onChange={(values) => console.log('Ngành đã chọn:', values)}
+        onChange={(values) => onChange(values[0])}
+        className={`${error ? 'border-red-600' : ''}`}
       />
+      {error && (
+        <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>
+          <AlertCircle className='w-4 h-4 mr-1' />
+          {error}
+        </p>
+      )}
     </div>
   )
 }

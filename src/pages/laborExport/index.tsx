@@ -41,7 +41,7 @@ const LaborExportPage = () => {
         ))
       )}
 
-      <div ref={loadMoreRef} className='h-10 flex items-center justify-center'>
+      <div ref={loadMoreRef} className='flex items-center justify-center'>
         {isFetchingNextPage ? (
           <div className='w-full space-y-2'>
             <NewsSkeleton />

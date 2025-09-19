@@ -19,6 +19,7 @@ import { useParams } from 'react-router-dom'
 import { useDataJobDetail } from '@/api/query/jobs'
 import SkeletonDetail from './skeletonDetail'
 import he from 'he'
+import { noAvatar, noCompany } from '@/static'
 
 const PageNotFound = () => (
   <div className='flex flex-col items-center justify-center min-h-[60vh] text-center'>
@@ -75,44 +76,70 @@ const JobDetail = () => {
     companyscale,
   } = job
 
+  // const infoCards = [
+  //   location && { icon: MapPin, title: 'Địa điểm', value: location },
+  //   salary && { icon: DollarSign, title: 'Mức lương', value: salary },
+  //   deadline && { icon: Clock, title: 'Hạn nộp', value: deadline },
+  //   numofrecruitment && {
+  //     icon: Users,
+  //     title: 'Số lượng tuyển',
+  //     value: `${numofrecruitment} người`,
+  //   },
+  //   position && { icon: Building2, title: 'Cấp bậc', value: position },
+  // ].filter(Boolean)
+
+  // console.log('===jobdetail======', job)
+
   const infoCards = [
-    location && { icon: MapPin, title: 'Địa điểm', value: location },
+    position && { icon: Building2, title: 'Cấp bậc', value: position },
     salary && { icon: DollarSign, title: 'Mức lương', value: salary },
-    deadline && { icon: Clock, title: 'Hạn nộp', value: deadline },
     numofrecruitment && {
       icon: Users,
       title: 'Số lượng tuyển',
       value: `${numofrecruitment} người`,
     },
-    position && { icon: Building2, title: 'Cấp bậc', value: position },
+    deadline && { icon: Clock, title: 'Ngày hết hạn', value: deadline },
   ].filter(Boolean)
 
   return (
     <div>
-      <div className='bg-white p-4 mb-4 flex items-start space-x-4'>
-        <div className='w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center bg-gray-100'>
-          {thumbnail ? (
-            <img
-              src={thumbnail}
-              alt={title || 'Logo công ty'}
-              className='w-full h-full object-cover'
-            />
-          ) : (
-            <Building2 className='w-8 h-8 text-white' />
-          )}
-        </div>
-        <div className='flex-1'>
-          <h2 className='text-lg font-bold text-gray-900'>{title}</h2>
-          <p className='text-gray-600 text-sm mb-2'>{companyname}</p>
-          <div className='flex items-center space-x-4 text-xs text-gray-500'>
-            {viewcount && (
-              <span className='flex items-center'>
-                <Eye className='w-3 h-3 mr-1' /> {viewcount} lượt xem
-              </span>
+      <div className='flex flex-col bg-white p-4 mb-4'>
+        <div className=' flex items-start space-x-4'>
+          <div className='w-20 h-20 rounded-2xl overflow-hidden flex items-center justify-center bg-gray-100'>
+            {thumbnail ? (
+              <img
+                src={thumbnail || noCompany}
+                alt={title || 'Logo công ty'}
+                className='w-full h-full object-cover'
+                onError={(e) => {
+                  e.currentTarget.src = noCompany
+                }}
+              />
+            ) : (
+              <Building2 className='w-8 h-8 text-white' />
             )}
+          </div>
+          <div className='flex-1'>
+            <h2 className='text-lg font-bold text-gray-900'>{title}</h2>
+            <p className='text-gray-600 text-sm mb-2'>{companyname}</p>
+            {/* */}
+          </div>
+        </div>
+
+        <div className='mt-1 space-y-2'>
+          <div className='flex items-center text-gray-600 text-sm mb-2'>
+            <MapPin className='w-4 h-4 mr-1 text-gray-500' />
+            {location}
+          </div>
+          <div className='flex items-center space-x-4 text-xs text-gray-500'>
+            <span className='flex items-center'>
+              <Eye className='w-4 h-4 mr-1' /> {viewcount || 0} lượt xem
+            </span>
+
             {publishdate && (
               <span className='flex items-center'>
-                <Calendar className='w-3 h-3 mr-1' /> Đăng {publishdate}
+                <Calendar className='w-4 h-4 mr-1' />
+                Ngày đăng {publishdate}
               </span>
             )}
           </div>
@@ -140,20 +167,37 @@ const JobDetail = () => {
                 <>
                   <div className='bg-white p-4 mb-4 space-y-4'>
                     <div className='grid grid-cols-2 gap-4'>
-                      {position && (
+                      {industry && (
                         <div>
-                          <p className='text-xs text-gray-500 mb-1'>Cấp bậc</p>
+                          <p className='text-xs text-gray-500 mb-1'>
+                            Ngành nghề
+                          </p>
                           <div className='flex items-center'>
-                            <Briefcase className='w-4 h-4 text-gray-400 mr-2' />
+                            <Target className='w-4 h-4 text-gray-400 mr-2' />
                             <p className='text-sm font-medium text-gray-900'>
-                              {position}
+                              {industry}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                      {workingtime && (
+                        <div>
+                          <p className='text-xs text-gray-500 mb-1'>
+                            Thời gian làm việc
+                          </p>
+                          <div className='flex items-center'>
+                            <Timer className='w-4 h-4 text-gray-400 mr-2' />
+                            <p className='text-sm font-medium text-gray-900'>
+                              {workingtime}
                             </p>
                           </div>
                         </div>
                       )}
                       {degreerequired && (
                         <div>
-                          <p className='text-xs text-gray-500 mb-1'>Trình độ</p>
+                          <p className='text-xs text-gray-500 mb-1'>
+                            Yêu cầu bằng cấp
+                          </p>
                           <div className='flex items-center'>
                             <GraduationCap className='w-4 h-4 text-gray-400 mr-2' />
                             <p className='text-sm font-medium text-gray-900'>
@@ -162,8 +206,6 @@ const JobDetail = () => {
                           </div>
                         </div>
                       )}
-                    </div>
-                    <div className='grid grid-cols-2 gap-4'>
                       {experience && (
                         <div>
                           <p className='text-xs text-gray-500 mb-1'>
@@ -177,6 +219,7 @@ const JobDetail = () => {
                           </div>
                         </div>
                       )}
+
                       {gender && (
                         <div>
                           <p className='text-xs text-gray-500 mb-1'>
@@ -190,31 +233,21 @@ const JobDetail = () => {
                           </div>
                         </div>
                       )}
+
+                      {deadline && (
+                        <div>
+                          <p className='text-xs text-gray-500 mb-1'>
+                            Hạn nộp hồ sơ
+                          </p>
+                          <div className='flex items-center'>
+                            <Calendar className='w-4 h-4 text-gray-400 mr-2' />
+                            <p className='text-sm font-medium text-gray-900'>
+                              {deadline}
+                            </p>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                    {workingtime && (
-                      <div>
-                        <p className='text-xs text-gray-500 mb-1'>
-                          Thời gian làm việc
-                        </p>
-                        <div className='flex items-center'>
-                          <Timer className='w-4 h-4 text-gray-400 mr-2' />
-                          <p className='text-sm font-medium text-gray-900'>
-                            {workingtime}
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                    {industry && (
-                      <div>
-                        <p className='text-xs text-gray-500 mb-1'>Ngành nghề</p>
-                        <div className='flex items-center'>
-                          <Target className='w-4 h-4 text-gray-400 mr-2' />
-                          <p className='text-sm font-medium text-gray-900'>
-                            {industry}
-                          </p>
-                        </div>
-                      </div>
-                    )}
                   </div>
                   {summary && (
                     <div className='bg-white p-4 mb-4'>
@@ -265,9 +298,12 @@ const JobDetail = () => {
                     <div className='w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center overflow-hidden'>
                       {thumbnail ? (
                         <img
-                          src={thumbnail}
+                          src={thumbnail || noCompany}
                           alt={companyname || 'Logo công ty'}
                           className='w-full h-full object-cover'
+                          onError={(e) => {
+                            e.currentTarget.src = noCompany
+                          }}
                         />
                       ) : (
                         <Building2 className='w-6 h-6 text-gray-600' />
@@ -278,21 +314,26 @@ const JobDetail = () => {
                     </h4>
                   </div>
 
-                  {companyscale && (
-                    <div>
-                      <p className='text-xs text-gray-500 mb-1'>Quy mô</p>
-                      <p className='text-sm font-medium text-gray-900'>
-                        {companyscale}
-                      </p>
-                    </div>
-                  )}
+                  <div className='flex gap-6'>
+                    {companyscale && (
+                      <div>
+                        <p className='text-xs text-gray-500 mb-0.5'>Quy mô</p>
+                        <p className='text-sm font-medium text-gray-900'>
+                          {companyscale}
+                        </p>
+                      </div>
+                    )}
 
-                  {companyaddress && (
-                    <div className='flex items-start space-x-2'>
-                      <MapPin className='w-4 h-4 text-gray-400 mt-0.5' />
-                      <p className='text-sm text-gray-700'>{companyaddress}</p>
-                    </div>
-                  )}
+                    {companyaddress && (
+                      <div>
+                        <p className='text-xs text-gray-500 mb-0.5'>Địa chỉ</p>
+                        <p className='text-sm text-gray-700 flex items-center'>
+                          <MapPin className='w-4 h-4 mr-1 text-gray-500' />
+                          {companyaddress}
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ),
             },

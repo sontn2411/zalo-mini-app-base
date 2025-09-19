@@ -1,14 +1,15 @@
-import { CircleStar } from 'lucide-react'
+import { AlertCircle, CircleStar } from 'lucide-react'
 import SelectInput from '../selectInput'
+import useSettingStore from '@/store/useSetting'
 
-const ranks = [
-  'Lao động kỹ thuật',
-  'Giám đốc điều hành',
-  'Chuyên gia',
-  'Nhà quản lý',
-]
+interface RankJobOptionType {
+  onChange: (value: string) => void
+  error?: string
+}
 
-const RankJobOption = () => {
+const RankJobOption = ({ onChange, error }: RankJobOptionType) => {
+  const { ListPosition } = useSettingStore()
+
   return (
     <div>
       <label className='block text-sm font-semibold text-gray-700 mb-2'>
@@ -16,15 +17,19 @@ const RankJobOption = () => {
         Cấp bậc
       </label>
       <SelectInput
-        options={ranks.map((item, index) => ({
-          label: item,
-          value: `ranks_${index}`,
-        }))}
+        options={ListPosition}
         maxSelect={1}
         title='Chọn cấp bậc'
         placeholder='Chọn cấp bậc'
-        onChange={(values) => console.log('Ngành đã chọn:', values)}
+        onChange={(values) => onChange(values[0])}
+        className={`${error ? 'border-red-600' : ''}`}
       />
+      {error && (
+        <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>
+          <AlertCircle className='w-4 h-4 mr-1' />
+          {error}
+        </p>
+      )}
     </div>
   )
 }

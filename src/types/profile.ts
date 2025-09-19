@@ -20,3 +20,42 @@ export interface UserProfile {
   name: string
   accessToken: string
 }
+
+export interface LaboreProfile {
+  avatar: string
+  address: string
+  cid: string
+  cidaddress: string
+  ciddate: string
+  dateofbirth: string
+  desiredcareer: string[]
+  email: string
+  ethnicity: string
+  fullname: string
+  gender: string
+  highestlevelofexpertise: string
+  isactive: boolean
+  isapproval: boolean
+  phone: string
+  schoolgraduate: string
+  traininglevel: string
+  trainingmajor: string
+  AccessToken: string
+  RefreshToken: string
+  zaloId: string
+  usertype: string
+}
+
+export interface EnterpriseProfile {
+  companyemail: string
+  companyname: string
+  companyphone: string
+  usertype: string
+  isactive: boolean
+  ward: string
+  address: string
+  email: string
+  avatart: string
+  businesssize: string | null
+  businesstype: string | null
+}

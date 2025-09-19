@@ -16,7 +16,7 @@ import {
   User2,
   AlertCircle,
 } from 'lucide-react'
-import { Button } from 'zmp-ui'
+import { Button, useSnackbar } from 'zmp-ui'
 import SelectInput from '@/components/shared/form/selectInput'
 import GenderField from '@/components/shared/form/genderField'
 import { z } from 'zod'
@@ -26,17 +26,34 @@ import GraduationOption from '@/components/shared/form/selectOption/graduationOp
 import useSettingStore from '@/store/useSetting'
 import SheetDate from '@/components/shared/form/sheetDate'
 import IconUI from '@/components/ui/iconUi'
-import { To, useNavigate } from 'react-router-dom'
+import { Route, To, useNavigate } from 'react-router-dom'
 import {
+  createRegisterPersonSchema,
   RegisterPersonForm,
-  registerPersonSchema,
 } from '@/schemas/registerSchema'
+import { formatDateYYMMDD } from '@/utils/date'
+import { getAccessToken, getUserID } from 'zmp-sdk'
+import { getPhoneNumber } from 'zmp-sdk/apis'
+import { useUserStore } from '@/store/useUserStore'
+import { insertLogin, insertRegisterLabore } from '@/api/query/auth'
+import { RegisterLaborePayload } from '@/types/auth'
+import { useLoadingGlobal } from '@/store/useLoadingGlobal'
+import { nativeStorage } from 'zmp-sdk/apis'
+import { ROUTES } from '@/constants/routes'
+import { KEYSTORAGE } from '@/constants/message'
+import { Modal } from 'zmp-ui'
 
 const RegisterPerson = () => {
-  const { ListJob } = useSettingStore()
-  const [birthDay, setBirthDay] = useState<string>('')
+  const { ListJob, ListEthnicity } = useSettingStore()
 
   const { ListGenderUser } = useSettingStore()
+  const { userInfo } = useUserStore()
+
+  const registerLabore = insertRegisterLabore()
+
+  const { openSnackbar } = useSnackbar()
+
+  const { setIsLoadingGlobal } = useLoadingGlobal()
 
   const genderDefault = ListGenderUser.find(
     (item) => item.label !== 'Nam' && item.label !== 'Nữ'
@@ -44,32 +61,90 @@ const RegisterPerson = () => {
 
   const navigate = useNavigate()
 
+  const maxJob = 2
+  const schema = createRegisterPersonSchema(maxJob)
+
+  type FormValues = z.infer<typeof schema>
+
   const {
     register,
     handleSubmit,
     control,
-    getValues,
+
     formState: { errors },
-  } = useForm<RegisterPersonForm>({
-    resolver: zodResolver(registerPersonSchema),
+  } = useForm<FormValues>({
+    resolver: zodResolver(schema),
     defaultValues: {
       job: [],
       gender: genderDefault?.value,
       birthday: '',
+      ethnicity: '',
     },
   })
 
-  const onSubmit = (data: RegisterPersonForm) => {
-    // let erros = []
+  const onSubmit = async (data: RegisterPersonForm) => {
+    setIsLoadingGlobal(true)
 
-    // if (birthDay.length === 0) {
-    //   erros.push({ field: 'birthday', messgage: 'errror' })
+    const accessToken = await getAccessToken()
+    const { token } = await getPhoneNumber()
+    const userID = await getUserID({})
+
+    // if (!accessToken || !token) {
+    //   console.error('Thiếu accessToken hoặc token, không thể đăng ký')
+    //   setIsLoadingGlobal(false)
+    //   return
     // }
 
-    const payload = {
-      ...data,
-      birthDay,
+    const payload: RegisterLaborePayload = {
+      Accesstoken: accessToken,
+      Code: token || '',
+      ZaloId: userID,
+      FullName: data.fullName,
+      DateOfBirth: formatDateYYMMDD(data.birthday),
+      Gender: data.gender,
+      CID: data.idCard,
+      CIDDate: formatDateYYMMDD(data.dateIdCard),
+      CIDAddress: data.addressIdCar,
+      Phone: data.phone,
+      Email: data.email,
+      Ethnicity: data.ethnicity,
+      Address: data.address,
+      Study: data.educationLevel,
+      TechnicalLevel: data.study,
+      TrainingMajor: data.major,
+      GraduateSchool: data.graduationSchool,
+      DesiredCareer: data.job,
     }
+
+    registerLabore.mutate(payload, {
+      onSuccess: (data) => {
+        const { Data, StatusResult } = data
+
+        if (StatusResult.Code === 0) {
+          const { AccessToken, RefreshToken } = Data
+          nativeStorage.setItem(KEYSTORAGE.ZALO_ID, userInfo.id)
+          nativeStorage.setItem(KEYSTORAGE.ACCESSTOKEN, AccessToken)
+          nativeStorage.setItem(KEYSTORAGE.REFRESHTOKEN, RefreshToken)
+
+          navigate(ROUTES.PROFILE, { viewTransition: true })
+          openSnackbar({
+            text: 'Đăng ký người lao động thành công!',
+            type: 'success',
+          })
+        } else {
+          openSnackbar({
+            text: 'Đã xảy ra lỗi khi lưu dữ liệu. Vui lòng thử lại.',
+            type: 'error',
+          })
+        }
+
+        setIsLoadingGlobal(false)
+      },
+      onError: (error) => {
+        console.error('Đăng ký thất bại:', error)
+        setIsLoadingGlobal(false)
+      },
+    })
   }
 
   const handlePrev = () => {
@@ -77,11 +152,6 @@ const RegisterPerson = () => {
       viewTransition: true,
     })
   }
-
-  const hanldeChangeBirthDay = (value: string) => setBirthDay(value)
-
-  console.log('=[]====', getValues())
-  // console.log('=[]=errors===', errors)
 
   return (
     <div className='pb-sb'>
@@ -98,9 +168,10 @@ const RegisterPerson = () => {
           <p className='text-sm opacity-90'>Hồ sơ người lao động</p>
         </div>
       </div>
+
       <div className='rounded-2xl shadow-sm'>
         <form onSubmit={handleSubmit(onSubmit)} className=''>
-          <div className='bg-white p-4 rounded-xl shadow-sm'>
+          {/* <div className='bg-white p-4 rounded-xl shadow-sm'>
             <h3 className='text-base font-semibold text-gray-800 mb-3'>
               Thông tin đăng nhập
             </h3>
@@ -127,7 +198,7 @@ const RegisterPerson = () => {
               error={errors.confirmPassword?.message}
               {...register('confirmPassword')}
             />
-          </div>
+          </div> */}
 
           <div className='bg-white p-4 rounded-xl shadow-sm mt-6'>
             <h3 className='text-base font-semibold text-gray-800 mb-3'>
@@ -169,18 +240,13 @@ const RegisterPerson = () => {
                   />
                 )}
               />
-              {/* <SheetDate
-                title='Chọn ngày'
-                singleDate={true}
-                disableLabel={true}
-              /> */}
             </div>
             <InputCustom
               label='Nơi cấp'
               placeholder='Nhập nơi cấp'
               icon={MapPin}
-              error={errors.issuePlace?.message}
-              {...register('issuePlace')}
+              error={errors.addressIdCar?.message}
+              {...register('addressIdCar')}
             />
             <InputCustom
               label='Số điện thoại'
@@ -227,25 +293,47 @@ const RegisterPerson = () => {
                   )
                 }}
               />
-              {/* <SheetDate
-                title='Chọn ngày'
-                singleDate={true}
-                disableLabel={true}
-                onChange={(value) => hanldeChangeBirthDay(value)}
-              /> */}
             </div>
-            <InputCustom
-              label='Dân tộc'
-              placeholder='Ví dụ: Kinh'
-              icon={User}
-              error={errors.ethnicity?.message}
-              {...register('ethnicity')}
-            />
+
+            <div>
+              <label className='block text-sm font-semibold text-gray-700 mb-2'>
+                <User className='w-4 h-4 inline mr-2' />
+                Dân tộc
+              </label>
+              <Controller
+                name='ethnicity'
+                control={control}
+                render={({ field }) => (
+                  <SelectInput
+                    options={ListEthnicity}
+                    maxSelect={1}
+                    title='Chọn dân tộc'
+                    placeholder='Chọn dân tộc'
+                    onChange={(values: string[]) => {
+                      field.onChange(values[0] ?? '')
+                    }}
+                    className={`${errors.ethnicity ? 'border-red-600' : ''}`}
+                  />
+                )}
+              />
+              {errors.ethnicity && (
+                <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>
+                  <AlertCircle className='w-4 h-4 mr-1' />
+                  {errors.ethnicity.message}
+                </p>
+              )}
+            </div>
+
             <div className='my-4'>
               <Controller
                 name='gender'
                 control={control}
-                render={({ field }) => <GenderField value={field.value} />}
+                render={({ field }) => (
+                  <GenderField
+                    value={field.value}
+                    onChange={(e) => field.onChange(e)}
+                  />
+                )}
               />
             </div>
           </div>
@@ -321,7 +409,6 @@ const RegisterPerson = () => {
             </div>
           </div>
 
-          {/* Submit */}
           <div className='px-4 pb-2 '>
             <div className=''>
               <div className=' p-4'>
@@ -348,6 +435,17 @@ const RegisterPerson = () => {
           </div>
         </form>
       </div>
+      {/* <Modal
+        actions={[
+          {
+            text: 'Khám phá việc làm',
+            onClick: handleSuccess,
+          },
+        ]}
+        title='Đăng ký thành công!'
+        description='Tài khoản của bạn đã được tạo. Vui lòng chờ quản trị viên xác nhận để có thể sử dụng đầy đủ tính năng kết nối doanh nghiệp và tìm việc.'
+        visible
+      /> */}
     </div>
   )
 }

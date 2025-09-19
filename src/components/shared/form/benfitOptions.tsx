@@ -1,21 +1,15 @@
-import { Gift } from 'lucide-react'
+import { AlertCircle, Gift } from 'lucide-react'
 import SelectInput from './selectInput'
+import useSettingStore from '@/store/useSetting'
 
-const benefitOptions = [
-  'Căn tin',
-  'Chăm sóc sức khỏe',
-  'Điện thoại  ',
-  'Nghỉ phép có lương',
-  'Hoạt động nhóm',
-  'Đào tạo',
-  'Xe đưa đón',
-  'Du lịch',
-  'Phiếu quà tặng',
-  'Hỗ trợ bữa ăn',
-  'Đóng BHXH, BHYT, BHTN',
-]
+interface BenfitOptionProps {
+  onChange: (value: string[]) => void
+  error?: string
+}
 
-const BenfitOptions = () => {
+const BenfitOptions = ({ onChange, error }: BenfitOptionProps) => {
+  const { ListBenefits } = useSettingStore()
+
   return (
     <div>
       <label className='block text-sm font-semibold text-gray-700 mb-2'>
@@ -23,15 +17,19 @@ const BenfitOptions = () => {
         Chế độ phúc lợi
       </label>
       <SelectInput
-        options={benefitOptions.map((item, index) => ({
-          label: item,
-          value: `benefit_${index}`,
-        }))}
-        maxSelect={5}
+        options={ListBenefits}
+        maxSelect={999}
         title='Chọn Phúc lợi'
-        placeholder='Chọn tối đa 5 phúc lợi'
-        onChange={(values) => console.log('Phúc lợi đã chọn:', values)}
+        placeholder='Chọn tối thiểu 1 phúc lợi'
+        onChange={(values) => onChange(values)}
+        className={`${error ? 'border-red-600' : ''}`}
       />
+      {error && (
+        <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>
+          <AlertCircle className='w-4 h-4 mr-1' />
+          {error}
+        </p>
+      )}
     </div>
   )
 }

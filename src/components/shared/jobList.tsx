@@ -1,4 +1,5 @@
 import { ROUTES } from '@/constants/routes'
+import { noCompany } from '@/static'
 import { Clock, DollarSign, MapPin } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
@@ -27,7 +28,14 @@ const JobList = ({ data }: JobListProps) => {
         >
           <div className='flex gap-4'>
             <div className=''>
-              <img src={job.thumbnail} alt='name' className=' h-24 border' />
+              <img
+                src={job.thumbnail || noCompany}
+                alt='name'
+                className=' h-24 border'
+                onError={(e) => {
+                  e.currentTarget.src = noCompany
+                }}
+              />
             </div>
             <div className='w-full'>
               <h3 className='font-semibold text-gray-900 mb-1 line-clamp-2'>
@@ -42,9 +50,9 @@ const JobList = ({ data }: JobListProps) => {
                   <Clock className='w-4 h-4' />
                   <span className='text-xs '>22/12/2025</span>
                 </p> */}
-                <div className='flex gap-4'>
+                <div className='flex flex-col gap-1'>
                   {job.location && (
-                    <p className='flex items-center space-x-1 text-gray-500'>
+                    <p className='flex items-center space-x-1 text-gray-500 w-full'>
                       <MapPin className='w-4 h-4' />
                       <span className='text-xs text-gray-500'>
                         {job.location}
@@ -52,7 +60,7 @@ const JobList = ({ data }: JobListProps) => {
                     </p>
                   )}
                   {job.salary && (
-                    <p className='flex items-center space-x-1 text-gray-500'>
+                    <p className='flex items-center space-x-1 text-gray-500 w-full'>
                       <DollarSign className='w-4 h-4' />
                       <span className='text-xs text-gray-500'>
                         {job.salary}

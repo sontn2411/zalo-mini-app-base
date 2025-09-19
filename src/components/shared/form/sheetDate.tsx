@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { AlertCircle, CalendarDays, CalendarRange, X } from 'lucide-react'
 import SheetPortal from './sheetPortal'
 import DateRangePicker from '../dateRangePicker'
+import { format } from 'date-fns'
+import { vi } from 'date-fns/locale'
 
 interface SheetDateProps {
   title: string
@@ -29,8 +31,9 @@ const SheetDate = ({
   const [visible, setVisible] = useState(false)
 
   const handleOnChange = (val: { startDate: Date; endDate: Date }) => {
-    const startDate = val.startDate.toLocaleDateString()
-    const endDate = val.startDate.toLocaleDateString()
+    const startDate = format(val.startDate, 'dd/MM/yyyy', { locale: vi })
+    const endDate = format(val.endDate, 'dd/MM/yyyy', { locale: vi })
+
     if (singleDate) {
       onChange?.(startDate)
     } else {
@@ -93,6 +96,7 @@ const SheetDate = ({
             onSelectDone={() => setVisible(false)}
             onChange={(val) => handleOnChange(val)}
             singleDate={singleDate}
+            value={value}
           />
           {!singleDate && (
             <div className='mt-2 flex justify-start gap-2 w-full px-4'>
