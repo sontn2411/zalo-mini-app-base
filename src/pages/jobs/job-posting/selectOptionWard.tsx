@@ -7,9 +7,14 @@ import { AlertCircle, MapPin } from 'lucide-react'
 interface SelectOptionWardProps {
   onChange: (value: string[]) => void
   error?: string
+  value: string[]
 }
 
-const SelectOptionWard = ({ onChange, error }: SelectOptionWardProps) => {
+const SelectOptionWard = ({
+  onChange,
+  error,
+  value,
+}: SelectOptionWardProps) => {
   const { provinceKH } = useLocationStore()
 
   const { data: dataWards } = useDataWards(provinceKH)
@@ -32,6 +37,7 @@ const SelectOptionWard = ({ onChange, error }: SelectOptionWardProps) => {
           placeholder='Chọn xã/phường'
           onChange={(values) => onChange(values)}
           className={`${error ? 'border-red-600' : ''}`}
+          value={value}
         />
       )}
       {error && (

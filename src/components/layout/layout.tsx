@@ -77,7 +77,8 @@ const ContentLayout = () => {
     <div className='w-screen h-screen flex flex-col bg-gray-50 text-foreground overflow-hidden'>
       {!isNoHeader &&
         (isHeaderProfile ? (
-          <HeaderProfile />
+          // <HeaderProfile />
+          <></>
         ) : isHeaderDetail ? (
           <HeaderDetail />
         ) : (

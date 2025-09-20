@@ -35,6 +35,16 @@ export interface UpdateProfileLaborePayload {
   TrainingMajor: string
   GraduateSchool: string
   DesiredCareer: string[]
+
+  Summary: string
+  Salary: string
+  Experience: number
+  EducationQualifications: string[]
+  Skills: string[]
+  CPSkill: string
+  FLanguages: string[]
+  ExperienceSummary: string
+  InterviewFormat: string
 }
 
 export interface LoginPayload {
@@ -60,4 +70,11 @@ export interface UpdateProfileEnterprise {
   CompanyEmail: string
   CompanyAddress: string
   CompanyPhone: string
+}
+
+export interface ZmpLinkedAccountPayload {
+  Accesstoken: string
+  Code: string
+  ZaloId: string
+  Email: string
 }

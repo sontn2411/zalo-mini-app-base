@@ -3,13 +3,15 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { FileText, Sparkles, AlertCircle } from 'lucide-react'
 import SelectInput from '@/components/shared/form/selectInput'
-
-const ListSkill = [
-  { value: 'communication', label: 'Giao tiếp' },
-  { value: 'teamwork', label: 'Làm việc nhóm' },
-  { value: 'leadership', label: 'Lãnh đạo' },
-  { value: 'problem-solving', label: 'Giải quyết vấn đề' },
-]
+import useSettingStore from '@/store/useSetting'
+import { UpdateProfileLaborePayload } from '@/types/auth'
+import { useUserStore } from '@/store/useUserStore'
+import { insertUodateLabore } from '@/api/query/auth'
+import { useLoadingGlobal } from '@/store/useLoadingGlobal'
+import { toast } from 'react-toastify'
+import { To, useNavigate } from 'react-router-dom'
+import { formatDateDDMMYY, formatDateYYMMDD } from '@/utils/date'
+import he from 'he'
 
 const schema = z.object({
   skills: z.array(z.string()).min(1, 'Chọn ít nhất 1 kỹ năng'),
@@ -19,6 +21,15 @@ const schema = z.object({
 type FormValues = z.infer<typeof schema>
 
 const Experience = () => {
+  const { Skills } = useSettingStore()
+  const { laboreProfile, setLaboreProfile } = useUserStore()
+
+  const { setIsLoadingGlobal } = useLoadingGlobal()
+
+  const navigate = useNavigate()
+
+  const updateProfile = insertUodateLabore()
+
   const {
     handleSubmit,
     control,
@@ -28,12 +39,61 @@ const Experience = () => {
     resolver: zodResolver(schema),
     defaultValues: {
       skills: [],
-      experienceDescription: '',
+      experienceDescription: laboreProfile?.experienceSummary || '',
     },
   })
 
   const onSubmit = (data: FormValues) => {
-    console.log('Form Data:', data)
+    setIsLoadingGlobal(true)
+    const payload: UpdateProfileLaborePayload = {
+      FullName: laboreProfile?.fullname || '',
+      DateOfBirth: formatDateYYMMDD(laboreProfile?.dateofbirth || '') || '',
+      Gender: laboreProfile?.gender || '',
+      CID: laboreProfile?.cid || '',
+      CIDDate: formatDateYYMMDD(laboreProfile?.ciddate || '') || '',
+      CIDAddress: laboreProfile?.cidaddress || '',
+      Phone: laboreProfile?.phone || '',
+      Email: laboreProfile?.email || '',
+      Ethnicity: laboreProfile?.ethnicity || '',
+      Address: laboreProfile?.address || '',
+      Study: laboreProfile?.traininglevel || '',
+      TechnicalLevel: laboreProfile?.highestlevelofexpertise || '',
+      TrainingMajor: laboreProfile?.trainingmajor || '',
+      GraduateSchool: laboreProfile?.schoolgraduate || '',
+      DesiredCareer: laboreProfile?.desiredcareer || [],
+
+      Summary: he.decode(laboreProfile?.summary || '') || '',
+      Salary: laboreProfile?.salary || 'f29ab406-8672-4ae4-9373-c28c309743e7',
+      Experience: laboreProfile?.experience || 0,
+      EducationQualifications: laboreProfile?.educationQualifications || [],
+      Skills: data?.skills || [],
+      CPSkill: laboreProfile?.cpskill || '',
+      FLanguages: laboreProfile?.flanguages || [],
+      ExperienceSummary: data?.experienceDescription || '',
+      InterviewFormat: laboreProfile?.interviewFormat || '',
+    }
+
+    updateProfile.mutate(payload, {
+      onSuccess: (res) => {
+        const { Data, StatusResult, Errors } = res
+        setIsLoadingGlobal(false)
+        if (StatusResult.Code == 0) {
+          setLaboreProfile({ ...Data })
+
+          toast.success('Thay dổi thông tin thành công!')
+          navigate(-1 as To, { viewTransition: true })
+        } else {
+          if (Errors) {
+            const message = Errors[0].Message
+            toast.error(message)
+          }
+        }
+      },
+      onError: (res) => {
+        console.log('=errror', res)
+        setIsLoadingGlobal(false)
+      },
+    })
   }
 
   return (
@@ -52,8 +112,8 @@ const Experience = () => {
           control={control}
           render={({ field }) => (
             <SelectInput
-              options={ListSkill}
-              maxSelect={5}
+              options={Skills}
+              maxSelect={999}
               title='Chọn kỹ năng'
               placeholder='Chọn kỹ năng'
               onChange={(values: string[]) => field.onChange(values)}

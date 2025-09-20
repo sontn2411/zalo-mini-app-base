@@ -30,8 +30,6 @@ const Details = ({ control, errors }: DetailsProps) => {
     name: 'detail',
   })
 
-  console.log('=======', nativeStorage.getItem(KEYSTORAGE.ACCESSTOKEN))
-
   return (
     <div className='space-y-4'>
       <h2 className='text-base font-medium text-gray-800 '>
@@ -67,9 +65,9 @@ const Details = ({ control, errors }: DetailsProps) => {
               <Controller
                 name={`detail.${index}.gender`}
                 control={control}
-                render={({ field }) => (
-                  <GenderField hiddenIcon={true} {...field} />
-                )}
+                render={({ field }) => {
+                  return <GenderField hiddenIcon={true} {...field} />
+                }}
               />
 
               <div className='flex gap-4'>
@@ -94,7 +92,10 @@ const Details = ({ control, errors }: DetailsProps) => {
                   name={`detail.${index}.age`}
                   control={control}
                   render={({ field }) => (
-                    <SelectOptionAge onChange={field.onChange} />
+                    <SelectOptionAge
+                      onChange={field.onChange}
+                      value={field.value}
+                    />
                   )}
                 />
               </div>

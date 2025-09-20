@@ -91,8 +91,6 @@ const CandidatePage = () => {
     )
   }
 
-  console.log('===sssss=====', nativeStorage.getItem(KEYSTORAGE.ACCESSTOKEN))
-
   const candidates =
     data?.pages.reduce(
       (acc: any[], page) => [...acc, ...(page?.Data?.Data || [])],

@@ -5,9 +5,10 @@ import useSettingStore from '@/store/useSetting'
 interface SalaryRangesProps {
   onChange: (value: string) => void
   error?: string
+  value: string
 }
 
-const SalaryRanges = ({ onChange, error }) => {
+const SalaryRanges = ({ onChange, error, value }: SalaryRangesProps) => {
   const { ListSalary } = useSettingStore()
 
   return (
@@ -24,6 +25,7 @@ const SalaryRanges = ({ onChange, error }) => {
         placeholder='Chọn Mức lương'
         onChange={(values) => onChange(values[0])}
         className={`${error ? 'border-red-600' : ''}`}
+        value={value}
       />
       {error && (
         <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>

@@ -5,9 +5,10 @@ import useSettingStore from '@/store/useSetting'
 interface JobSelectOptionProps {
   onChange: (value: string) => void
   error?: string
+  value: string
 }
 
-const JobSelectOption = ({ onChange, error }: JobSelectOptionProps) => {
+const JobSelectOption = ({ onChange, error, value }: JobSelectOptionProps) => {
   const { ListJob } = useSettingStore()
 
   return (
@@ -24,6 +25,7 @@ const JobSelectOption = ({ onChange, error }: JobSelectOptionProps) => {
         placeholder='Chọn ngành nghề'
         onChange={(values) => onChange(values[0])}
         className={`${error ? 'border-red-600' : ''}`}
+        value={value}
       />
       {error && (
         <p className='mt-1 ml-1 text-xs text-red-600 flex items-center animate-slideDown'>

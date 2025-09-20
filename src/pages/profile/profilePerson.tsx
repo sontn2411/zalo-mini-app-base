@@ -143,6 +143,16 @@ const ProfilePerson = () => {
           />
         </div>
       </div>
+
+      <div className='mb-6'>
+        <h3 className='text-lg font-bold text-gray-900 mb-4 px-2'>
+          Giới thiệu bản thân
+        </h3>
+        <div
+          className='flex items-center p-4 bg-white rounded-xl shadow-sm border border-gray-100'
+          dangerouslySetInnerHTML={{ __html: laboreProfile?.summary || '' }}
+        ></div>
+      </div>
     </div>
   )
 }

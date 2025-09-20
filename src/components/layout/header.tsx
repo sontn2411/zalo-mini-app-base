@@ -13,7 +13,7 @@ type RouteHandle = {
 
 const Header = () => {
   const matches = useMatches()
-  const { enterpriseProfile } = useUserStore()
+  const { enterpriseProfile, laboreProfile } = useUserStore()
   const currentRoute = matches[matches.length - 1]
   const handle = currentRoute?.handle as RouteHandle | undefined
   const title = handle?.title || 'Ứng dụng'
@@ -62,15 +62,17 @@ const Header = () => {
               {handle && handle.desc && (
                 <span className='text-sm '>{handle.desc}</span>
               )}
-              {isEdit && (
-                <button
-                  onClick={handleEdit}
-                  className='flex items-center gap-1 text-sm text-color-4 font-medium mt-1 pl-2'
-                >
-                  <span>Chỉnh sửa hồ sơ</span>
-                  <Pen className='w-4 h-4' />
-                </button>
-              )}
+              {isEdit &&
+                ((laboreProfile && laboreProfile.isactive) ||
+                  (enterpriseProfile && enterpriseProfile.isactive)) && (
+                  <button
+                    onClick={handleEdit}
+                    className='flex items-center gap-1 text-sm text-color-4 font-medium mt-1 pl-2'
+                  >
+                    <span>Chỉnh sửa hồ sơ</span>
+                    <Pen className='w-4 h-4' />
+                  </button>
+                )}
             </div>
           </div>
         )}

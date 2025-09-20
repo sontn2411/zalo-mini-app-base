@@ -20,14 +20,14 @@ import { Controller, useForm } from 'react-hook-form'
 import { JobForm, JobFormSchema } from '@/schemas/postingSchema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import SelectOptionWard from './selectOptionWard'
-import { formatDateRangerYYMMDD } from '@/utils/date'
+import { formatDateRangerWithDash, formatDateRangerYYMMDD } from '@/utils/date'
 import LevelOption from '@/components/shared/form/selectOption/levelOption'
-import { insertRegisterRecruitment } from '@/api/query/jobs'
+import { insertRegisterRecruitment, updateDataJob } from '@/api/query/jobs'
 import { PostingJobPayload } from '@/types/job'
 import { toast } from 'react-toastify'
 import StatusOption from './statusOption'
 import useSettingStore from '@/store/useSetting'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { ROUTES } from '@/constants/routes'
 import { useLoadingGlobal } from '@/store/useLoadingGlobal'
 
@@ -36,8 +36,16 @@ const TYPE = {
   PENDING: 'chờ xét duyệt',
 }
 
-const JobPostingPage = () => {
+interface JobPostingPageProps {
+  dataEdit?: PostingJobPayload | null
+}
+
+const JobPostingPage = ({ dataEdit }: JobPostingPageProps) => {
   const registerRecruitment = insertRegisterRecruitment()
+
+  const updateRecruitment = updateDataJob()
+
+  const { id } = useParams()
 
   const { ListStatusJob } = useSettingStore()
 
@@ -53,25 +61,34 @@ const JobPostingPage = () => {
     control,
     handleSubmit,
     register,
+    getValues,
     formState: { errors },
   } = useForm<JobForm>({
     resolver: zodResolver(JobFormSchema) as any,
     defaultValues: {
-      jobposition: '',
-      job: '',
-      position: '',
-      qualifications: '',
-      workingtime: '',
-      workexperience: '',
-      salary: '',
-      benefits: [],
-      recruitmentperiod: '',
-      summary: '',
-      jobrequirements: '',
-      detail: [{ gender: '', quantity: 0, age: '' }],
-      address: '',
-      ward: [],
-      status: draftOption?.value || '',
+      jobposition: dataEdit ? dataEdit.JobPosition : '',
+      job: dataEdit ? dataEdit.Job : '',
+      position: dataEdit ? dataEdit.Position : '',
+      qualifications: dataEdit ? dataEdit.Qualifications : '',
+      workingtime: dataEdit ? dataEdit.WorkingTime : '',
+      workexperience: dataEdit ? dataEdit.WorkExperience : '',
+      salary: dataEdit ? dataEdit.Salary : '',
+      benefits: dataEdit ? dataEdit.Benefits : [],
+      recruitmentperiod: dataEdit
+        ? formatDateRangerWithDash(dataEdit.RecruitmentPeriod)
+        : '',
+      summary: dataEdit ? dataEdit.Summary : '',
+      jobrequirements: dataEdit ? dataEdit.JobRequirements : '',
+      detail: dataEdit?.Details
+        ? dataEdit.Details.map((d: any) => ({
+            gender: d.Gender,
+            quantity: d.Quantity,
+            age: d.Age,
+          }))
+        : [{ gender: '', quantity: 0, age: '' }],
+      address: dataEdit ? dataEdit.Address : '',
+      ward: dataEdit ? dataEdit.Wards : [],
+      status: dataEdit ? dataEdit.status : draftOption?.value || '',
     },
     shouldFocusError: false,
   })
@@ -90,7 +107,7 @@ const JobPostingPage = () => {
       RecruitmentPeriod: formatDateRangerYYMMDD(value.recruitmentperiod),
       Summary: value.summary,
       JobRequirements: value.jobrequirements,
-      // Status: 'null',
+      Status: value.status,
       Details: value.detail.map((item) => ({
         ...item,
         gender: item.gender ?? '',
@@ -98,27 +115,47 @@ const JobPostingPage = () => {
       Wards: value.ward,
       Address: value.address,
     }
+    if (dataEdit && id) {
+      const payloadRequirement = { ...payload, RequirementId: id }
 
-    registerRecruitment.mutate(payload, {
-      onSuccess: (res) => {
-        setIsLoadingGlobal(false)
-        const { Errors, StatusResult } = res
-        if (StatusResult.Code === 0) {
-          toast.success('Tin của bạn đã được gửi, vui lòng chờ duyệt.')
-          navigate(ROUTES.ENTERPRISERECRUITMENTS)
-        } else {
-          toast.error(Errors[0].Message)
-        }
-      },
-      onError: (err) => {
-        console.log(err)
-        setIsLoadingGlobal(false)
-      },
-    })
+      updateRecruitment.mutate(payloadRequirement, {
+        onSuccess: (res) => {
+          setIsLoadingGlobal(false)
+          const { Errors, StatusResult } = res
+          if (StatusResult.Code === 0) {
+            toast.success('Tin của bạn đã được cập nhật.')
+            navigate(ROUTES.ENTERPRISERECRUITMENTS)
+          } else {
+            toast.error(Errors[0].Message)
+          }
+        },
+        onError: (err) => {
+          console.log(err)
+          setIsLoadingGlobal(false)
+        },
+      })
+    } else {
+      registerRecruitment.mutate(payload, {
+        onSuccess: (res) => {
+          setIsLoadingGlobal(false)
+          const { Errors, StatusResult } = res
+          if (StatusResult.Code === 0) {
+            toast.success('Tin của bạn đã được gửi, vui lòng chờ duyệt.')
+            navigate(ROUTES.ENTERPRISERECRUITMENTS)
+          } else {
+            toast.error(Errors[0].Message)
+          }
+        },
+        onError: (err) => {
+          console.log(err)
+          setIsLoadingGlobal(false)
+        },
+      })
+    }
   }
 
   // console.log('====errors===', errors)
-  // console.log('====value===', getValues())
+  console.log('====value===', getValues())
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className=''>
@@ -139,6 +176,7 @@ const JobPostingPage = () => {
             <JobSelectOption
               error={errors.job?.message}
               onChange={field.onChange}
+              value={field.value}
             />
           )}
         />
@@ -149,6 +187,7 @@ const JobPostingPage = () => {
             <LevelOption
               onChange={field.onChange}
               error={errors.qualifications?.message}
+              value={field.value}
             />
           )}
         />
@@ -160,6 +199,7 @@ const JobPostingPage = () => {
             <RankJobOption
               onChange={field.onChange}
               error={errors.position?.message}
+              value={field.value}
             />
           )}
         />
@@ -171,6 +211,7 @@ const JobPostingPage = () => {
             <SelectOptionWard
               onChange={field.onChange}
               error={errors.ward?.message}
+              value={field.value}
             />
           )}
         />
@@ -192,6 +233,7 @@ const JobPostingPage = () => {
             <TimeOption
               onChange={field.onChange}
               error={errors.workingtime?.message}
+              value={field.value}
             />
           )}
         />
@@ -204,6 +246,7 @@ const JobPostingPage = () => {
             <SalaryRanges
               onChange={field.onChange}
               error={errors.salary?.message}
+              value={field.value}
             />
           )}
         />
@@ -216,6 +259,7 @@ const JobPostingPage = () => {
             <ExperienceOptions
               onChange={field.onChange}
               error={errors.workexperience?.message}
+              value={field.value}
             />
           )}
         />
@@ -229,6 +273,7 @@ const JobPostingPage = () => {
             <BenfitOptions
               onChange={field.onChange}
               error={errors.benefits?.message}
+              value={field.value}
             />
           )}
         />

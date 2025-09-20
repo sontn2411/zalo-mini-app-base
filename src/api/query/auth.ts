@@ -4,6 +4,7 @@ import {
   RegisterLaborePayload,
   UpdateProfileEnterprise,
   UpdateProfileLaborePayload,
+  ZmpLinkedAccountPayload,
 } from '@/types/auth'
 import instance from '../http'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -15,8 +16,13 @@ const fetchRegisterLabore = async (payload: RegisterLaborePayload) => {
   try {
     const res = await instance.post('/LaboreSignUp', { ...payload })
     return res.data
-  } catch (error) {
+  } catch (err) {
+    const error = err as AxiosError
     console.error('❌ Lỗi fetchRegisterLabore:', error)
+
+    if (error.response?.data) {
+      return error.response.data
+    }
     throw error
   }
 }
@@ -48,7 +54,6 @@ const fetchUserProfile = async () => {
     const { data } = await instance.get('/Profile')
     return data
   } catch (error) {
-    console.error('❌ Lỗi fetchUserProfile:', error)
     throw error
   }
 }
@@ -118,5 +123,27 @@ export const insertUpdateEntrprise = () => {
   return useMutation({
     mutationFn: (data: UpdateProfileEnterprise) =>
       fetchUpdateProfileEnterprise(data),
+  })
+}
+
+const fetchZmpLinkedAccount = async (payload: ZmpLinkedAccountPayload) => {
+  try {
+    const { data } = await instance.post('/ZmpLinkedAccount', { ...payload })
+
+    return data
+  } catch (err) {
+    const error = err as AxiosError
+    console.error('❌ Lỗi fetchUpdateProfileEnterprise:', error)
+
+    if (error.response?.data) {
+      return error.response.data
+    }
+    throw error
+  }
+}
+
+export const insertZmpLinkedAccount = () => {
+  return useMutation({
+    mutationFn: (data: ZmpLinkedAccountPayload) => fetchZmpLinkedAccount(data),
   })
 }

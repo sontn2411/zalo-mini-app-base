@@ -1,11 +1,22 @@
+import { insertZmpLinkedAccount } from '@/api/query/auth'
 import { ROUTES } from '@/constants/routes'
+import { useLoadingGlobal } from '@/store/useLoadingGlobal'
+import useSettingStore from '@/store/useSetting'
 import { useUserStore } from '@/store/useUserStore'
-import { Building2, User } from 'lucide-react'
+import { Building2, PlayCircle, User } from 'lucide-react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getPhoneNumber } from 'zmp-sdk'
+import { toast } from 'react-toastify'
+import { getAccessToken, getPhoneNumber, getUserID } from 'zmp-sdk'
+import ZaloLinkModal from './zmLinked/zaloLinkModal'
 
 const ButtonCTA = () => {
   const navigate = useNavigate()
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const { setIsLoadingGlobal } = useLoadingGlobal()
+
+  const zmpLinkedAccount = insertZmpLinkedAccount()
 
   const handleNavigate = async (router: string) => {
     // const { token } = await getPhoneNumber()
@@ -13,6 +24,19 @@ const ButtonCTA = () => {
     //   navigate(router, { viewTransition: true })
     // }
     navigate(router, { viewTransition: true })
+  }
+
+  const handleZaloLinked = async () => {
+    // const { token } = await getPhoneNumber()
+    // const accessToken = await getAccessToken()
+    // const userID = await getUserID()
+    // if (token && accessToken && userID) {
+    //   setIsLoadingGlobal(true)
+    //   const  payload = {
+    //   }
+    // } else {
+    //   toast.error('Liên kết thất bại, vui lòng thử lại!')
+    // }
   }
 
   return (
@@ -48,7 +72,10 @@ const ButtonCTA = () => {
           </button>
         </>
 
-        <button className='flex items-center gap-3 p-4 rounded-xl bg-[#1877f2] hover:bg-[#0f5ec1] text-white shadow-md transition-all'>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className='flex items-center gap-3 p-4 rounded-xl bg-[#1877f2] hover:bg-[#0f5ec1] text-white shadow-md transition-all'
+        >
           <div className='w-10 h-10 flex items-center justify-center rounded-full'>
             <svg
               xmlns='http://www.w3.org/2000/svg'
@@ -70,13 +97,19 @@ const ButtonCTA = () => {
             </svg>
           </div>
           <div className='text-left'>
-            <p className='text-sm font-semibold'>Liên kết tài khoản</p>
+            <p className='text-sm font-semibold'>Liên kết tài khoản web</p>
             <p className='text-xs text-white/80'>
-              Đã có tài khoản trên website
+              Đồng bộ dữ liệu giữa Zalo và web
             </p>
           </div>
         </button>
       </div>
+      {isModalOpen && (
+        <ZaloLinkModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
     </div>
   )
 }

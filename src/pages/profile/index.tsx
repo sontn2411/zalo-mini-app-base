@@ -6,6 +6,7 @@ import { useAuthLogin } from '@/hooks/useAuthLogin'
 import useSettingUser from '@/hooks/useSettingUser'
 import ProfileLabore from './labore/profileLabore'
 import EnterpriseProfile from './enterprise/profileEnterprise'
+import HeaderProfile from '@/components/layout/headerProfile'
 
 const SkeletonProfile = () => {
   return (
@@ -31,16 +32,26 @@ const ProfilePage = () => {
 
   const { isLoadingProfile } = useAuthLogin(scope)
 
+  console.log('=========', laboreProfile)
+
   return (
     <>
-      {/* <ProfileLabore /> */}
-      {isLoadingProfile && <SkeletonProfile />}
-      <EnterpriseProfile />
-      {laboreProfile && <ProfileLabore />}
-      {/* {enterpriseProfile && <ProfileEnterprise />} */}
-      {!isBtnRegister && <ButtonCTA />}
+      <HeaderProfile />
+      <div className=' relative'>
+        <div className='absolute bg-color-3 w-full h-20 top-0 left-0 '></div>
+        <div className='relative z-10 '>
+          {/* <ProfileLabore /> */}
+          {isLoadingProfile && <SkeletonProfile />}
 
-      {/* <button onClick={() => nativeStorage.clear()}>Clear Storage</button> */}
+          {laboreProfile && <ProfileLabore />}
+          {enterpriseProfile && <EnterpriseProfile />}
+          {!isBtnRegister && (
+            <div className='mt-10'>
+              <ButtonCTA />
+            </div>
+          )}
+        </div>
+      </div>
     </>
   )
 }

@@ -6,6 +6,8 @@ import { useUserInfo } from '@/hooks/useUserInfo'
 import { useEffect, useState } from 'react'
 import { ROUTES } from '@/constants/routes'
 import { noAvatar, noCompany } from '@/static'
+import { email } from 'zod'
+import IconUI from '../ui/iconUi'
 
 const HeaderProfile = () => {
   const navigate = useNavigate()
@@ -35,23 +37,9 @@ const HeaderProfile = () => {
     }
   }, [userInfo, laboreProfile, enterpriseProfile])
 
-  // const handlePrev = () => {
-  //   navigate(-1 as To, {
-  //     viewTransition: true,
-  //   })
-  // }
-
-  // const handleEdit = () => {
-  //   if (enterpriseProfile) {
-  //     navigate(ROUTES.EDITBUSINESS)
-  //   } else {
-  //     navigate(ROUTES.EDITPERSON)
-  //   }
-  // }
-
   return (
-    <div className='flex-none w-full min-h-12  px-4 pt-st pb-2 space-x-2 bg-color-3  '>
-      <div className='flex items-center gap-2 min-h-12'>
+    <div className='flex-none w-full min-h-12  px-4 pt-st pb-2 space-x-2 bg-color-3  relative'>
+      {/* <div className='flex items-center gap-2 min-h-12'>
         <div>
           <img
             src={profile?.avatar}
@@ -68,16 +56,37 @@ const HeaderProfile = () => {
                 Đang chờ phê duyệt
               </span>
             ) : (
-              // <button
-              //   onClick={handleEdit}
-              //   className='flex items-center gap-1 text-sm text-color-4 font-medium mt-1'
-              // >
-              //   <Pen className='w-4 h-4' />
-              //   <span>Chỉnh sửa hồ sơ</span>
-              // </button>
               <></>
             ))}
-          {/* */}
+         
+        </div>
+      </div> */}
+      <div className='   '>
+        <button>
+          <IconUI icon='previous' className='w-5 h-5' />
+        </button>
+      </div>
+      <div className=' mx-auto w-full '>
+        <div className='flex flex-col items-center gap-2'>
+          <img
+            src={profile?.avatar}
+            alt={profile?.name}
+            className='w-20 h-20 rounded-full object-cover border-4 border-white shadow-md'
+            onError={(e) => ((e.target as HTMLImageElement).src = noAvatar)}
+          />
+
+          <p className='text-base font-bold text-color-4'>{profile?.name}</p>
+
+          {(laboreProfile || enterpriseProfile) &&
+            (!(laboreProfile?.isactive ?? enterpriseProfile?.isactive) ? (
+              <span className='px-3 py-0.5 rounded-full text-xs font-medium bg-white text-gray-700 shadow-sm'>
+                Đang chờ phê duyệt
+              </span>
+            ) : (
+              <></>
+            ))}
+
+          {/* <span className='text-sm text-gray-700'>{profile?.email}</span> */}
         </div>
       </div>
     </div>

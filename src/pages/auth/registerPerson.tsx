@@ -42,6 +42,7 @@ import { nativeStorage } from 'zmp-sdk/apis'
 import { ROUTES } from '@/constants/routes'
 import { KEYSTORAGE } from '@/constants/message'
 import { Modal } from 'zmp-ui'
+import { toast } from 'react-toastify'
 
 const RegisterPerson = () => {
   const { ListJob, ListEthnicity } = useSettingStore()
@@ -118,7 +119,7 @@ const RegisterPerson = () => {
 
     registerLabore.mutate(payload, {
       onSuccess: (data) => {
-        const { Data, StatusResult } = data
+        const { Data, StatusResult, Errors } = data
 
         if (StatusResult.Code === 0) {
           const { AccessToken, RefreshToken } = Data
@@ -127,15 +128,11 @@ const RegisterPerson = () => {
           nativeStorage.setItem(KEYSTORAGE.REFRESHTOKEN, RefreshToken)
 
           navigate(ROUTES.PROFILE, { viewTransition: true })
-          openSnackbar({
-            text: 'Đăng ký người lao động thành công!',
-            type: 'success',
-          })
+          toast.success('Đăng ký người lao động thành công!')
         } else {
-          openSnackbar({
-            text: 'Đã xảy ra lỗi khi lưu dữ liệu. Vui lòng thử lại.',
-            type: 'error',
-          })
+          toast.error(
+            Errors[0].Message || 'Đăng ký thất bại, vui lòng thử lại!'
+          )
         }
 
         setIsLoadingGlobal(false)
@@ -171,35 +168,6 @@ const RegisterPerson = () => {
 
       <div className='rounded-2xl shadow-sm'>
         <form onSubmit={handleSubmit(onSubmit)} className=''>
-          {/* <div className='bg-white p-4 rounded-xl shadow-sm'>
-            <h3 className='text-base font-semibold text-gray-800 mb-3'>
-              Thông tin đăng nhập
-            </h3>
-            <InputCustom
-              label='Tên đăng nhập'
-              placeholder='Nhập tên đăng nhập'
-              icon={User}
-              error={errors.username?.message}
-              {...register('username')}
-            />
-            <InputCustom
-              label='Mật khẩu'
-              type='password'
-              placeholder='Nhập mật khẩu'
-              icon={Lock}
-              error={errors.password?.message}
-              {...register('password')}
-            />
-            <InputCustom
-              label='Nhập lại mật khẩu'
-              type='password'
-              placeholder='Xác nhận mật khẩu'
-              icon={Lock}
-              error={errors.confirmPassword?.message}
-              {...register('confirmPassword')}
-            />
-          </div> */}
-
           <div className='bg-white p-4 rounded-xl shadow-sm mt-6'>
             <h3 className='text-base font-semibold text-gray-800 mb-3'>
               Thông tin cá nhân

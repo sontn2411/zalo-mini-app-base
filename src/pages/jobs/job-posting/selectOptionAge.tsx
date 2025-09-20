@@ -5,9 +5,10 @@ import { AlertCircle } from 'lucide-react'
 interface SelectOptionAgeProps {
   onChange: (value: string) => void
   error?: string
+  value: string
 }
 
-const SelectOptionAge = ({ onChange }: SelectOptionAgeProps) => {
+const SelectOptionAge = ({ onChange, value }: SelectOptionAgeProps) => {
   const { ListAgeRecruitment } = useSettingStore()
 
   return (
@@ -23,6 +24,7 @@ const SelectOptionAge = ({ onChange }: SelectOptionAgeProps) => {
         title='Chọn tuổi'
         placeholder='Chọn tuổi'
         onChange={(values) => onChange(values[0])}
+        value={value}
       />
     </div>
   )

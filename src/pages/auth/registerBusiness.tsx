@@ -19,6 +19,7 @@ import {
 import { useUserStore } from '@/store/useUserStore'
 import { KEYSTORAGE } from '@/constants/message'
 import { ROUTES } from '@/constants/routes'
+import { toast } from 'react-toastify'
 
 export const registerBusinessSchema = z.object({
   email: z.string().email('Email không hợp lệ'),
@@ -81,7 +82,7 @@ const RegisterBusiness = () => {
 
     registerEnterprise.mutate(payload, {
       onSuccess: (data) => {
-        const { Data, StatusResult } = data
+        const { Data, StatusResult, Errors } = data
 
         if (StatusResult.Code === 0) {
           const { AccessToken, RefreshToken } = Data
@@ -90,15 +91,11 @@ const RegisterBusiness = () => {
           nativeStorage.setItem(KEYSTORAGE.REFRESHTOKEN, RefreshToken)
 
           navigate(ROUTES.PROFILE, { viewTransition: true })
-          openSnackbar({
-            text: 'Đăng ký người doanh nghiệp thành công!',
-            type: 'success',
-          })
+          toast.success('Đăng ký người lao động thành công!')
         } else {
-          openSnackbar({
-            text: 'Đã xảy ra lỗi khi lưu dữ liệu. Vui lòng thử lại.',
-            type: 'error',
-          })
+          toast.error(
+            Errors[0].Message || 'Đăng ký thất bại, vui lòng thử lại!'
+          )
         }
 
         setIsLoadingGlobal(false)

@@ -1,25 +1,6 @@
-import {
-  Award,
-  Briefcase,
-  Building2,
-  Calendar,
-  Clock,
-  DollarSign,
-  Eye,
-  GraduationCap,
-  MapPin,
-  Target,
-  Timer,
-  UserCheck,
-  Users,
-} from 'lucide-react'
-import InfoCard from './infoCard'
-import CustomTabs from '@/components/shared/customTabs'
+import { useDataJobDetailEdit } from '@/api/query/jobs'
 import { useParams } from 'react-router-dom'
-import { useDataJobDetail } from '@/api/query/jobs'
 import SkeletonDetail from './skeletonDetail'
-import he from 'he'
-import { noAvatar, noCompany } from '@/static'
 import JobDetailContent from './jobDetailContent'
 
 const PageNotFound = () => (
@@ -33,12 +14,13 @@ const PageNotFound = () => (
   </div>
 )
 
-const JobDetail = () => {
+const JobDetailPreview = () => {
   const { id } = useParams()
   if (!id) return null
 
-  const { data, isLoading } = useDataJobDetail(id)
-  const job = data?.Data?.Data
+  const { data, isLoading } = useDataJobDetailEdit(id)
+  const dataJob = data?.Data
+  const job = data?.Data
 
   if (isLoading) {
     return <SkeletonDetail />
@@ -51,4 +33,4 @@ const JobDetail = () => {
   return <JobDetailContent job={job} />
 }
 
-export default JobDetail
+export default JobDetailPreview

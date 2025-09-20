@@ -31,7 +31,7 @@ const JobList = ({ data }: JobListProps) => {
               <img
                 src={job.thumbnail || noCompany}
                 alt='name'
-                className=' h-24 border'
+                className=' h-24 w-32 border'
                 onError={(e) => {
                   e.currentTarget.src = noCompany
                 }}

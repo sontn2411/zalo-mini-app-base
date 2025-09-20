@@ -16,8 +16,9 @@ export interface PostingJobPayload {
   RecruitmentPeriod: string
   Summary: string
   JobRequirements: string
-  // Status: string
+  Status: string
   Details: DetailItem[]
   Wards: string[]
   Address: string
+  status?: string
 }

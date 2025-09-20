@@ -13,6 +13,7 @@ export const createRegisterPersonSchema = (maxJob: number) =>
     graduationSchool: z.string().min(1, 'Vui lòng nhập trường tốt nghiệp'),
     major: z.string().min(1, 'Vui lòng nhập chuyên ngành'),
     study: z.string().min(1, 'Vui lòng chọn trình độ cao nhất'),
+    summary: z.string().min(1, 'Vui lòng nhập tóm tắt bản thân'),
     job: z
       .array(z.string())
       .min(2, 'Vui lòng chọn ít nhất 2 ngành')

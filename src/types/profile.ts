@@ -44,6 +44,17 @@ export interface LaboreProfile {
   RefreshToken: string
   zaloId: string
   usertype: string
+
+  summary: string
+  // sumary: string
+  salary: string
+  experience: number
+  educationQualifications: string[]
+  skills: string[]
+  cpskill: string
+  flanguages: string[]
+  experienceSummary: string
+  interviewFormat: string
 }
 
 export interface EnterpriseProfile {

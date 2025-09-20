@@ -27,6 +27,9 @@ import LanguageIt from './pages/profile/labore/languageIt'
 import Benefits from './pages/profile/labore/benefits'
 import ProfileEnterprise from './pages/profile/profileEnterprise'
 import Recruitments from './pages/profile/enterprise/recruitments'
+import EditJobDetail from './pages/profile/edit/editJobDetail'
+import JobDetailPreview from './pages/jobs/detail/jobDetailPreview'
+import ResultZmLinked from './pages/profile/zmLinked/resultZmLinked'
 
 const router = createBrowserRouter(
   [
@@ -85,6 +88,11 @@ const router = createBrowserRouter(
           handle: { title: 'Chi tiết việc làm' },
         },
         {
+          path: ROUTES.JOB_PREVIEW_DETAIL,
+          element: <JobDetailPreview />,
+          handle: { title: 'Xem trước tin tuyển dụng' },
+        },
+        {
           path: ROUTES.CANDIDATE,
           element: <CandidatePage />,
           handle: { title: 'Danh sách ứng viên' },
@@ -105,6 +113,11 @@ const router = createBrowserRouter(
           handle: { title: 'Hồ sơ cá nhân', desc: 'Quản lý thông tin của bạn' },
         },
         {
+          path: ROUTES.RESULTSZMLINK,
+          element: <ResultZmLinked />,
+          handle: { title: 'Kết quả liên kết Zalo ' },
+        },
+        {
           path: ROUTES.ENTERPRISEINFO,
           element: <ProfileEnterprise />,
           handle: { title: 'Thông tin doanh nghiệp', edit: true },
@@ -113,6 +126,11 @@ const router = createBrowserRouter(
           path: ROUTES.ENTERPRISERECRUITMENTS,
           element: <Recruitments />,
           handle: { title: 'Danh sách tuyển dụng' },
+        },
+        {
+          path: ROUTES.ENTERPRISEEDITJOB,
+          element: <EditJobDetail />,
+          handle: { title: 'Chỉnh sửa tin tuyển dụng' },
         },
         {
           path: ROUTES.EDITINFOMATION,
@@ -133,7 +151,7 @@ const router = createBrowserRouter(
         {
           path: ROUTES.EDITIEXPERIENCE,
           element: <Experience />,
-          handle: { title: 'Kinh nghiệm' },
+          handle: { title: 'Kinh nghiệm & Kỹ năng' },
         },
         {
           path: ROUTES.EDITILANGUAGEIT,

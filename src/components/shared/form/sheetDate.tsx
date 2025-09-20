@@ -40,6 +40,7 @@ const SheetDate = ({
       onChange?.(startDate + '-' + endDate)
     }
   }
+  console.log('value', value)
 
   return (
     <div>

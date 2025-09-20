@@ -13,6 +13,8 @@ import {
   Trash2,
   Plus,
 } from 'lucide-react'
+import { Button } from 'zmp-ui'
+import useSettingStore from '@/store/useSetting'
 
 const dataEducation = [
   { value: 'DH', label: 'Đại học' },
@@ -41,6 +43,8 @@ const schema = z.object({
 type FormType = z.infer<typeof schema>
 
 const Education = () => {
+  const { ListStudy } = useSettingStore()
+
   const {
     register,
     control,
@@ -105,7 +109,7 @@ const Education = () => {
               control={control}
               render={({ field }) => (
                 <SelectInput
-                  options={dataEducation}
+                  options={ListStudy}
                   maxSelect={1}
                   title='Chọn bằng cấp'
                   placeholder='Chọn bằng cấp'
@@ -185,6 +189,14 @@ const Education = () => {
         <Plus size={16} />
         Thêm học vấn
       </button>
+
+      <Button
+        onClick={handleSubmit(onSubmit)}
+        htmlType='submit'
+        className='w-full bg-color-1 text-white py-3 rounded-xl text-sm font-medium  hover:bg-color-1'
+      >
+        Đăng ký
+      </Button>
     </form>
   )
 }

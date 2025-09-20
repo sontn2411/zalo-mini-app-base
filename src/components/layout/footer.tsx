@@ -105,9 +105,9 @@ const Footer = () => {
   }
 
   const dataNav = NAV_ITEMS.filter((item) => {
-    // if (item.id === 3 && !enterpriseProfile) {
-    //   return false
-    // }
+    if (item.id === 3 && !enterpriseProfile) {
+      return false
+    }
     return true
   })
 

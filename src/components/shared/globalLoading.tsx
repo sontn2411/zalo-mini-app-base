@@ -3,8 +3,6 @@ import { useLoadingGlobal } from '@/store/useLoadingGlobal'
 const GlobalLoading = () => {
   const { isLoadingGlobal } = useLoadingGlobal()
 
-  console.log('=======', isLoadingGlobal)
-
   if (!isLoadingGlobal) return <></>
 
   return (

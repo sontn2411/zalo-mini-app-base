@@ -4,6 +4,7 @@ import { addYears, endOfYear, parse } from 'date-fns'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
 import { vi } from 'date-fns/locale'
+import { parseDateRangeInput } from '@/utils/date'
 
 interface Props {
   onChange?: (range: { startDate: Date; endDate: Date }) => void
@@ -22,14 +23,15 @@ export default function DateRangePicker({
     ? parse(value, 'dd/MM/yyyy', new Date())
     : new Date()
 
+  const dates = value && !singleDate ? parseDateRangeInput(value) : null
+
   const [range, setRange] = useState([
     {
-      startDate: defaultDate,
-      endDate: defaultDate,
+      startDate: singleDate ? defaultDate : dates?.startDate ?? new Date(),
+      endDate: singleDate ? defaultDate : dates?.endDate ?? new Date(),
       key: 'selection',
     },
   ])
-
   const maxYear = addYears(new Date(), 1)
   const maxDate = endOfYear(maxYear)
 

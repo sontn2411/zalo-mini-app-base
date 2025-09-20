@@ -30,10 +30,11 @@ import {
   UserRound,
 } from 'lucide-react'
 import { Controller, useForm } from 'react-hook-form'
-import { useNavigate } from 'react-router-dom'
+import { To, useNavigate } from 'react-router-dom'
 import { Button } from 'zmp-ui'
 import z from 'zod'
 import { toast } from 'react-toastify'
+import he from 'he'
 
 const EditPerson = () => {
   const { ListEthnicity, ListJob } = useSettingStore()
@@ -72,6 +73,7 @@ const EditPerson = () => {
       major: laboreProfile?.trainingmajor,
       educationLevel: laboreProfile?.traininglevel,
       study: laboreProfile?.highestlevelofexpertise || '',
+      summary: he.decode(laboreProfile?.summary || '') || '',
     },
   })
 
@@ -93,7 +95,18 @@ const EditPerson = () => {
       TrainingMajor: data.major,
       GraduateSchool: data.graduationSchool,
       DesiredCareer: data.job,
+
+      Summary: data?.summary,
+      Salary: laboreProfile?.salary || 'f29ab406-8672-4ae4-9373-c28c309743e7',
+      Experience: laboreProfile?.experience || 0,
+      EducationQualifications: laboreProfile?.educationQualifications || [],
+      Skills: laboreProfile?.skills || [],
+      CPSkill: laboreProfile?.cpskill || '',
+      FLanguages: laboreProfile?.flanguages || [],
+      ExperienceSummary: laboreProfile?.experienceSummary || '',
+      InterviewFormat: laboreProfile?.interviewFormat || '',
     }
+    console.log('==payload', payload)
 
     updateProfile.mutate(payload, {
       onSuccess: (res) => {
@@ -103,7 +116,7 @@ const EditPerson = () => {
           setLaboreProfile({ ...Data })
 
           toast.success('Thay dổi thông tin thành công!')
-          navigate(ROUTES.PROFILE, { viewTransition: true })
+          navigate(-1 as To, { viewTransition: true })
         } else {
           if (Errors) {
             const message = Errors[0].Message
@@ -283,7 +296,7 @@ const EditPerson = () => {
       </div>
 
       {/* Career Info */}
-      <div className='py-4 mb-4 pb-24  bg-white '>
+      <div className='py-4 mb-4   bg-white '>
         <h3 className='text-lg font-bold text-gray-900 mb-4 px-2'>
           Thông tin nghề nghiệp
         </h3>
@@ -355,6 +368,23 @@ const EditPerson = () => {
               </p>
             )}
           </div>
+        </div>
+      </div>
+
+      <div className='py-4 mb-4 pb-24  bg-white '>
+        <h3 className='text-lg font-bold text-gray-900 mb-4 px-2'>
+          Giới thiệu bản thân
+        </h3>
+
+        <div className='px-4'>
+          <textarea
+            rows={3}
+            placeholder='Nhập mô tả'
+            className={`w-full px-4 py-3 border rounded-xl  transition-all resize-none focus:outline-color-1  focus:outline focus:outline-2 ${
+              errors.summary ? 'border-red-600' : ''
+            }`}
+            {...register('summary')}
+          />
         </div>
       </div>
 

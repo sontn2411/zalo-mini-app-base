@@ -7,6 +7,7 @@ import { useUserStore } from '@/store/useUserStore'
 import { accessTokenStorage } from '@/utils/localStorage'
 import { KEYSTORAGE } from '@/constants/message'
 import { getUserID } from 'zmp-sdk/apis'
+import { useAuthStore } from '@/store/useAuthStore'
 
 export const useAuthLogin = (scope: {
   phoneNumber?: boolean
@@ -15,7 +16,8 @@ export const useAuthLogin = (scope: {
   const login = insertLogin()
   const { setProfile } = useUserStore()
   const { data, isLoading } = useDataUserProfile()
-  const hasTriedLogin = useRef(false)
+
+  const { hasTriedLogin, setHasTriedLogin } = useAuthStore()
 
   useEffect(() => {
     const loginAccount = async () => {
@@ -38,8 +40,9 @@ export const useAuthLogin = (scope: {
                 )
               }
             },
-            onError: (error: any) => {
-              console.error('Login error:', error)
+            onError: () => {
+              nativeStorage.removeItem(KEYSTORAGE.ACCESSTOKEN)
+              nativeStorage.removeItem(KEYSTORAGE.REFRESHTOKEN)
             },
           }
         )
@@ -50,9 +53,9 @@ export const useAuthLogin = (scope: {
       !accessTokenStorage &&
       scope.phoneNumber &&
       scope.info &&
-      !hasTriedLogin.current
+      !hasTriedLogin
     ) {
-      hasTriedLogin.current = true
+      setHasTriedLogin(true)
       loginAccount()
     }
   }, [scope, login, setProfile])

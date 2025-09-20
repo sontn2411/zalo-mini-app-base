@@ -165,6 +165,7 @@ export const insertRegisterRecruitment = () => {
 interface JobByEnterprisePayload {
   keyword: string
   rowIndex: number
+  status?: string
 }
 
 const fetchDataJobByEnterprise = async (payload: JobByEnterprisePayload) => {
@@ -172,6 +173,7 @@ const fetchDataJobByEnterprise = async (payload: JobByEnterprisePayload) => {
     params: {
       rowIndex: payload.rowIndex,
       keyword: payload.keyword,
+      status: payload.status,
     },
   })
 
@@ -189,5 +191,61 @@ export const useJobByEnterprise = (params: JobByEnterprisePayload) => {
       return allPages.length * pageSize
     },
     staleTime: 5 * 60 * 1000,
+  })
+}
+
+const fetchDetailJobEdit = async (id: string) => {
+  const { data } = await instance.get('/GetRecruitmentEnterprise', {
+    params: { jodId: id },
+  })
+
+  return data
+}
+
+export const useDataJobDetailEdit = (id: string) => {
+  return useQuery({
+    queryKey: ['jobDetailEdit', id],
+    queryFn: () => fetchDetailJobEdit(id),
+  })
+}
+
+interface UpdateJobPayload extends PostingJobPayload {
+  RequirementId: string
+}
+
+const fetchUpdateDataJob = async (payload: UpdateJobPayload) => {
+  try {
+    const { data } = await instance.post('/UpdateRecruitment', { ...payload })
+    return data
+  } catch (err) {
+    const error = err as AxiosError
+    console.error('❌ Lỗi fetchUpdateDataJob:', error)
+
+    if (error.response?.data) {
+      return error.response.data
+    }
+    throw error
+  }
+}
+
+export const updateDataJob = () => {
+  return useMutation({
+    mutationFn: (data: UpdateJobPayload) => fetchUpdateDataJob(data),
+  })
+}
+
+const fetchDeleteRecruitment = async (id: string) => {
+  const { data } = await instance.delete('/DeleteRecruitmentEnterprise', {
+    params: {
+      jodId: id,
+    },
+  })
+
+  return data
+}
+
+export const deleteRecruitment = () => {
+  return useMutation({
+    mutationFn: fetchDeleteRecruitment,
   })
 }
